@@ -1,0 +1,22 @@
+Tests started on:
+Mon 17 Oct 2022 10:03:28 PM EDT
+-----------------------------------------------------
+Test result for:
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/test_demo1
+-----------------------------------------------------
+Error comparison result for: 
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/test_demo1
+-----------------------------------------------------
+Test result for:
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/test_demo2
+-----------------------------------------------------
+Error comparison result for: 
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/test_demo2
+-----------------------------------------------------
+Test result for:
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/test_demo3
+-----------------------------------------------------
+Error comparison result for: 
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/test_demo3
+Tests completed on:
+Mon 17 Oct 2022 10:03:35 PM EDT

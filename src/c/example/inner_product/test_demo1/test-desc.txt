@@ -1,0 +1,1 @@
+This test the invokes ablity to test one bin with a small amount of image inputs.

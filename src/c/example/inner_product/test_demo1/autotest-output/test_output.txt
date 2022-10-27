@@ -1,0 +1,10 @@
+Tests started on:
+Mon 17 Oct 2022 11:49:33 PM EDT
+-----------------------------------------------------
+Test result for:
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/test_demo1
+-----------------------------------------------------
+Error comparison result for: 
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/test_demo1
+Tests completed on:
+Mon 17 Oct 2022 11:49:35 PM EDT

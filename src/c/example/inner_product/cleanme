@@ -1,0 +1,10 @@
+rm -rf cmake_install.cmake
+rm -rf CMakeFiles/
+rm -rf compile_commands.json
+rm -rf Makefile
+rm -rf CMakeCache.txt
+rm -rf util/cmake_install.cmake
+rm -rf util/CMakeFiles/
+rm -rf util/compile_commands.json
+rm -rf util/Makefile
+rm -rf util/CMakeCache.txt
