@@ -11,8 +11,11 @@ polynomial computations, and outputs results of these computations.
 
 /* Actor modes */
 #define LIDE_C_PEA_MODE_GET_COMMAND   0
-#define LIDE_C_PEA_MODE_PROCESS_COMMAND   1
-#define LIDE_C_PEA_MODE_OUTPUT    2
+#define LIDE_C_PEA_MODE_STP   1
+#define LIDE_C_PEA_MODE_EVP   2
+#define LIDE_C_PEA_MODE_EVB   3
+#define LIDE_C_PEA_MODE_RST   4
+#define LIDE_C_PEA_MODE_OUTPUT    5
 
 /*******************************************************************************
 TYPE DEFINITIONS

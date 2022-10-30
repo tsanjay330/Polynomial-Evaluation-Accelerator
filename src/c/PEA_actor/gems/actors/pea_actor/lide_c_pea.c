@@ -9,11 +9,11 @@ struct _lide_c_pea_context_struct {
 #include "lide_c_actor_context_type_common.h"
 
     /* Persistent local variables for temporary work */
-	int cmd;
-    int A;
-	int N;
+    int S[8][11];
+	int N[8];
+	int A;
 	int b;
-	int data;
+	int x;
 
     /* input ports */
     lide_c_fifo_pointer ffp_input_command;
@@ -41,17 +41,11 @@ lide_c_pea_context_type *lide_c_pea_new(
     context->invoke =
             (lide_c_actor_invoke_function_type)lide_c_pea_invoke;
 
-        context->num_bins = num_bins;
-        context->w = w;
-        context->h = h;
-        context->stride = stride;
-        context->height = height;
+    context->ffp_input_command = ffp_input_command;
+    context->ffp_input_data = ffp_input_data;
 
-    context->ffp_input_ = ffp_input_bins;
-    context->ffp_input_head = ffp_input_head;
-    context->ffp_input_img = ffp_input_img;
-
-    context->ffp_output_hist = ffp_output_hist;
+    context->ffp_output_result = ffp_output_result;
+	context->ffp_output_status = ffp_output_status;
 
     return context;
 }
@@ -61,23 +55,43 @@ bool lide_c_pea_enable(lide_c_pea_context_type *context) {
 
     switch (context->mode) {
         case LIDE_C_PEA_MODE_GET_COMMAND:
-            result = (lide_c_fifo_population(context->ffp_input_bins)
-                    < lide_c_fifo_capacity(context->ffp_input_bins));
-            result = result && (lide_c_fifo_population(context->ffp_input_bins)
-                    >= context->num_bins * 2);
+            result = (lide_c_fifo_population(context->ffp_input_command)
+                    < lide_c_fifo_capacity(context->ffp_input_command));
+            result = result && (lide_c_fifo_population(context->ffp_input_command)
+                    >= 16);
             break;
 
-        case LIDE_C_PEA_MODE_PROCESS_COMMAND:
-            result = (lide_c_fifo_population(context->ffp_input_head)
-                    < lide_c_fifo_capacity(context->ffp_input_head));
-            result = result && (lide_c_fifo_population(context->ffp_input_head)
-                    >= 2);
+        case LIDE_C_PEA_MODE_STP:
+            result = (lide_c_fifo_population(context->ffp_input_data)
+                    < lide_c_fifo_capacity(context->ffp_input_data));
+            result = result && (lide_c_fifo_population(context->ffp_input_data)
+                    >= context->N[context->A]);
             break;
 
+		case LIDE_C_PEA_MODE_EVP:
+			result = (lide_c_fifo_population(context->ffp_input_data)
+					< lide_c_fifo_capacity(context->ffp_input_data));
+			result = result && (lide_c_fifo_population(context->ffp_input_data)
+					>= 1);
+			break;
+
+		case LIDE_C_PEA_MODE_EVB:
+			result = (lide_c_fifo_population(context->ffp_input_data)
+					< lide_c_fifo_capacity(context->ffp_input_data));
+			result = result && (lide_c_fifo_population(context->ffp_input_data)
+					>= context->b);
+			break;
+
+		case LIDE_C_PEA_MODE_RST:
+			result = true;
+			break;
+
+		/* TODO: fix this. Add a condition for having enough space in both buffers  */
         case LIDE_C_PEA_MODE_OUTPUT:
-            result = (lide_c_fifo_population(context->ffp_input_img)
-                    < lide_c_fifo_capacity(context->ffp_input_img));
-            result = result && (lide_c_fifo_population(context->ffp_input_img)                      >= (context->stride) * (context->height));
+            result = (lide_c_fifo_population(context->ffp_output_result)
+                    < lide_c_fifo_capacity(context->ffp_output_result));
+            result = result && (lide_c_fifo_population(context->ffp_output_status)                      
+					< lide_c_fifo_capacity(context->ffp_output_status));
             break;
 
         default:
@@ -87,26 +101,50 @@ bool lide_c_pea_enable(lide_c_pea_context_type *context) {
     return result;
 }
 
-void lide_c_pea_actor_invoke(lide_c_pea_context_type *context) {
+void lide_c_pea_invoke(lide_c_pea_context_type *context) {
 
-    int *bins;
-    int head_x, head_y;
-    int curr;
-    int *hist;
+	int full_command; //16 bits
+	int command;	//8 bits
+	int arg1;		//3 bits
+	int arg2;		//5 bits
 
     switch(context->mode) {
-        case LIDE_C_HIST_PEA_ACTOR_GET_COMMAND:
-            bins = (int *) malloc(context->num_bins * 2 * sizeof(int));
+        case LIDE_C_PEA_MODE_GET_COMMAND:
+			/* Read in the command */
+			lide_c_fifo_read(context->ffp_input_command, &full_command); 
+			command = full_command >> 8;
+			arg1 = (full_command >> 5) & 0x7;
+			arg2 = full_command & 0x1F;
 
-            for (int i = 0; i < context->num_bins * 2; i++) {
-                lide_c_fifo_read(context->ffp_input_bins, &bins[i]);
-            }
+			switch (command) {
+				case 0: //STP A N
+			        context->A = arg1;
+					context->N[context->A] = arg2;
+					context->mode = LIDE_C_PEA_MODE_STP;
+					break;
 
-            context->bins = bins;
-            context->mode = LIDE_C_PEA_ACTOR_MODE_PROCESS_COMMAND;
+				case 1: //EVP A
+					context->A = arg1;
+					context->mode = LIDE_C_PEA_MODE_EVP;
+					break;
+
+				case 2: //EVB A b
+					context->A = arg1;
+					context->b = arg2;
+					context->mode = LIDE_C_PEA_MODE_EVB;
+					break;
+
+				case 3:
+					context->mode = LIDE_C_PEA_MODE_RST;
+					break;
+
+				default:
+					context->mode = LIDE_C_PEA_MODE_GET_COMMAND;
+			}
+
             break;
 
-        case LIDE_C_PEA_MODE_GET_COMMAND:
+        case LIDE_C_PEA_MODE_STP:
             lide_c_fifo_read(context->ffp_input_head, &context->head_x);
             lide_c_fifo_read(context->ffp_input_head, &context->head_y);
             context->mode = LIDE_C_HIST_GEN_MODE_PROCESS;
