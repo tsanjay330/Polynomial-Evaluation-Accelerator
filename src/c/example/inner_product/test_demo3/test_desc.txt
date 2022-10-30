@@ -1,0 +1,1 @@
+this tests the enable function to make sure it keep reading the size until it gets anon-zero value 

@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/src/tools/runtime/lide_c_util.c
+lide_c_util.h
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/src/tools/runtime/lide_c_util.h
+stdio.h
+-
+stdlib.h
+-
+
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/src/tools/runtime/lide_c_util.h
+stdio.h
+-
+lide_c_basic.h
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/src/tools/runtime/lide_c_basic.h
+lide_c_actor.h
+/homes/n/o/nolson12/home/enee408c/labs/lab06/inner_product/src/tools/runtime/lide_c_actor.h
+
+src/gems/actors/common/lide_c_actor.h
+lide_c_basic.h
+src/gems/actors/common/lide_c_basic.h
+lide_c_actor_context_type_common.h
+src/gems/actors/common/lide_c_actor_context_type_common.h
+
+src/gems/actors/common/lide_c_actor_context_type_common.h
+
+src/gems/actors/common/lide_c_basic.h
+stdbool.h
+-
+

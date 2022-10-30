@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblide_c_communication_common.a  CMakeFiles/lide_c_communication_common.dir/lide_c_file_read.c.o CMakeFiles/lide_c_communication_common.dir/lide_c_file_write.c.o
+/usr/bin/ranlib liblide_c_communication_common.a
