@@ -86,12 +86,15 @@ bool lide_c_pea_enable(lide_c_pea_context_type *context) {
 			result = true;
 			break;
 
-		/* TODO: fix this. Add a condition for having enough space in both buffers  */
         case LIDE_C_PEA_MODE_OUTPUT:
             result = (lide_c_fifo_population(context->ffp_output_result)
                     < lide_c_fifo_capacity(context->ffp_output_result));
             result = result && (lide_c_fifo_population(context->ffp_output_status)                      
 					< lide_c_fifo_capacity(context->ffp_output_status));
+			result = result && (lide_c_fifo_population(context->ffp_output_result) + context->b
+					<= lide_c_fifo_capacity(context->ffp_output_result));
+			result = result && (lide_c_fifo_population(context->ffp_output_status) + context->b
+					<= lide_c_fifo_capacity(context->ffp_output_status));
             break;
 
         default:
@@ -120,11 +123,13 @@ void lide_c_pea_invoke(lide_c_pea_context_type *context) {
 				case 0: //STP A N
 			        context->A = arg1;
 					context->N[context->A] = arg2;
+					context->b = 1;
 					context->mode = LIDE_C_PEA_MODE_STP;
 					break;
 
 				case 1: //EVP A
 					context->A = arg1;
+					context->b = 1;
 					context->mode = LIDE_C_PEA_MODE_EVP;
 					break;
 
@@ -135,6 +140,7 @@ void lide_c_pea_invoke(lide_c_pea_context_type *context) {
 					break;
 
 				case 3:
+					context->b = 0;
 					context->mode = LIDE_C_PEA_MODE_RST;
 					break;
 
