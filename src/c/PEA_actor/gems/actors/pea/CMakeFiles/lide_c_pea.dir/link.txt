@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblide_c_pea.a  CMakeFiles/lide_c_pea.dir/lide_c_pea.c.o
+/usr/bin/ranlib liblide_c_pea.a
