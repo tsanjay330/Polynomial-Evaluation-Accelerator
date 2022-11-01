@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblide_c_objtr.a  CMakeFiles/lide_c_objtr.dir/lide_c_hist_gen.c.o
-/usr/bin/ranlib liblide_c_objtr.a

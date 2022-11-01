@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblide_c_graph_basic.a  CMakeFiles/lide_c_graph_basic.dir/lide_c_inner_product_graph.c.o
-/usr/bin/ranlib liblide_c_graph_basic.a

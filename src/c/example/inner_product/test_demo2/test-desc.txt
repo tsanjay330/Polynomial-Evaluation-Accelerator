@@ -1,1 +1,0 @@
-This test the invoke ability to handle more bins and numbers.

@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblide_c_edges_basic.a  CMakeFiles/lide_c_edges_basic.dir/lide_c_fifo.c.o
-/usr/bin/ranlib liblide_c_edges_basic.a

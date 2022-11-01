@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblide_c_runtime.a  CMakeFiles/lide_c_runtime.dir/lide_c_util.c.o
-/usr/bin/ranlib liblide_c_runtime.a
