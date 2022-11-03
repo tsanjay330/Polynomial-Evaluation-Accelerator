@@ -29,4 +29,5 @@
 ################################################################################
 
 ../../../../util/lide_c_pea_driver.exe command.txt data.txt result.txt status.txt > diagnostics.txt
-cat out.txt
+cat result.txt
+cat status.txt
