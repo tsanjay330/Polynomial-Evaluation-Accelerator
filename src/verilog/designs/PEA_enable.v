@@ -9,7 +9,7 @@ Parameters:     control_size: bit width of each control token (16 bits, 8 for co
  
 *****************************************************************/
 `timescale 1ns / 1ps
-module PEA_enable #(parameter control_size = 16, data_size = 16, result_size = 32, status_size = 16, buffer_size = 1024)
+module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
    (
 	input 				  rst,
     	input [log2(buffer_size) - 1 : 0] control_pop,
@@ -17,7 +17,7 @@ module PEA_enable #(parameter control_size = 16, data_size = 16, result_size = 3
     	input [log2(buffer_size) - 1 : 0] result_free_space,
     	input [log2(buffer_size) - 1 : 0] status_free_space,
 	input [1 : 0] 			  mode, // How many bits/modes for the FSM operation?
-	input [control_size - 1 : 0] control_in, // the current command read in from input FIFO
+	input [word_size - 1 : 0] control_in, // the current command read in from input FIFO
 	output reg 			  enable
 
 
@@ -25,7 +25,13 @@ module PEA_enable #(parameter control_size = 16, data_size = 16, result_size = 3
    
     // Temporary names for State Transition Diagram/Table
     localparam GET_COMMAND = 2'b00, COMP = 2'b01, OUTPUT = 2'b10;
+   localparam STP = 2'b00, EVP = 2'b01, EVB = 2'b10, RST = 2'b11;
 
+   reg [7:0] 				  instr;
+   reg [2:0] 				  arg1;
+   reg [4:0] 				  arg2;
+   {instr, arg1, arg2} = control_in;
+   
     always @(mode, control_pop, data_pop, result_free_space, status_free_space, control_in)
     begin
         case (mode)
@@ -38,12 +44,11 @@ module PEA_enable #(parameter control_size = 16, data_size = 16, result_size = 3
         end
         COMP:
         begin
-            //enable <= 1;
 	   // Before this is implemented, we need to know exactly which 8-bit values correspond to which mode
 	   // Flow:
-	   /* case(first 8 bits of control_in)
+	    case({instr[1], instr[0]})
 	   	STP: begin
-	    		if(data_pop >= last 5 bits of control_in + 1)
+	    		if(data_pop >= arg2 + 1)
 	    			enable <= 1;
 	    		else
 	    			enable <= 0;
@@ -55,15 +60,16 @@ module PEA_enable #(parameter control_size = 16, data_size = 16, result_size = 3
 	    			enable <= 0;
 	    	end
 	    	EVB: begin
-	    		if(data_pop >= last 5 bits of control_in)
+	    		if(data_pop >= arg2)
 	    			enable <= 1;
 	    		else
 	    			enable <= 0;
 	    	end
-	    	//RST: Not sure how to enable RST instruction - must interrupt any in-progress computation
+	    	RST: // Not too sure how enable for RST should be implemented - must interrupt any-inprogress computation
+	    		enable <= 1;
 	    	default:
 	    		enable <= 0;
-	    endcase */
+	    endcase 
         end
         OUTPUT:
         begin
