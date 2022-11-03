@@ -22,11 +22,11 @@ Parameters:	control_size: bit width of each control token (16 bits, 8 for comman
  		
  ********************************************************************/
 `timescale 1ns / 1ns
-module PEA_top_module_1 #(parameter control_size = 16, data_size = 16, result_size = 32, status_size = 16, buffer_size = 1024)
+module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)
 	input clk, rst,
-	input [control_size - 1 : 0] control_in,
+	input [word_size - 1 : 0] control_in,
 	input [log2(buffer_size) - 1 : 0] control_pop,
-  	input [data_size - 1 : 0] data_in,
+  	input [word_size - 1 : 0] data_in,
   	input [log2(buffer_size) - 1 : 0] data_pop,
   	input [log2(buffer_size) - 1 : 0] result_free_space, // should this be log2(buffer_size) bits long?
   	input [log2(buffer_size) - 1 : 0] status_free_space, // same for this
@@ -34,18 +34,13 @@ module PEA_top_module_1 #(parameter control_size = 16, data_size = 16, result_si
 	output data_rd_en,
   	output result_wr_en,
   	output status_wr_en,
-  	output [result_size - 1 : 0] result_out,
-  	output [status_size - 1 : 0] status_out,
+  	output [2*word_size - 1 : 0] result_out,
+  	output [word_size - 1 : 0] status_out,
 	
 			);
 
    reg [1:0] 			     mode;
    wire 			     enable;
-   
-   
-   // Enable module, outputs high enable when there are enough tokens/free space in all FIFOs depending on the current mode/state
-   PEA_enable #(16,16,32,16,1024) enable_module(rst, control_pop, data_pop, result_free_space, status_free_space, mode, control_in, enable);
-   
 
 
    function integer log2;
