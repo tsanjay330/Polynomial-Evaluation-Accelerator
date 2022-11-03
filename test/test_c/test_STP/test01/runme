@@ -28,5 +28,5 @@
 # Script to run this test
 # Usage: runme [no arguments]
 
-# [FIXME: complete this script, this is just a template]
+../../../../util/runtest
 

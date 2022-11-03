@@ -28,5 +28,6 @@
 # Script to build the executable for this test
 # Usage: makeme [no arguments]
 
-# [FIXME: complete this script, this is just a template]
-
+dxpushd ../../../../util
+./makeme
+dxpopd
