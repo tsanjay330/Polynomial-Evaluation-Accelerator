@@ -28,10 +28,12 @@
 # @ddblock_end copyright
 ################################################################################
 
-# Script to run this test
-
-set -a
-
-dlvprojreset
-source ./dlvconfig
-dlvrunme
+# Remove files that are generated when running this test
+# (i.e., files that are not part of the source code for this test)
+rm -r -f autotest-output
+rm -r -f work
+rm -f out.txt
+rm -f vsim.wlf
+rm -f transcript
+rm -f testrun.sum
+rm -f testrun.log

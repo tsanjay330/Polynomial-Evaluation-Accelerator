@@ -2,7 +2,11 @@
 dlvincludepath="./"
 dlvverbose=""
 dlvext=".v"
+<<<<<<< HEAD
 dlvbindir="../../../bin/verilog"
+=======
+dlvbindir="../../bin/designs"
+>>>>>>> 07e5dfbfbbaf2005777d2ed1bf429b3f815f41a5
 dlvdest="./xsim.dir/work"
 
 # The right hand side of the following assignment statement needs to
