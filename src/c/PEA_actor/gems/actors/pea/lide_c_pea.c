@@ -35,7 +35,6 @@ IMPLEMENTATIONS OF INTERFACE FUNCTIONS.
 
 lide_c_pea_context_type *lide_c_pea_new(
         lide_c_fifo_pointer ffp_input_command, lide_c_fifo_pointer ffp_input_data, lide_c_fifo_pointer ffp_output_result, lide_c_fifo_pointer ffp_output_status) {
-	printf("PEA_NEW\n");
     lide_c_pea_context_type *context = NULL;
 
     context = lide_c_util_malloc(sizeof(lide_c_pea_context_type));
@@ -68,7 +67,7 @@ bool lide_c_pea_enable(lide_c_pea_context_type *context) {
             result = (lide_c_fifo_population(context->ffp_input_command)
                     < lide_c_fifo_capacity(context->ffp_input_command));
             result = result && (lide_c_fifo_population(context->ffp_input_command)
-                    >= 16);
+                    >= 1);
             break;
 
         case LIDE_C_PEA_MODE_STP:
@@ -76,7 +75,6 @@ bool lide_c_pea_enable(lide_c_pea_context_type *context) {
                     < lide_c_fifo_capacity(context->ffp_input_data));
             result = result && (lide_c_fifo_population(context->ffp_input_data)
                     >= context->N[context->A] + 1);
-			printf("result %d\n", result);
             break;
 
 		case LIDE_C_PEA_MODE_EVP:
@@ -131,7 +129,6 @@ void lide_c_pea_invoke(lide_c_pea_context_type *context) {
 			command = full_command >> 8;
 			arg1 = (full_command >> 5) & 0x7;
 			arg2 = full_command & 0x1F;
-			printf("command %d : arg1 %d : arg2 %d \n",command, arg1,arg2);
 			switch (command) {
 				case 0: //STP A N
 					context->b = 1;

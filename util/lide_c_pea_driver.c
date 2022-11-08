@@ -59,8 +59,7 @@ int main(int argc, char **argv) {
     /* Connectivity: fifo1: (source, hist_gen), fifo2: (hist_gen, sink) */
     lide_c_fifo_pointer fifo1 = NULL, fifo2 = NULL, fifo3 = NULL, fifo4 = NULL;
 
-    int token_size_input = 0;
-	int token_size_output = 0;
+    int token_size = 0;
     int i = 0;
     int arg_count = 5;
     
@@ -82,12 +81,11 @@ int main(int argc, char **argv) {
     status_file = argv[i++];  
 
     /* Create the buffers. */
-    token_size_input = 16;
-	token_size_output = 32;
-    fifo1 = lide_c_fifo_new(BUFFER_CAPACITY, token_size_input);
-    fifo2 = lide_c_fifo_new(BUFFER_CAPACITY, token_size_input);
-    fifo3 = lide_c_fifo_new(BUFFER_CAPACITY, token_size_output);
-    fifo4 = lide_c_fifo_new(BUFFER_CAPACITY, token_size_output);
+    token_size = sizeof(int);
+    fifo1 = lide_c_fifo_new(BUFFER_CAPACITY, token_size);
+    fifo2 = lide_c_fifo_new(BUFFER_CAPACITY, token_size);
+    fifo3 = lide_c_fifo_new(BUFFER_CAPACITY, token_size);
+    fifo4 = lide_c_fifo_new(BUFFER_CAPACITY, token_size);
 
     /* Create and connect the actors. */
     i = 0;
