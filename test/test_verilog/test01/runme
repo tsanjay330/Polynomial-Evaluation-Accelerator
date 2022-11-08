@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
+
+################################################################################
+# @ddblock_begin copyright
 #
-# Copyright (c) 1997-2020
+# Copyright (c) 1997-2022
 # Maryland DSPCAD Research Group, The University of Maryland at College Park 
 #
 # Permission is hereby granted, without written agreement and without
@@ -22,11 +25,13 @@
 # MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 # ENHANCEMENTS, OR MODIFICATIONS.
 #
-
-
+# @ddblock_end copyright
+################################################################################
 
 # Script to run this test
-# Usage: runme [no arguments]
 
-# [FIXME: complete this script, this is just a template]
+set -a
 
+dlvprojreset
+source ./dlvconfig
+dlvrunme

@@ -28,7 +28,5 @@
 # @ddblock_end copyright
 ################################################################################
 
-# Script to build this test.
-
-set -a
-dlvmakeme
+run -all
+quit -f
