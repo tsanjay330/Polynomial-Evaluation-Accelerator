@@ -16,7 +16,7 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
     	input [log2(buffer_size) - 1 : 0] data_pop,
     	input [log2(buffer_size) - 1 : 0] result_free_space,
     	input [log2(buffer_size) - 1 : 0] status_free_space,
-	input [1 : 0] 			  mode, // How many bits/modes for the FSM operation?
+	input [2 : 0] 			  mode, // How many bits/modes for the FSM operation - 3 bits for 6 operations.
 	input [word_size - 1 : 0] control_in, // the current command read in from input FIFO
 	output reg 			  enable
 
@@ -24,18 +24,23 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
     );
    
     // Temporary names for State Transition Diagram/Table
-    localparam GET_COMMAND = 2'b00, COMP = 2'b01, OUTPUT = 2'b10;
-   localparam STP = 2'b00, EVP = 2'b01, EVB = 2'b10, RST = 2'b11;
+    localparam STATE_GET_COMMAND = 3'b000, STATE_STP = 3'b001, STATE_EVP = 3'b010, STATE_EVB = 3'b011, STATE_RST = 3'b100, STATE_OUTPUT = 3'b101;
+    localparam GET_COMMAND = 2'b00, COMP = 2'b01, OUTPUT = 2'b11;   
+    localparam CMD_STP = 2'b00, CMD_EVP = 2'b01, CMD_EVB = 2'b10, CMD_RST = 2'b11;
 
-   reg [7:0] 				  instr;
-   reg [2:0] 				  arg1;
-   reg [4:0] 				  arg2;
-   {instr, arg1, arg2} = control_in;
+   // Use wires to allow for assign statement
+   wire [7:0] 				  instr;
+   wire [2:0] 				  arg1;
+   wire [4:0] 				  arg2;
+   assign instr = {control_in[word_size - 1 : word_size - 8]};
+   assign arg1 = {control_in[word_size - 9 : word_size - 11]};
+   assign arg2 = {control_in[word_size - 12 : 0]};
    
-    always @(mode, control_pop, data_pop, result_free_space, status_free_space, control_in)
+    always @(rst, mode, control_pop, data_pop, result_free_space, status_free_space, control_in)
+
     begin
         case (mode)
-        GET_COMMAND:
+        STATE_GET_COMMAND:
         begin
             if (control_pop >= 1)
                 enable <= 1;
@@ -80,7 +85,10 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
         begin
             enable <= 0;
         end
-        endcase
+        endcase // case (mode)
+       if(rst) begin
+         enable <= 0;
+       end
     end
    
     function integer log2;

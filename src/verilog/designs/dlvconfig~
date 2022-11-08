@@ -28,7 +28,7 @@
 # @ddblock_end copyright
 ################################################################################
 
-# Script to build this test.
-
-set -a
-dlvmakeme
+dlvincludepath=./
+dlvverbose=""
+dlvext=.v
+dlvbindir=../bin/window-computation
