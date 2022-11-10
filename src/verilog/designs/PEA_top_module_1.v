@@ -38,8 +38,8 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
   	output [2*word_size - 1 : 0] status_out,
   	output [4 : 0] b, // Argument 2 of current command input token, gets used
 	output [3 : 0] Ni  // Degree/Length of a current/specified coefficient vector
-	
 			);
+    localparam MODE_GET_COMMAND=3'b000, 
 
    /*	Persistent local variables (from lide_c_pea_context_struct)	*/
    	// S, the coffeicient vectors reg, is 3D with 8 rows & 11 columns (10 degrees, including degree 0) of 16-bit signed two's complement values
