@@ -1,0 +1,10 @@
+Tests started on:
+Thu 10 Nov 2022 01:36:29 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_c/test_EVB/test01
+-----------------------------------------------------
+Error comparison result for: 
+/homes/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_c/test_EVB/test01
+Tests completed on:
+Thu 10 Nov 2022 01:36:31 PM EST
