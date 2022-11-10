@@ -22,7 +22,5 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-This tests checks the error detection when an invalid STP command is given (a degree 12 polynomial is included in the second argument, when the max is 10).
-
-@author Noah-Olson.
+Test of the STP instruction - tests that coefficients for a 10th degree polynomial can be stored properly in S8.
 
