@@ -1,0 +1,21 @@
+Tests a sequence of instructions:
+
+STP 2 6
+EVP 2
+STP 7 2
+EVB 7 3
+RST
+STP 2 3
+EVP 2
+
+The following data corresponds to each instruction:
+
+STP 2 6 --> 1 2 3 4 5 6 7
+EVP 2   --> 2
+STP 7 2 --> 3 2 1
+EVB 7 3 --> 2 3 4
+RST
+STP 2 3 --> 9 8 7 6
+EVP 2   --> 5
+
+This test should result in no errors.
