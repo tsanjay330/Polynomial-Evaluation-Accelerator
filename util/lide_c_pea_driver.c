@@ -47,7 +47,7 @@ ENHANCEMENTS, OR MODIFICATIONS.
 #define ACTOR_COUNT 5
 
 /* 
-    Usage: lide_c_hist_gen_driver.exe in_file out_file
+    Usage: lide_c_pea_driver.exe command.txt data.txt result.txt status.txt
 */
 int main(int argc, char **argv) {
     char *command_file = NULL;
