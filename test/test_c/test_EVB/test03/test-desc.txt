@@ -1,1 +1,1 @@
-This is a test with a moderate size b and and larger polynomial to see how evb handles it.
+This is a test EVB at the limit of  b and N to see how evb handles it.
