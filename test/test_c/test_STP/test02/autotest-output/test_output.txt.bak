@@ -1,0 +1,11 @@
+Tests started on:
+Thu 10 Nov 2022 02:18:58 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_c/test_STP/test02
+-----------------------------------------------------
+Error comparison result for: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_c/test_STP/test02
+Files ../expected-errors.txt and error_output.txt differ
+Tests completed on:
+Thu 10 Nov 2022 02:19:00 PM EST
