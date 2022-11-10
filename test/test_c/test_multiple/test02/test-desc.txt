@@ -1,0 +1,21 @@
+Tests a sequence of instructions:
+
+STP 0 10
+EVP 0
+EVP 1
+EVP 0
+RST
+EVP 0
+
+The following data corresponds to each instruction:
+
+STP 0 10 --> 1 2 1 2 1 2 1 2 1 2 1
+EVP 0    --> 2
+EVP 1
+EVP 0    --> 2
+RST
+EVP 0
+
+This test should result in 2 errors:
+1) Instruction #3, EVP 1: S_1 has not been set
+2) Instruction #6, EVP 0: S_0 has not been set

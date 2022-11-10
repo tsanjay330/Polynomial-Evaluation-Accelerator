@@ -1,0 +1,151 @@
+PEA_NEW
+source_command visit complete.
+source_data visit complete.
+Entered enable for MODE_GET_COMMAND
+result = 1
+command 0 : arg1 2 : arg2 6 
+pea visit complete.
+source_command visit complete.
+source_data visit complete.
+Entered enable for MODE_STP
+result 0
+source_command visit complete.
+source_data visit complete.
+Entered enable for MODE_STP
+result 0
+source_command visit complete.
+source_data visit complete.
+Entered enable for MODE_STP
+result 0
+source_command visit complete.
+source_data visit complete.
+Entered enable for MODE_STP
+result 0
+source_command visit complete.
+source_data visit complete.
+Entered enable for MODE_STP
+result 0
+source_command visit complete.
+source_data visit complete.
+Entered enable for MODE_STP
+result 1
+In LIDE_C_PEA_MODE_STP: N at index A is 6
+In LIDE_C_PEA_MODE_STP: the current value of x is 1
+In LIDE_C_PEA_MODE_STP: the current value of x is 2
+In LIDE_C_PEA_MODE_STP: the current value of x is 3
+In LIDE_C_PEA_MODE_STP: the current value of x is 4
+In LIDE_C_PEA_MODE_STP: the current value of x is 5
+In LIDE_C_PEA_MODE_STP: the current value of x is 6
+In LIDE_C_PEA_MODE_STP: the current value of x is 7
+pea visit complete.
+source_data visit complete.
+Entered enable for MODE_OUTPUT
+LIDE_C_PEA_MODE_OUTPUT: made it past error check
+LIDE_C_PEA_MODE_OUTPUT: made it past write to result
+LIDE_C_PEA_MODE_OUTPUT: made it past write to status
+pea visit complete.
+sink_result visit complete.
+sink_status visit complete.
+source_data visit complete.
+Entered enable for MODE_GET_COMMAND
+result = 1
+command 1 : arg1 2 : arg2 0 
+pea visit complete.
+source_data visit complete.
+Entered enable for MODE_EVP
+pea visit complete.
+source_data visit complete.
+Entered enable for MODE_OUTPUT
+LIDE_C_PEA_MODE_OUTPUT: made it past error check
+LIDE_C_PEA_MODE_OUTPUT: made it past write to result
+LIDE_C_PEA_MODE_OUTPUT: made it past write to status
+pea visit complete.
+sink_result visit complete.
+sink_status visit complete.
+source_data visit complete.
+Entered enable for MODE_GET_COMMAND
+result = 1
+command 0 : arg1 7 : arg2 2 
+pea visit complete.
+source_data visit complete.
+Entered enable for MODE_STP
+result 1
+In LIDE_C_PEA_MODE_STP: N at index A is 2
+In LIDE_C_PEA_MODE_STP: the current value of x is 3
+In LIDE_C_PEA_MODE_STP: the current value of x is 2
+In LIDE_C_PEA_MODE_STP: the current value of x is 1
+pea visit complete.
+source_data visit complete.
+Entered enable for MODE_OUTPUT
+LIDE_C_PEA_MODE_OUTPUT: made it past error check
+LIDE_C_PEA_MODE_OUTPUT: made it past write to result
+LIDE_C_PEA_MODE_OUTPUT: made it past write to status
+pea visit complete.
+sink_result visit complete.
+sink_status visit complete.
+source_data visit complete.
+Entered enable for MODE_GET_COMMAND
+result = 1
+command 2 : arg1 7 : arg2 3 
+pea visit complete.
+source_data visit complete.
+Entered enable for MODE_EVB
+pea visit complete.
+source_data visit complete.
+Entered enable for MODE_OUTPUT
+LIDE_C_PEA_MODE_OUTPUT: made it past error check
+LIDE_C_PEA_MODE_OUTPUT: made it past write to result
+LIDE_C_PEA_MODE_OUTPUT: made it past write to status
+LIDE_C_PEA_MODE_OUTPUT: made it past write to result
+LIDE_C_PEA_MODE_OUTPUT: made it past write to status
+LIDE_C_PEA_MODE_OUTPUT: made it past write to result
+LIDE_C_PEA_MODE_OUTPUT: made it past write to status
+pea visit complete.
+sink_result visit complete.
+sink_status visit complete.
+source_data visit complete.
+Entered enable for MODE_GET_COMMAND
+result = 1
+command 3 : arg1 0 : arg2 0 
+pea visit complete.
+sink_result visit complete.
+sink_status visit complete.
+source_data visit complete.
+Entered enable for MODE_RST
+pea visit complete.
+sink_result visit complete.
+sink_status visit complete.
+Entered enable for MODE_GET_COMMAND
+result = 1
+command 0 : arg1 2 : arg2 3 
+pea visit complete.
+Entered enable for MODE_STP
+result 1
+In LIDE_C_PEA_MODE_STP: N at index A is 3
+In LIDE_C_PEA_MODE_STP: the current value of x is 9
+In LIDE_C_PEA_MODE_STP: the current value of x is 8
+In LIDE_C_PEA_MODE_STP: the current value of x is 7
+In LIDE_C_PEA_MODE_STP: the current value of x is 6
+pea visit complete.
+Entered enable for MODE_OUTPUT
+LIDE_C_PEA_MODE_OUTPUT: made it past error check
+LIDE_C_PEA_MODE_OUTPUT: made it past write to result
+LIDE_C_PEA_MODE_OUTPUT: made it past write to status
+pea visit complete.
+sink_result visit complete.
+sink_status visit complete.
+Entered enable for MODE_GET_COMMAND
+result = 1
+command 1 : arg1 2 : arg2 0 
+pea visit complete.
+Entered enable for MODE_EVP
+pea visit complete.
+Entered enable for MODE_OUTPUT
+LIDE_C_PEA_MODE_OUTPUT: made it past error check
+LIDE_C_PEA_MODE_OUTPUT: made it past write to result
+LIDE_C_PEA_MODE_OUTPUT: made it past write to status
+pea visit complete.
+sink_result visit complete.
+sink_status visit complete.
+Entered enable for MODE_GET_COMMAND
+result = 0

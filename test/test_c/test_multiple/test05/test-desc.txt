@@ -1,0 +1,15 @@
+Tests a sequence of instructions:
+
+RST
+STP 7 3
+EVP 7
+EVP 7
+
+The following data corresponds to each instruction:
+
+RST
+STP 7 3 --> 5 4 3 2
+EVP 7   --> 3
+EVP 7	
+
+This test should result in no errors, but the final instruction will not execute since there is not enough data.
