@@ -1,4 +1,2 @@
 INFO: [VRFC 10-2263] Analyzing Verilog file "/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/PEA_top_module_1.v" into library src
 INFO: [VRFC 10-311] analyzing module PEA_top_module_1
-ERROR: [VRFC 10-4982] syntax error near 'input' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/PEA_top_module_1.v:26]
-ERROR: [VRFC 10-8549] Verilog 2000 keyword 'input' used in incorrect context [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/PEA_top_module_1.v:26]

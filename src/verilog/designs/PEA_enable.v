@@ -11,7 +11,6 @@ Parameters:     control_size: bit width of each control token (16 bits, 8 for co
 `timescale 1ns / 1ps
 module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
    (
-	input 				  rst,
     	input [log2(buffer_size) - 1 : 0] command_pop,
     	input [log2(buffer_size) - 1 : 0] data_pop,
     	input [log2(buffer_size) - 1 : 0] result_free_space,
@@ -26,7 +25,7 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
     // Temporary names for State Transition Diagram/Table
     localparam STATE_GET_COMMAND = 3'b000, STATE_STP = 3'b001, STATE_EVP = 3'b010, STATE_EVB = 3'b011, STATE_RST = 3'b100, STATE_OUTPUT = 3'b101;
    
-    always @(rst, mode, command_pop, data_pop, result_free_space, status_free_space, b)
+    always @(mode, command_pop, data_pop, result_free_space, status_free_space, b)
     begin
         case (mode)
         STATE_GET_COMMAND:
@@ -68,10 +67,7 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
         begin
             enable <= 0;
         end
-        endcase // case (mode)
-       if(rst) begin
-         enable <= 0;
-       end
+        endcase
     end
    
     function integer log2;

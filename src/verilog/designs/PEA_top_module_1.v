@@ -22,8 +22,8 @@ Parameters:	control_size: bit width of each control token (16 bits, 8 for comman
  		
  ********************************************************************/
 `timescale 1ns / 1ns
-module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)
-	input clk, rst,
+module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
+	input clk,
 	input [word_size - 1 : 0] control_in,
 	input [log2(buffer_size) - 1 : 0] command_pop,
   	input [word_size - 1 : 0] data_in,
@@ -35,12 +35,35 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)
   	output result_wr_en,
   	output status_wr_en,
   	output [2*word_size - 1 : 0] result_out,
-  	output [word_size - 1 : 0] status_out,
-  	output [4 : 0] b // Argument 2 of current command input token, gets used 
+  	output [2*word_size - 1 : 0] status_out,
+  	output [4 : 0] b, // Argument 2 of current command input token, gets used
+	output [3 : 0] Ni  // Degree/Length of a current/specified coefficient vector
 	
 			);
 
-   reg [1:0] 			     mode;
+   /*	Persistent local variables (from lide_c_pea_context_struct)	*/
+   	// S, the coffeicient vectors reg, is 3D with 8 rows & 11 columns (10 degrees, including degree 0) of 16-bit signed two's complement values
+	reg [word_size - 1 : 0] S[7 : 0][10:0];
+   	
+	// N, the array of polynomial degrees, is 2D with 8 rows of 4-bit unsigned values. 4'b1111 will represent the initial state before STP.
+   	reg [3 : 0]  N[7:0];
+
+   	// A, the current/specified index/address for the S array (3 bits b/c log2(length(S) = 3)
+   	reg [2 : 0]  A;
+
+   	// B, the number of operations to perform
+   	reg [4 : 0]  B;
+
+   	// Temporary result token - might not be needed
+   	reg [2*word_size - 1 : 0] result_temp;
+
+   	// Temporary error token - might not be needed
+   	reg [2*word_size - 1 : 0] status_temp;
+   
+   
+   
+   
+   reg [1 : 0] 			     mode;
    wire 			     enable;
 
 
