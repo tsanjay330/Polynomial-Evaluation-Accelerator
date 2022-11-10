@@ -23,39 +23,39 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
     );
    
     // Temporary names for State Transition Diagram/Table
-    localparam STATE_GET_COMMAND = 3'b000, STATE_STP = 3'b001, STATE_EVP = 3'b010, STATE_EVB = 3'b011, STATE_RST = 3'b100, STATE_OUTPUT = 3'b101;
+    localparam GET_COMMAND = 3'b000, STP = 3'b001, EVP = 3'b010, EVB = 3'b011, RST = 3'b100, OUTPUT = 3'b101;
    
     always @(mode, command_pop, data_pop, result_free_space, status_free_space, b)
     begin
         case (mode)
-        STATE_GET_COMMAND:
+        GET_COMMAND:
         begin
             if (command_pop >= 1)
                 enable <= 1;
             else
                 enable <= 0;
         end
-        STATE_STP: begin
+        STP: begin
 	    	if(data_pop >= N + 1)
 	    		enable <= 1;
 	    	else
 	    		enable <= 0;
 	end
-	STATE_EVP: begin
+	EVP: begin
 	    	if(data_pop >= 1)
 	    		enable <= 1;
 	    	else
 	    		enable <= 0;
 	end
-	STATE_EVB: begin
+	EVB: begin
 	    	if(data_pop >= b)
 	    		enable <= 1;
 	    	else
 	    		enable <= 0;
 	end
 	// Not too sure how enable for RST should be implemented - must interrupt any-inprogress computation
-	STATE_RST: enable <= 1; 
-        STATE_OUTPUT:
+	RST: enable <= 1; 
+        OUTPUT:
         begin
            if (result_free_space >= b && status_free_space >= b)
            	enable <= 1;
