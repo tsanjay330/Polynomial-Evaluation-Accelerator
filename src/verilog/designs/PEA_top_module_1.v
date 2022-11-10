@@ -25,7 +25,7 @@ Parameters:	control_size: bit width of each control token (16 bits, 8 for comman
 module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)
 	input clk, rst,
 	input [word_size - 1 : 0] control_in,
-	input [log2(buffer_size) - 1 : 0] control_pop,
+	input [log2(buffer_size) - 1 : 0] command_pop,
   	input [word_size - 1 : 0] data_in,
   	input [log2(buffer_size) - 1 : 0] data_pop,
   	input [log2(buffer_size) - 1 : 0] result_free_space, // should this be log2(buffer_size) bits long?
@@ -36,6 +36,7 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)
   	output status_wr_en,
   	output [2*word_size - 1 : 0] result_out,
   	output [word_size - 1 : 0] status_out,
+  	output [4 : 0] b // Argument 2 of current command input token, gets used 
 	
 			);
 
