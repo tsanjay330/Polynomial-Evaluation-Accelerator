@@ -24,7 +24,7 @@ Parameters:	control_size: bit width of each control token (16 bits, 8 for comman
 `timescale 1ns / 1ns
 module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
 	input clk,
-	input [word_size - 1 : 0] control_in,
+	input [word_size - 1 : 0] command_in,
 	input [log2(buffer_size) - 1 : 0] command_pop,
   	input [word_size - 1 : 0] data_in,
   	input [log2(buffer_size) - 1 : 0] data_pop,
@@ -37,9 +37,9 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
   	output [2*word_size - 1 : 0] result_out,
   	output [2*word_size - 1 : 0] status_out,
   	output [4 : 0] b, // Argument 2 of current command input token, gets used
-	output [3 : 0] Ni  // Degree/Length of a current/specified coefficient vector
+	output [3 : 0] Ni  // Degree/Length of a current/specified coefficient vector(can be a total of value=8)
 			);
-    localparam MODE_GET_COMMAND=3'b000, 
+    localparam GET_COMMAND=3'b000, STP=3'b001, EVP=3'b010, EVB=3'b011, OUTPUT=3'b100, RST=3'b101; 
 
    /*	Persistent local variables (from lide_c_pea_context_struct)	*/
    	// S, the coffeicient vectors reg, is 3D with 8 rows & 11 columns (10 degrees, including degree 0) of 16-bit signed two's complement values
@@ -60,11 +60,16 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
    	// Temporary error token - might not be needed
    	reg [2*word_size - 1 : 0] status_temp;
    
-   
+    reg [2:0] state_module;
+    reg [2:0] next_state_module;
+    reg start_in_child;//Taken from lab07(might not use the same)
+    wire done_out_child;//Taken from lab07(might not use the same)
    
    
    reg [1 : 0] 			     mode;
    wire 			     enable;
+    /*firing state FSM2-module instantiation block*/
+  
 
 
    function integer log2;

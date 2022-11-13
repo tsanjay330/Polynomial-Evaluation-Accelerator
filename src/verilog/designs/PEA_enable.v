@@ -15,10 +15,10 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
     	input [log2(buffer_size) - 1 : 0] data_pop,
     	input [log2(buffer_size) - 1 : 0] result_free_space,
     	input [log2(buffer_size) - 1 : 0] status_free_space,
-	input [2 : 0] 			  mode, // How many bits/modes for the FSM operation - 3 bits for 6 operations.
-    	input [4 : 0] 			  b, // Second argument of the command token
-    	input [3 : 0] 			  N, // The degree of a current/specified coefficient vector
-	output reg 			  enable
+	    input [2 : 0] mode, // How many bits/modes for the FSM operation - 3 bits for 6 operations.
+    	input [4 : 0] b, // Second argument of the command token
+    	input [3 : 0] N, // The degree of a current/specified coefficient vector
+	    output reg enable
 
     );
    
