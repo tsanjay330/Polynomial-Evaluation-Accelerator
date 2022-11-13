@@ -1,0 +1,2 @@
+This is the first test suite for the RST instruction.
+The RST instruction takes no operands and returns a boolean result by indicating that the instructions are set to an empty state.
