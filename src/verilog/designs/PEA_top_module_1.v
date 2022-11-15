@@ -23,14 +23,17 @@ Parameters:	control_size: bit width of each control token (16 bits, 8 for comman
  ********************************************************************/
 `timescale 1ns / 1ns
 module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
-	input 				  clk,
+	input 				  clk, rst, // This rst is NOT the rst command.
 	input [word_size - 1 : 0] 	  command_in,
 	input [log2(buffer_size) - 1 : 0] command_pop,
   	input [word_size - 1 : 0] 	  data_in,
   	input [log2(buffer_size) - 1 : 0] data_pop,
   	input [log2(buffer_size) - 1 : 0] result_free_space, // should this be log2(buffer_size) bits long?
-	input enable, // From enable module
+	input 				  enable, // From enable module
   	input [log2(buffer_size) - 1 : 0] status_free_space, // same for this
+	input 				  invoke,        /***	These three signals relate to test bench (invoke, next_mode_in and next_mode_out	***/
+	input [1 : 0] 			  next_mode_in,
+	output [1 : 0] 			  next_mode_out,
   	output 				  command_rd_en,
 	output 				  data_rd_en,
   	output 				  result_wr_en,
@@ -40,7 +43,8 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
   	output [4 : 0] 			  b, // Argument 2 of current command input token, gets used
 	output [3 : 0] 			  Ni  // Degree/Length of a current/specified coefficient vector(can be a total of value=8)
 			);
-    localparam GET_COMMAND=3'b000, STP=3'b001, EVP=3'b010, EVB=3'b011, OUTPUT=3'b100, RST=3'b101; 
+    localparam GET_COMMAND=3'b000, STP=3'b001, EVP=3'b010, EVB=3'b011, OUTPUT=3'b100, RST=3'b101;
+    localparam STATE_IDLE = 2'b00, STATE_FIRING_START = 2'b01, STATE_FIRING_WAIT = 2'b10;
 
    /*	Persistent local variables (from lide_c_pea_context_struct)	*/
    	// S, the coffeicient vectors reg, is 3D with 8 rows & 11 columns (10 degrees, including degree 0) of 16-bit signed two's complement values
@@ -68,11 +72,53 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
    
    
    reg [1 : 0] 			     mode;
-   wire 			     enable;
+  // wire 			     enable;
     /*firing state FSM2-module instantiation block*/
-  
 
+   /* Update current state */
+   always@(posedge clk)
+     begin
+	if(!rst)
+	  state_module <= STATE_IDLE;
+	else
+	  state_module <= next_state_module;
+     end
 
+   /* State evolution of the top-level FSM for this module */
+always@(state_module, invoke, done_out_child)
+  begin
+	case(state_module)
+	STATE_IDLE: begin
+	if(invoke)
+  	  next_state_module <= STATE_FIRING_START;
+	else
+	  next_state_module <= STATE_IDLE;
+   	end
+	STATE_FIRING_START: begin
+           next_state_module <= STATE_FIRING_WAIT;
+        end
+	STATE_FIRING_WAIT: begin
+        if(done_out_child)
+          next_state_module <= STATE_IDLE;
+        else
+          next_state_module <= STATE_FIRING_WAIT;
+        end
+	default:
+	  next_state_module <= STATE_IDLE;
+  	endcase
+
+  end // always@ (state_module, invoke, done_out_child)
+
+   /* start_in_child signal assignment */
+   always @(state_module) begin
+	case (state_module)
+	  STATE_IDLE:  start_in_child <= 0;
+          STATE_FIRING_START: start_in_child <= 1;
+          STATE_FIRING_WAIT: start_in_child <= 0;
+          default: start_in_child <= 0;
+        endcase
+   end // always @ (state_module)
+   
    function integer log2;
     input [31 : 0] value;
          integer i;
