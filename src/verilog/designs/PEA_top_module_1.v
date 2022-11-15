@@ -23,21 +23,22 @@ Parameters:	control_size: bit width of each control token (16 bits, 8 for comman
  ********************************************************************/
 `timescale 1ns / 1ns
 module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
-	input clk,
-	input [word_size - 1 : 0] command_in,
+	input 				  clk,
+	input [word_size - 1 : 0] 	  command_in,
 	input [log2(buffer_size) - 1 : 0] command_pop,
-  	input [word_size - 1 : 0] data_in,
+  	input [word_size - 1 : 0] 	  data_in,
   	input [log2(buffer_size) - 1 : 0] data_pop,
   	input [log2(buffer_size) - 1 : 0] result_free_space, // should this be log2(buffer_size) bits long?
+	input enable, // From enable module
   	input [log2(buffer_size) - 1 : 0] status_free_space, // same for this
-  	output control_rd_en,
-	output data_rd_en,
-  	output result_wr_en,
-  	output status_wr_en,
-  	output [2*word_size - 1 : 0] result_out,
-  	output [2*word_size - 1 : 0] status_out,
-  	output [4 : 0] b, // Argument 2 of current command input token, gets used
-	output [3 : 0] Ni  // Degree/Length of a current/specified coefficient vector(can be a total of value=8)
+  	output 				  command_rd_en,
+	output 				  data_rd_en,
+  	output 				  result_wr_en,
+  	output 				  status_wr_en,
+  	output [2*word_size - 1 : 0] 	  result_out,
+  	output [2*word_size - 1 : 0] 	  status_out,
+  	output [4 : 0] 			  b, // Argument 2 of current command input token, gets used
+	output [3 : 0] 			  Ni  // Degree/Length of a current/specified coefficient vector(can be a total of value=8)
 			);
     localparam GET_COMMAND=3'b000, STP=3'b001, EVP=3'b010, EVB=3'b011, OUTPUT=3'b100, RST=3'b101; 
 
