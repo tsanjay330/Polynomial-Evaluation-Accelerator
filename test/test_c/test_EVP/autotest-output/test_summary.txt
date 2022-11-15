@@ -1,1 +1,5 @@
-Test count: 3; test failures: 0; error output mismatches: 0
+Test count: 3; test failures: 3; error output mismatches: 0
+Test failures: 
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_EVP/test01
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_EVP/test02
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_EVP/test03
