@@ -47,9 +47,15 @@ module tb_PEA();
             (clk, rst, wr_en_input, rd_in_fifo_command, command_in,
             command_pop, free_space_command, data_in_fifo_command);
 
-    fifo #(buffer_size_out, width) out_fifo1
-            (clk, rst, wr_out_fifo1, rd_en_fifo1, data_out,
-            pop_out_fifo1, free_space_out_fifo1, data_out_fifo1);
+	/* OUTPUT FIFOS*/
+    fifo #(buffer_size_out, 32) out_fifo_result
+            (clk, rst, wr_out_fifo1, rd_en_result, data_out_result,
+            result_pop_out, free_space_out_result, data_out_fifo1_result);
+
+	fifo #(buffer_size_out, 32) out_fifo_status
+            (clk, rst, wr_out_fifo1, rd_en_status, data_out_status,
+            status_pop_out, free_space_out_status, data_out_fifo2_status);
+
 
     /***************************************************************************
     Instantiate the enable and invoke modules for the actor under test.
@@ -62,12 +68,8 @@ module tb_PEA();
             rd_in_fifo1_window, rd_in_fifo2_L, rd_in_fifo3_C,
             next_mode_out, FC, wr_out_fifo1,
             data_out);
-
-    stream_comp_enable #(.size(size), .buffer_size(buffer_size),
-            .buffer_size_out(buffer_size_out)) enable_module(rst,
-            pop_in_fifo1_window, pop_in_fifo2_L, pop_in_fifo3_C,
-            free_space_out_fifo1, next_mode_in, enable);
-
+		
+	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,free_space_out_status, next_mode_in, b, N, 
     integer descr;
 
     /***************************************************************************
@@ -83,6 +85,13 @@ module tb_PEA();
             #1 clk <= 0;
         end
     end
+
+
+/******************************Nothing has been changed beyond here***********/
+
+
+
+
 
     /***************************************************************************
     Try to carry out three actor firings (to cycle through the three
