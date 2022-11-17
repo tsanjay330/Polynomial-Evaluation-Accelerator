@@ -33,7 +33,7 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
   	input [log2(buffer_size) - 1 : 0] status_free_space, // same for this
 	input 				  invoke,        /***	These three signals relate to test bench (invoke, next_mode_in and next_mode_out	***/
 	input [1 : 0] 			  next_mode_in,
-	output [1 : 0] 			  next_mode_out,
+	output [1 : 0] 			  next_mode_out, // Is this necessary???
   	output 				  command_rd_en,
 	output 				  data_rd_en,
   	output 				  result_wr_en,
@@ -48,6 +48,7 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
     localparam STATE_IDLE = 2'b00, STATE_FIRING_START = 2'b01, STATE_FIRING_WAIT = 2'b10;
 
    /*	Persistent local variables (from lide_c_pea_context_struct)	*/
+   /*
    	// S, the coffeicient vectors reg, is 3D with 8 rows & 11 columns (10 degrees, including degree 0) of 16-bit signed two's complement values
 	reg [word_size - 1 : 0] S[7 : 0][10:0];
    	
@@ -65,6 +66,7 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
 
    	// Temporary error token - might not be needed
    	reg [2*word_size - 1 : 0] status_temp;
+    */
    
     reg [2:0] state_module;
     reg [2:0] next_state_module;
