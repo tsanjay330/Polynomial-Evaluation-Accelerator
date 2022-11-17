@@ -49,11 +49,10 @@ q: data that is read out of the RAM
 
 --- PARAMETERS: ---    
 
-size: the number of tokens (integers) in each input vector. So, if size =
+buffer_size: the number of tokens (integers) in each input vector. So, if size =
 N, then this actor performs stream computation.  
 
-width: the bit width for the integer data type used in the stream comp 
-operations
+word_size: the bit width for each of the input data  used in computation of the PEA actor.
 *******************************************************************************/
 
 `timescale 1ns/1ps
