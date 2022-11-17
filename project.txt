@@ -1,1 +1,9 @@
 This is the project from team1
+Progress So Far:
+Enable.v is compiled
+PEA_top_module_1.v has the state operations defined(Yet to add the FSM-2 instantiation)
+PEA_FSM2.v is yet to be coded
+Rough draft for get_command_fsm3.v is implemented
+Drafts for STP, EVB and EVP are yet to be implemented.
+Testbench for the PEA has states defined.
+Tb for the enable module prints out Input FIFO. 
