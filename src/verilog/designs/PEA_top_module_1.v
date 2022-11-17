@@ -40,6 +40,7 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
   	output 				  status_wr_en,
   	output [2*word_size - 1 : 0] 	  result_out,
   	output [2*word_size - 1 : 0] 	  status_out,
+    output FC;
   	output [4 : 0] 			  b, // Argument 2 of current command input token, gets used
 	output [3 : 0] 			  Ni  // Degree/Length of a current/specified coefficient vector(can be a total of value=8)
 			);
@@ -72,9 +73,11 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
    
    
    reg [1 : 0] 			     mode;
+   assign FC = done_out_child;
   // wire 			     enable;
     /*firing state FSM2-module instantiation block*/
-
+   firing_state_FSM2 #(.word_size(word_size))
+           FSM2(clk, rst, data_in, command_in, start_in, next_mode_in, data_rd_en, command_rd_en, next_mode_out, done_out_child, result_wr_en, status_wr_en, result_out, status_out);
    /* Update current state */
    always@(posedge clk)
      begin
