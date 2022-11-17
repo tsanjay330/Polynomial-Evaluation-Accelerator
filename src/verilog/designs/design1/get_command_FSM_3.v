@@ -7,18 +7,18 @@ module get_command_FSM_3
 		input [15 : 0] commandstr,
 		input en_proc_cmd,
 		output reg en_rd_cmd,
-        output reg done_out,
+        output reg done_get_cmd,
         output reg [7 : 0] command,
         output reg [2 : 0] arg1,
 		output reg [4 : 0] arg2,
-		output reg [3 : 0] error); //TODO: correct bit width of error
+		output reg [1 : 0] error); //TODO: correct bit width of error
 
 		reg [15 : 0] commandstr;
-		reg [7 : 0] next_command, next_command_tmp;
-		reg [2 : 0] next_arg1, next_arg1_tmp;
-		reg [4 : 0] next_arg2, next_arg2_tmp;
+		reg [7 : 0] next_command;
+		reg [2 : 0] next_arg1;
+		reg [4 : 0] next_arg2;
 
-    localparam STATE_START = 3'b000, STATE_GET_CMD = 3'b001, STATE_PROC_CMD = 3'b010, STATE_CHECK_ERR = 3'b011, STATE_END = 3'b100;
+    localparam STATE_START = 2'b00, STATE_GET_CMD = 2'b01, STATE_CHECK_ERR = 2'b10, STATE_END = 2'b11;
 
 	always @(posedge clk or negedge reset)
 		if (! rst)
@@ -26,11 +26,13 @@ module get_command_FSM_3
 			command <= 0;
 			arg1 <= 0;
 			arg2 <= 0;
+			error <= 0;
 		else
 			state <= next_state;
 			command <= next_command;
 			arg1 <= next_arg1;
 			arg2 <= next_arg2;
+			error <= next_error;
 
 	always @(state, start_get_cmd, en_proc_cmd) begin
 		case (state)
@@ -42,12 +44,9 @@ module get_command_FSM_3
 
 			STATE_GET_CMD:
 				if (en_proc_cmd)
-					next_state <= STATE_PROC_CMD;
+					next_state <= STATE_CHECK_ERR;
 				else
 					next_state <= STATE_GET_CMD;
-
-			STATE_PROC_CMD:
-				next_state <= STATE_CHECK_ERR;
 
 			STATE_CHECK_ERR:
 				next_state <= STATE_END;
@@ -67,9 +66,6 @@ module get_command_FSM_3
 				next_arg1 <= arg1;
 				next_arg2 <= arg2;
 				next_error <= error;
-				next_command_tmp <= 0;
-				next_arg1_tmp <= 0;
-				next_arg2_tmp <= 0;
 
 			STATE_GET_CMD:
 				done_get_cmd <= 0;
@@ -78,59 +74,54 @@ module get_command_FSM_3
 				next_arg1 <= arg1;
                 next_arg2 <= arg2;
                 next_error <= error;
-                next_command_tmp <= 0;
-                next_arg1_tmp <= 0;
-                next_arg2_tmp <= 0;
-
-			STATE_PROC_CMD:
-				done_get_cmd <= 0;
-				en_rd_cmd <= 0;
-				next_command <= command;
-                next_arg1 <= arg1;
-                next_arg2 <= arg2;
-                next_error <= error;
-                next_command_tmp <= commandstr[15 : 8];
-                next_arg1_tmp <= commandstr[7 : 5];
-                next_arg2_tmp <= commandstr[4 : 0];
 
 			STATE_CHECK_ERR:
-				done_get_cmd <= 0;
-				en_rd_cmd <= 0;
-
-				case (next_command_tmp)
+				case (commandstr[15 : 8])
 					0: 
-						if (next_arg2_tmp <= 10) begin
-							next_command <= next_command_tmp;
-							next_arg1 <= next_arg1_tmp;
-							next_arg2 <= next_arg2_tmp;
-							next_error <= 2;
+						if (commandstr[4 : 0] <= 10) begin
+							done_get_cmd <= 0;
+							en_rd_cmd <= 0;
+							next_command <= commandstr[15 : 8];
+							next_arg1 <= commandstr[7 : 5];
+							next_arg2 <= commandstr[4 : 0];
+							next_error <= 0;
 						end
 			 			else begin
+							done_get_cmd <= 0;
+							en_rd_cmd <= 0;
 							next_command <= command;
 							next_arg1 <= arg1;
 							next_arg2 <= arg2;
-							next_error <= 1;
+							next_error <= 2;
 						end
 		
 					1:
-						next_command <= next_command_tmp;
-                        next_arg1 <= next_arg1_tmp;
-                        next_arg2 <= 1;
+						// TODO: add error handling for using S_A before setting S_A
+						done_get_cmd <= 0;
+                        en_rd_cmd <= 0;
+                        next_command <= commandstr[15 : 8];
+                        next_arg1 <= commandstr[7 : 5];
+                        next_arg2 <= 0
+                        next_error <= 0;
+					2:
+						done_get_cmd <= 0;
+						en_rd_cmd <= 0;
+                        next_command <= commandstr[15 : 8];
+                        next_arg1 <= commandstr[7 : 5];
+                        next_arg2 <= commandstr[4 : 0];
                         next_error <= 0;
 
-					2:
-						next_command <= next_command_tmp;
-						next_arg1 <= next_arg1_tmp;
-						next_arg2 <= next_arg2_tmp;
-						next_error <= 0;
-
 					3:
-						next_command <= next_command_tmp;
+						done_get_cmd <= 0;
+						en_rd_cmd <= 0;
+						next_command <= commandstr[15 : 8];
 						next_arg1 <= 0;
 						next_arg2 <= 0;
 						next_error <= 0;
 
 					default:
+						done_get_cmd <= 0;
+						en_rd_cmd <= 0;
 						next_command <= command;
 						next_arg1 <= arg1;
 						next_arg2 <= arg2;
@@ -138,4 +129,14 @@ module get_command_FSM_3
 				
 				endcase
 
-			// kinda stuck on this next vs next tmp thing	
+			STATE_END:
+				done_get_cmd <= 1;
+				en_rd_cmd <= 0;
+				next_command <= command;
+				next_arg1 <= arg1;
+				next_arg2 <= arg2;
+				next_error <= error;
+
+		endcase
+	end
+endmodule
