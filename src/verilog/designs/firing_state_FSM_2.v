@@ -1,22 +1,22 @@
 `timescale 1ns/1ps
 module firing_state_FSM2
         #(parameter word_size = 16, buffer_size = 1024)//Not sure if we need buffer size for this one
-        (input clk, rst;
-        input [word_size - 1 : 0] data_in;
-        input [word_size - 1 : 0] command_in;
-        input start_get_cmd;
-        input [3 : 0] N [7 : 0];
-        input [2 : 0] next_mode_in;
-        output rd_in_data;
-        output rd_in_command;
+        (input clk, rst,
+        input [word_size - 1 : 0] data_in,
+        input [word_size - 1 : 0] command_in,
+        input start_get_cmd,
+//        input [3 : 0] N [7 : 0],
+        input [2 : 0] next_mode_in,
+        output rd_in_data,
+        output rd_in_command,
 //        output reg [2 : 0] next_mode_out;
-        output reg done_get_cmd;
-        output reg wr_out_result;
-        output reg wr_out_status;
-        output reg [word_size - 1 : 0] data_out;
-        output reg [7 : 0] instr;
-        output reg [2 : 0] arg1;
-        output reg [4 : 0] arg2;
+        output reg done_get_cmd,
+        output reg wr_out_result,
+        output reg wr_out_status,
+        output reg [word_size - 1 : 0] data_out,
+        output reg [7 : 0] instr,
+        output reg [2 : 0] arg1,
+        output reg [4 : 0] arg2,
         output reg [1 : 0] error);
    
    localparam GET_COMMAND=3'b000;//(STP=3'b001, EVP=3'b010, EVB=3'b011, OUTPUT=3'b100, RST=3'b101)
@@ -24,6 +24,7 @@ module firing_state_FSM2
 
    reg [2 : 0] state_module, next_state_module;
    reg start_in_get_command;
+   reg done_out_child;
    reg en_mode_check_err;
    wire [word_size - 1 : 0] get_command_out;
    wire rd_en;
@@ -102,7 +103,7 @@ end
 /**************************************
 OUTPUT SIGNALS
 **************************************/
-always @(state_module, result_out)
+always @(state_module, data_out)
 begin
     case(state_module)
     STATE_START:
