@@ -67,9 +67,9 @@ module single_port_ram_edited
         input [log2(buffer_size) - 1 : 0] wr_addr,
         input [log2(buffer_size) - 1 : 0] rd_addr,
         input 				  wr_en, re_en, clk,
-        output [word_size - 1 : 0] 	  q,
-	output 				  wr_suc,
-	output 				  q_en); // This signal goes high when data is successfully read out - it is the responsibility of the module that drives the read_enable signal to make sure that re_en only stays high for a single clock cycle.
+        output reg [word_size - 1 : 0] 	  q,
+	output reg			  wr_suc,
+	output reg			  q_en); // This signal goes high when data is successfully read out - it is the responsibility of the module that drives the read_enable signal to make sure that re_en only stays high for a single clock cycle.
 
     /* Declare the RAM variable */
     reg [word_size - 1 : 0] ram[buffer_size - 1 : 0];
@@ -82,10 +82,10 @@ module single_port_ram_edited
         /* Write */
         if (wr_en) begin
            ram[wr_addr] <= data;
-	   wr_suc = 1'b1;
+	   wr_suc <= 1'b1;
 	end
         else
-	  wr_suc = 1'b0;
+	  wr_suc <= 1'b0;
 
         /* Read */
         if (re_en) begin
