@@ -6,7 +6,6 @@ module get_command_FSM_3
         input start_get_cmd,
 		input [15 : 0] command_in,
 		input en_mode_check_err,
-		input [3 : 0] N [7 : 0],
 		output reg en_rd_cmd,
         output reg done_get_cmd,
         output reg [7 : 0] instr,
@@ -113,43 +112,23 @@ module get_command_FSM_3
 		
 					1:
 					begin
-						if (N[command_in[7 : 5]] != 15) begin
-							done_get_cmd <= 0;
-                        	en_rd_cmd <= 0;
-                        	next_instr <= command_in[15 : 8];
-                        	next_arg1 <= command_in[7 : 5];
-                        	next_arg2 <= 0;
-                        	next_error <= 0;
-						end
-						else begin
-							done_get_cmd <= 0;
-                            en_rd_cmd <= 0;
-                            next_instr <= instr;
-                            next_arg1 <= arg1;
-                            next_arg2 <= arg2;
-                            next_error <= 3;
-						end
+						done_get_cmd <= 0;
+                        en_rd_cmd <= 0;
+                        next_instr <= command_in[15 : 8];
+                        next_arg1 <= command_in[7 : 5];
+                        next_arg2 <= 0;
+                        next_error <= 0;
 					end
 
 					2:
 					begin
-						if (N[command_in[7 : 5]] != 15) begin
-                            done_get_cmd <= 0;
-                            en_rd_cmd <= 0;
-                            next_instr <= command_in[15 : 8];
-                            next_arg1 <= command_in[7 : 5];
-                            next_arg2 <= command_in[4 : 0];
-                            next_error <= 0;
-                        end
-                        else begin
-                            done_get_cmd <= 0;
-                            en_rd_cmd <= 0;
-                            next_instr <= instr;
-                            next_arg1 <= arg1;
-                            next_arg2 <= arg2;
-                            next_error <= 3;
-						end
-					end
+                        done_get_cmd <= 0;
+                        en_rd_cmd <= 0;
+                        next_instr <= command_in[15 : 8];
+                        next_arg1 <= command_in[7 : 5];
+                        next_arg2 <= command_in[4 : 0];
+                        next_error <= 0;
+                    end
 
 					3:
 					begin
