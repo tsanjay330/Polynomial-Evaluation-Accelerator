@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 
 //TODO: could change initial values of result and status
+//TODO: do I need a write enable signal for S?
 
 module STP_FSM_3 
 		(
@@ -14,7 +15,7 @@ module STP_FSM_3
 		output reg done_stp,
 		output reg [15 : 0] SA_i,
 		output reg [31 : 0] result,
-		output reg [4 : 0] status);		// TODO: this bit width depends on number of errors
+		output reg [31 : 0] status);
 
 		reg [1 : 0] state, next_state;
 		reg [31 : 0] next_result;
@@ -22,14 +23,14 @@ module STP_FSM_3
 		reg [4 : 0] counter, next_counter;
 		reg [15 : 0] next_SA_i;
 
-	localparam STATE_START = 2'b00, STATE_GET_COEFF = 2'b01, 
-				STATE_WRITE_COEFF = 2'b10, STATE_END = 2'b11;
+	localparam STATE_START = 2'b00, STATE_WR_COEFF0 = 2'b01, 
+				STATE_WR_COEFF1 = 2'b10, STATE_END = 2'b11;
 
 	always @(posedge clk, negedge rst)
 		if (!rst) begin
 			state <= STATE_START;
 			result <= 0;
-			status <= 5'b11111;
+			status <= 32'b11111111111111111111111111111111;
 			counter <= 0;
 			SA_i <= 0;
 		end
@@ -45,21 +46,18 @@ module STP_FSM_3
 		case (state)
 			STATE_START:
 				if (start_stp)
-					next_state <= STATE_GET_COEFF;
+					next_state <= STATE_WR_COEFF0;
 				else
 					next_state <= STATE_START;	
 			
-			STATE_GET_COEFF:
-				if (en_mode_wr_coeff)
-					next_state <= STATE_WRITE_COEFF;
-				else
-					next_state <= STATE_GET_COEFF;
+			STATE_WR_COEFF0:
+				next_state <= STATE_WR_COEFF1;
 			
-			STATE_WRITE_COEFF:
+			STATE_WR_COEFF1:
 				if (counter == N - 1)
 					next_state <= STATE_END;
 				else
-					next_state <= STATE_GET_COEFF;
+					next_state <= STATE_WR_COEFF1;
 	
 			STATE_END:
 				next_state <= STATE_START;
@@ -73,25 +71,25 @@ module STP_FSM_3
 				done_stp <= 0;
 				en_rd_data <= 0;
 				next_SA_i <= 0;
-				next_result <= result;
-				next_status <= status;
+				next_result <= 0;
+				next_status <= 32'b11111111111111111111111111111111;
 				next_counter <= 0;
 			end
 
-			STATE_GET_COEFF:
+			STATE_WR_COEFF0:
 			begin
 				done_stp <= 0;
 				en_rd_data <= 1;
 				next_SA_i <= SA_i;
 				next_result <= result;
 				next_status <= status;
-				next_counter <= 0;
+				next_counter <= counter + 1;
 			end
 
-			STATE_WRITE_COEFF:
+			STATE_WR_COEFF1:
 			begin
 				done_stp <= 0;
-				en_rd_data <= 0;
+				en_rd_data <= 1;
 				next_SA_i <= c;
 				next_result <= result;
 				next_status <= status;
