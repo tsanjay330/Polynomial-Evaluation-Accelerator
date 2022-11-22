@@ -73,15 +73,15 @@ module S_vector_ram
 	input [log2(num_vectors) - 1 : 0] wr_vector_addr,
         input [log2(max_degree) : 0] 	  wr_coef_addr,
         input 				  wr_en, re_en, clk,
-        output [word_size - 1 : 0] 	  q,
-	output wr_suc,
-	output 				  q_en); // This signal goes high when data is successfully read out - it is the responsibility of the module that drives the read_enable signal to make sure that re_en only stays high for a single clock cycle.
+        output reg [word_size - 1 : 0] 	  q,
+	output reg 			  wr_suc,
+	output reg			  q_en); // This signal goes high when data is successfully read out - it is the responsibility of the module that drives the read_enable signal to make sure that re_en only stays high for a single clock cycle.
 
     /* Declare the RAM variable */
     reg [word_size - 1 : 0] ram[num_vectors - 1 : 0][max_degree : 0];
 	
-    /* Variable to hold the registered read address */
-    reg [log2(buffer_size) - 1 : 0] addr_reg;
+    /* Variable to hold the registered read address - old implementation */
+    //reg [log2(buffer_size) - 1 : 0] addr_reg;
 	
     always @ (posedge clk)
     begin
