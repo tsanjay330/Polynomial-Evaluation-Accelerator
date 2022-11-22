@@ -32,6 +32,10 @@ module tb_PEA();
 	wire [4:0] b; 
 	wire [3:0] N;
 
+	//These signals come from the FSM2/3 level
+	wire wr_out, rd_in_command, rd_in_data;
+	wire [2:0] mode;
+
     integer i, j, k;
 
     /***************************************************************************
@@ -40,20 +44,20 @@ module tb_PEA();
 
     fifo #(buffer_size, width)
             data_fifo
-            (clk, rst, wr_en_input, /*rd_in_fifo_data*/, data_in,
+            (clk, rst, wr_en_input, rd_in_data, data_in,
             data_pop, free_space_data, data_in_fifo_data);
 
     fifo #(buffer_size, width) command_fifo
-            (clk, rst, wr_en_input, rd_in_fifo_command, command_in,
+            (clk, rst, wr_en_input, rd_in_command, command_in,
             command_pop, free_space_command, data_in_fifo_command);
 
 	/* OUTPUT FIFOS*/
     fifo #(buffer_size_out, 32) out_fifo_result
-            (clk, rst, wr_out_fifo1, rd_en_result, data_out_result,
+            (clk, rst, wr_out, rd_en_result, data_out_result,
             result_pop_out, free_space_out_result, data_out_fifo1_result);
 
 	fifo #(buffer_size_out, 32) out_fifo_status
-            (clk, rst, wr_out_fifo1, rd_en_status, data_out_status,
+            (clk, rst, wr_out, rd_en_status, data_out_status,
             status_pop_out, free_space_out_status, data_out_fifo2_status);
 
 
@@ -61,15 +65,13 @@ module tb_PEA();
     Instantiate the enable and invoke modules for the actor under test.
     ***************************************************************************/
 
-    stream_comp_invoke_top_module_1 #(.size(size), .width(width))
-            invoke_module(clk, rst,
-            data_in_fifo1_window, data_in_fifo2_L, data_in_fifo3_C,
-            invoke, next_mode_in,
-            rd_in_fifo1_window, rd_in_fifo2_L, rd_in_fifo3_C,
-            next_mode_out, FC, wr_out_fifo1,
-            data_out);
+	PEA_top_module_1 invoke_module(command_in, data_in, invoke, next_mode_in,
+			rd_in_command, rd_in_data, FC, wr_out, data_out_result,
+			data_out_status, mode, b, N);
 		
-	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,free_space_out_status, next_mode_in, b, N, 
+	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
+			free_space_out_status, next_mode_in, mode, b, N, enable);
+
     integer descr;
 
     /***************************************************************************
