@@ -49,7 +49,7 @@ module EVP_FSM_3
 			status <= next_status;
 		end
 
-	always @(state, start_evp, counter)
+	always @(state, start_evp, counter, N)
 		case (state)
 			STATE_START:
 			begin
@@ -64,7 +64,7 @@ module EVP_FSM_3
 
 			STATE_COMPUTE1:
 			begin
-				if (exp_counter == counter)
+				if (exp_counter == counter - 1)
 					next_state <= STATE_COMPUTE2;
 				else
 					next_state <= STATE_COMPUTE1;

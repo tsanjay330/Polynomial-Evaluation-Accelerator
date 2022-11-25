@@ -50,11 +50,11 @@ module EVB_FSM_3
 			status <= next_status;
 		end
 
-	always @(state, en_evp, done_evp, b)
+	always @(state, start_evb, done_evp, b)
 		case (state)
 			STATE_START:
             begin
-                if (en_evp)
+                if (start_evb)
                     next_state <= STATE_FIRST_EVP0;
                 else
                     next_state <= STATE_START;
