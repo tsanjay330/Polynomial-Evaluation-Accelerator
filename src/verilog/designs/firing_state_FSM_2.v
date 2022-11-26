@@ -1,3 +1,5 @@
+//TODO:Add signals rd_en_command,data,S,N,x,c_i.
+//TODO:Figure out number of states(whther to implement instr states in SETUP_COMP,COMP and OUTPUT
 `timescale 1ns/1ps
 module firing_state_FSM2
         #(parameter word_size = 16, buffer_size = 1024)//Not sure if we need buffer size for this one
@@ -160,7 +162,7 @@ CFDF: firing mode STP
         next_state_module <= STATE_EVB_WAIT;
     end
 
-    STATE_EVP_WAIT:
+    STATE_EVB_WAIT:
     begin
         if(done_out_child_mode4)
         begin
@@ -224,6 +226,34 @@ begin
     begin
         wr_out_result <= 0;
         start_in_stp <= 0;
+        done_get_cmd <= 0;
+        data_out <= get_command_out;
+    end
+    STATE_EVP_START:
+    begin
+        wr_out_result <= 0;
+        start_in_evp <= 1;
+        done_get_cmd <= 0;
+        data_out <= get_command_out;
+    end
+    STATE_EVP_WAIT:
+    begin
+        wr_out_result <= 0;
+        start_in_evp <= 0;
+        done_get_cmd <= 0;
+        data_out <= get_command_out;
+    end
+    STATE_EVB_START:
+    begin
+        wr_out_result <= 0;
+        start_in_evb <= 1;
+        done_get_cmd <= 0;
+        data_out <= get_command_out;
+    end
+    STATE_EVB_WAIT:
+    begin
+        wr_out_result <= 0;
+        start_in_evb <= 0;
         done_get_cmd <= 0;
         data_out <= get_command_out;
     end
