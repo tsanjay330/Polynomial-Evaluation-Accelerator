@@ -28,16 +28,28 @@ module firing_state_FSM2
    localparam STATE_START=3'b000, STATE_GET_COMMAND_START=3'b001, STATE_GET_COMMAND_WAIT=3'b010, STATE_STP_START=3'b011, STATE_STP_WAIT=3'b100, STATE_EVP_START=3'b101, STATE_EVP_WAIT=3'b110, STATE_END=3'b111;
 
    reg [2 : 0] state_module, next_state_module;
+
+	/* Comment 1: these need to have clearer names. Suggestions commented below */
    reg start_in_child_mode1;
+	// reg en_get_command;
    reg start_in_child_mode2;
+	// reg en_stp;
    reg start_in_child_mode3;
+	// reg en_evp;
    reg start_in_child_mode4;
+	// reg en_evb;
    reg start_in_child_mode5;
+	// reg en_rst;
    reg done_out_child_mode1;
+	// reg done_get_command;
    reg done_out_child_mode2;
+	// reg done_stp;
    reg done_out_child_mode3;
+	// reg done_evp;
    reg done_out_child_mode4;
+	// reg done_evb;
    reg done_out_child_mode5;
+	// reg done_rst;
    reg en_mode_check_err;
    reg en_mode_wr_coeff;
    wire result, status;
@@ -52,6 +64,28 @@ single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
       RAM1(data_out_result, wr_addr, rd_addr, wr_en_ram, rd_en, clk, ram_out_result);  
 single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
       RAM2(data_out_status, wr_addr, rd_addr, wr_en_ram, rd_en, clk, ram_out_status);
+
+/* Comment 2: RAM is not for result and status. RAM is for command, data, S, and N. Adding modified implementation in the comment below. */
+
+/* Note 2: We may need separate variables for the rd_en and wr_en variables. This will depend upon how we ultimately implement RAM modules. At the moment, level-3 FSMs are handling enable signals, so they need to be separate. I've implemented this below. */
+
+/* Implementation 2:
+single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
+	RAM_COMMAND(command_in, wr_addr, rd_addr, wr_en_ram_command, 
+	rd_en_ram_command, clk, ram_out_command);
+
+single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
+	RAM_DATA(data_in, wr_addr, rd_addr, wr_en_ram_data, rd_en_ram_data,
+	clk, ram_out_data);
+
+single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
+	RAM_S(coeff, wr_addr, rd_addr, wr_en_ram_S, rd_en_ram_S, clk, ram_out_S);
+
+single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
+	RAM_N((what should this be? arg2, which is sometimes N?), wr_addr, rd_addr,
+			wr_en_ram_N, rd_en_ram_NN, clk, ram_out_N);
+
+*/
 
 /***************************************************
 Instantiation of the nested FSM for get_command_FSM3
@@ -70,6 +104,9 @@ EVB_FSM_3 #(.word_size(word_size))
 
 RST_FSM_3 #(.word_size(word_size))
        rst_command(clk, rst, start_in_child_mode5, done_out_child_mode5);
+
+/* Note 3: based on (2), might need to change some inputs here. ex. I think command_in in STP instantiation should be replaced with ram_out_command */
+
 always @(posedge clk or negedge rst)
 begin
     if(!rst)
@@ -101,6 +138,9 @@ begin
         else
            next_state_module <= STATE_START;
     end
+
+	/* Comment 4: can we change this to a case statement? It's cleaner and matches the formatting of the rest of the modules */
+
 /***************************************
 CFDF: firing mode_GET_COMMAND
 ***************************************/
@@ -199,6 +239,10 @@ begin
         done_get_cmd <= 0;
         data_out <= get_command_out;
     end
+
+/* Comment 5: we briefly talked about this before; didn't we want to make one single wr_out_output? Since result and status are always outputted together? If we don't do this, then you need to be setting wr_out_status in all of these */
+
+/* Comment 6: I'm confused by some of your wires and regs. It seems you are expecting one single output value from get_command, but get_command outputs instr, arg1, arg2, result, and status (and done signal). Is data_out supposed to be for result? We need to be setting values for all the outputs, and that also includes status. Apply this same logic to the rest of the states too. */
 
     STATE_GET_COMMAND_START:
     begin
