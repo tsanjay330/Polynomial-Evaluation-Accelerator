@@ -30,46 +30,58 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
 
     always @(next_mode_in,mode, command_pop, data_pop, result_free_space, status_free_space, b)
     begin
-        case (mode)
-        GET_COMMAND:
-        begin
-            if (command_pop >= 1)
-                enable <= 1;
-            else
-                enable <= 0;
-        end
-        STP: begin
-            if(data_pop >= N + 1)
-                enable <= 1;
-            else
-                enable <= 0;
-    end
-    EVP: begin
-            if(data_pop >= 1)
-                enable <= 1;
-            else
-                enable <= 0;
-    end
-    EVB: begin
-            if(data_pop >= b)
-                enable <= 1;
-            else
-                enable <= 0;
-    end
-    // Not too sure how enable for RST should be implemented - must interrupt any-inprogress computation
-    RST: enable <= 1;
-        OUTPUT:
-        begin
-           if (result_free_space >= b && status_free_space >= b)
-            enable <= 1;
-       else
-        enable <= 0;
+	case(next_mode_in)
+		SETUP_COMP:
+	        case (mode)
+       		GET_COMMAND:
+        		begin
+            		if (command_pop >= 1)
+                	enable <= 1;
+            		else
+                	enable <= 0;
+        	end
 
-        end
-        default:
+        	STP: begin
+            	if(data_pop >= N + 1)
+                	enable <= 1;
+            	else
+                	enable <= 0;
+    		end
+
+    		EVP: begin
+            	if(data_pop >= 1)
+                	enable <= 1;
+            	else
+                	enable <= 0;
+    		end
+
+    		EVB: begin
+            	if(data_pop >= b)
+                	enable <= 1;
+            	else
+                	enable <= 0;
+    		end
+
+	    	RST: enable <= 1;
+			default: begin
+            	enable <= 0;
+        	end
+
+        	endcase
+
+		COMP: enable <= 1;
+
+        OUTPUT: begin
+           if (result_free_space >= b && status_free_space >= b)
+				enable <= 1;
+       	   else enable <= 0;
+		end
+        
+		default:
         begin
             enable <= 0;
         end
+
         endcase
     end
 
