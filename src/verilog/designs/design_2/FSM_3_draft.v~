@@ -1,0 +1,27 @@
+`timescale 1ns / 1ps
+
+module FSM_3 #(parameter word_size = 16, buffer_size = 1024)
+   (
+    input 			 clk,
+    //input [word_size - 1 : 0] 	 command_in,
+    input b,
+    input [word_size - 1 : 0] 	 data_in,
+    input 			 enable, // from enable module - do we need this here?
+
+/***	How will internal signals like N, S, A, and B be used in this module? Where should they be placed in the interface? - discuss w/ team	***/
+    
+    
+    output [2*word_size - 1 : 0] result_out,
+    output [2*word_size - 1 : 0] status_out
+
+    );
+
+   localparam GET_COMMAND=3'b000, STP=3'b001, EVP=3'b010, EVB=3'b011, OUTPUT=3'b100, RST=3'b101;
+
+   always@(posedge clk) begin
+	case(b)
+
+	endcase
+
+
+   end
