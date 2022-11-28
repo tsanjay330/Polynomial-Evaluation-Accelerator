@@ -41,18 +41,18 @@ status: value outputted to the status FIFO
 //TODO: could change initial values of result and status
 
 module STP_FSM_3 
-		#(parameter buffer_size = 1024)(
+		#(parameter word_size = 16, buffer_size = 1024)(
 		input clk, rst,
 		input start_stp,
-		input [log2(buffer_size) : 0] rd_addr_data,
+		input [log2(buffer_size)-1 : 0] rd_addr_data,
 		input [2 : 0] A,
 		input [4 : 0] N,
 		input [15 : 0] next_c,
 		output reg done_stp,
 		output reg en_rd_data,
 		output reg en_wr_S,
-		output reg [log2(buffer_size) : 0] rd_addr_data_updated,
-		output reg [log2(buffer_size) : 0] wr_addr_S,
+		output reg [log2(buffer_size)-1 : 0] rd_addr_data_updated,
+		output reg [log2(buffer_size)-1 : 0] wr_addr_S,
 		output reg [15 : 0] c,
 		output reg [31 : 0] result,
 		output reg [31 : 0] status);
@@ -60,8 +60,8 @@ module STP_FSM_3
 		reg [1 : 0] state, next_state;
 		reg [31 : 0] next_result;
 		reg [4 : 0] next_status;
-		reg [log2(buffer_size) : 0] next_rd_addr_data;
-		reg [log2(buffer_size) : 0] next_wr_addr_S;
+		reg [log2(buffer_size)-1 : 0] next_rd_addr_data;
+		reg [log2(buffer_size)-1 : 0] next_wr_addr_S;
 
 	localparam STATE_START = 3'b000, STATE_RD_FIRST_DATA = 3'b001, 
 				STATE_WR_COEFF0 = 3'b010, STATE_WR_COEFF1 = 3'b011,
