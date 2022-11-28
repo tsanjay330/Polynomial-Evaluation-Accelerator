@@ -6,15 +6,17 @@ module firing_state_FSM2
         (input clk, rst,
         input [word_size - 1 : 0] data_in,
         input [word_size - 1 : 0] command_in,
-        input start_get_cmd,
+        input [word_size - 1 : 0] ram_out_command;
+        input start_fsm2,
         input [2 : 0] next_mode_in,
         output rd_in_data,
         output rd_in_command,
 //        output reg [2 : 0] next_mode_out;
-        output reg done_get_cmd,
+        output reg done_fsm2,
         output reg wr_out_result,
         output reg wr_out_status,
-        output reg [word_size - 1 : 0] data_out,
+        output reg [word_size - 1 : 0] data_out_result,
+        output reg [word_size - 1 : 0] data_out_status,
         output reg [2 : 0] A,
         output reg [4 : 0] N,
         output reg [15 : 0] c,
@@ -24,52 +26,44 @@ module firing_state_FSM2
         output reg [4 : 0] arg2,
         output reg [1 : 0] error);
    
-   localparam GET_COMMAND=3'b000, STP=3'b001; EVP=3'b010, EVB=3'b011, RST=3'b100;
-   localparam STATE_START=3'b000, STATE_GET_COMMAND_START=3'b001, STATE_GET_COMMAND_WAIT=3'b010, STATE_STP_START=3'b011, STATE_STP_WAIT=3'b100, STATE_EVP_START=3'b101, STATE_EVP_WAIT=3'b110, STATE_END=3'b111;
+   localparam GET_COMMAND=3'b000, STP=3'b001; EVP=3'b010, EVB=3'b011, OUTPUT=3'b100, RST=3'b101;
+   localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, STATE_GET_COMMAND_WAIT=4'b0010, STATE_STP_START=4'b0011, STATE_STP_WAIT=4'b0100, STATE_EVP_START=4'b0101, STATE_EVP_WAIT=4'b0110, STATE_EVB_START=4'b0111, STATE_EVB_WAIT=4'b1000, STATE_OUTPUT=4'b1001, STATE_END=4'b1010;
 
    reg [2 : 0] state_module, next_state_module;
 
 	/* Comment 1: these need to have clearer names. Suggestions commented below */
-   reg start_in_child_mode1;
-	// reg en_get_command;
-   reg start_in_child_mode2;
-	// reg en_stp;
-   reg start_in_child_mode3;
-	// reg en_evp;
-   reg start_in_child_mode4;
-	// reg en_evb;
-   reg start_in_child_mode5;
-	// reg en_rst;
-   reg done_out_child_mode1;
-	// reg done_get_command;
-   reg done_out_child_mode2;
-	// reg done_stp;
-   reg done_out_child_mode3;
-	// reg done_evp;
-   reg done_out_child_mode4;
-	// reg done_evb;
-   reg done_out_child_mode5;
-	// reg done_rst;
+   reg en_get_command;
+   reg en_stp;
+   reg en_evp;
+   reg en_evb;
+   reg en_rst;
+   reg done_out_get_command;
+   reg done_out_stp;
+   reg done_out_evp;
+   reg done_out_evb;
+   reg done_out_rst;
    reg en_mode_check_err;
    reg en_mode_wr_coeff;
    wire result, status;
-   wire [word_size - 1 : 0] get_command_out;
-   wire rd_en;
-   wire [2*word_size - 1 : 0] data_out_result, data_out_status;
+   wire [2*word_size - 1 : 0] next_result_out, next_status_out;
+   wire wr_en_ram_command, wr_en_ram_data, wr_en_ram_S, wr_en_ram_N;
+   wire rd_en_ram_command, rd_en_ram_data, rd_en_ram_S, rd_en_ram_NN;
+   wire ram_out_command, ram_out_data, ram_out_S, ram_out_N;
+//   wire [2*word_size - 1 : 0] data_out_result, data_out_status;
 /********************************
 wire ram_out1, ram_out2;
 wire wr_addr, rd_addr;
 ********************************/
-single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
+/*single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
       RAM1(data_out_result, wr_addr, rd_addr, wr_en_ram, rd_en, clk, ram_out_result);  
 single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
       RAM2(data_out_status, wr_addr, rd_addr, wr_en_ram, rd_en, clk, ram_out_status);
-
+*/
 /* Comment 2: RAM is not for result and status. RAM is for command, data, S, and N. Adding modified implementation in the comment below. */
 
 /* Note 2: We may need separate variables for the rd_en and wr_en variables. This will depend upon how we ultimately implement RAM modules. At the moment, level-3 FSMs are handling enable signals, so they need to be separate. I've implemented this below. */
 
-/* Implementation 2:
+// Implementation 2:
 single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 	RAM_COMMAND(command_in, wr_addr, rd_addr, wr_en_ram_command, 
 	rd_en_ram_command, clk, ram_out_command);
@@ -85,25 +79,25 @@ single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 	RAM_N((what should this be? arg2, which is sometimes N?), wr_addr, rd_addr,
 			wr_en_ram_N, rd_en_ram_NN, clk, ram_out_N);
 
-*/
+
 
 /***************************************************
 Instantiation of the nested FSM for get_command_FSM3
 ***************************************************/
 get_command_FSM_3 #(.word_size(word_size))
-          get_command(clk, rst, start_in_child_mode1, command_in, en_mode_check_err, N, en_rd_cmd, done_out_child_mode1, instr, arg1, error);
+          get_command(clk, rst, en_get_command, ram_out_command/*command_in*/, en_mode_check_err, N, en_rd_cmd, done_out_get_command, instr, arg1, error);
 
 STP_FSM_3 #(.word_size(word_size))
-       stp_command(clk, rst, start_in_child_mode2, en_mode_wr_coeff, A, N, c, en_rd_data, done_out_child_mode2, SA, result, status);     
+       stp_command(clk, rst, en_stp, en_mode_wr_coeff, A, N, c, en_rd_data, done_out_stp, SA, result, status);     
 
 EVP_FSM_3 #(.word_size(word_size))
-       evp_command(clk, rst, start_in_child_mode3, A, x, c_i, N, en_rd_data, en_rd_S, en_rd_N, done_out_child_mode3, result, status);
+       evp_command(clk, rst, en_evp, A, x, c_i, N, en_rd_data, en_rd_S, en_rd_N, done_out_evp, result, status);
 
 EVB_FSM_3 #(.word_size(word_size))
-       evb_command(clk, rst, start_in_child_mode4, A, b, x_b, c_i, N, done_out_child_mode4, en_rd_data, en_rd_S, en_rd_N, result, status);
+       evb_command(clk, rst, en_evb, A, b, x_b, c_i, N, done_out_evb, en_rd_data, en_rd_S, en_rd_N, result, status);
 
 RST_FSM_3 #(.word_size(word_size))
-       rst_command(clk, rst, start_in_child_mode5, done_out_child_mode5);
+       rst_command(clk, rst, en_rst, done_out_rst);
 
 /* Note 3: based on (2), might need to change some inputs here. ex. I think command_in in STP instantiation should be replaced with ram_out_command */
 
@@ -119,24 +113,37 @@ begin
         end
 end
 
-always @(state_module, start_get_cmd, done_out_child_mode1, done_out_child_mode2, done_out_child_mode3, done_out_child_mode4, done_out_child_mode5, next_mode_in)
+always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_rst, next_mode_in)
 begin
     case(state_module)
     STATE_START: 
     begin
-        if(start_get_cmd)
-           if(next_mode_in == GET_COMMAND)
-              next_state_module <= STATE_GET_COMMAND_START;
-           else if(next_mode_in == STP)
-                   next_state_module <= STATE_STP_START;
-           else if(next_mode_in == EVP)
-                   next_state_module <= STATE_EVP_START;
-           else if(next_mode_in == EVB)
-                   next_state_module <= STATE_EVB_START;
-           else if(next_mode_in == RST)
-                   next_state_module <= STATE_RESET;
-        else
-           next_state_module <= STATE_START;
+        case(next_mode_in)
+        GET_COMMAND:
+        begin
+            next_state_module <= STATE_GET_COMMAND_START;
+        end
+        STP:
+        begin
+            next_state_module <= STATE_STP_START;
+        end
+        EVP:
+        begin
+            next_state_module <= STATE_EVP_START;
+        end
+        EVB:
+        begin
+            next_state_module <= STATE_EVB_START;
+        end
+        OUTPUT:
+        begin
+            next_state_module <= STATE_OUTPUT;
+        end
+        default:
+        begin
+            next_state_module <= STATE_START;
+        end
+        endcase
     end
 
 	/* Comment 4: can we change this to a case statement? It's cleaner and matches the formatting of the rest of the modules */
@@ -151,7 +158,7 @@ CFDF: firing mode_GET_COMMAND
     
     STATE_GET_COMMAND_WAIT:
     begin
-        if(done_out_child_mode1)
+        if(done_out_get_command)
         begin
             next_state_module <= STATE_END;
         end
@@ -171,7 +178,7 @@ CFDF: firing mode STP
 
     STATE_STP_WAIT:
     begin
-        if(done_out_child_mode2)
+        if(done_out_stp)
         begin
             next_state_module <= STATE_END;
         end
@@ -188,7 +195,7 @@ CFDF: firing mode STP
 
     STATE_EVP_WAIT:
     begin
-        if(done_out_child_mode3)
+        if(done_out_evp)
         begin
             next_state_module <= STATE_END;
         end
@@ -204,7 +211,7 @@ CFDF: firing mode STP
 
     STATE_EVB_WAIT:
     begin
-        if(done_out_child_mode4)
+        if(done_out_evb)
         begin
             next_state_module <= STATE_END;
         end
@@ -213,7 +220,11 @@ CFDF: firing mode STP
             next_state_module <= STATE_EVB_WAIT;
         end
     end
-        
+
+    STATE_OUTPUT:
+    begin
+        next_state_module <= STATE_END;
+    end
    
     STATE_END:
     begin
@@ -229,15 +240,21 @@ end
 /**************************************
 OUTPUT SIGNALS
 **************************************/
-always @(state_module, data_out)
+always @(state_module, next_result_out, next_status_out)
 begin
     case(state_module)
     STATE_START:
     begin
         wr_out_result <= 0;
-        start_in_get_command <= 1;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
 
 /* Comment 5: we briefly talked about this before; didn't we want to make one single wr_out_output? Since result and status are always outputted together? If we don't do this, then you need to be setting wr_out_status in all of these */
@@ -247,74 +264,148 @@ begin
     STATE_GET_COMMAND_START:
     begin
         wr_out_result <= 0;
-        start_in_get_command <= 1;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 1;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
 
     STATE_GET_COMMAND_WAIT:
     begin
         wr_out_result <= 0;
-        start_in_get_command <= 0;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
     STATE_STP_START:
     begin
         wr_out_result <= 0;
-        start_in_stp <= 1;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 1;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
     STATE_STP_WAIT:
     begin
         wr_out_result <= 0;
-        start_in_stp <= 0;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
     STATE_EVP_START:
     begin
         wr_out_result <= 0;
-        start_in_evp <= 1;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 1;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
     STATE_EVP_WAIT:
     begin
         wr_out_result <= 0;
-        start_in_evp <= 0;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
     STATE_EVB_START:
     begin
         wr_out_result <= 0;
-        start_in_evb <= 1;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 1;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
     STATE_EVB_WAIT:
     begin
         wr_out_result <= 0;
-        start_in_evb <= 0;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
+    end
+
+    STATE_OUTPUT:
+    begin
+        wr_out_result <= 1;
+        wr_out_status <= 1;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
 
     STATE_END:
     begin
         wr_out_result <= 0;
-        start_in_get_command <= 0;
-        done_get_cmd <= 1;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 1;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
     default:
     begin
         wr_out_result <= 0;
-        start_in_get_command <= 0;
-        done_get_cmd <= 0;
-        data_out <= get_command_out;
+        wr_out_status <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 0;
+        data_out_result <= next_result_out;
+        data_out_status <= next_status_out;
     end
     endcase
 end
