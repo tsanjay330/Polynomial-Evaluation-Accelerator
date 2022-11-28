@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 module tb_PEA();
-
+	
+	parameter SETUP_COMP = 2'b00, COMP = 2'b01, OUTPUT = 2'b10;
     parameter buffer_size = 1024, width = 16, buffer_size_out = 1;
 	parameter GET_COMMAND = 3'b000, STP = 3'b001, EVP = 3'b010, EVB = 3'b011, OUTPUT = 3'b100, RST = 3'b101;
 
@@ -9,7 +10,8 @@ module tb_PEA();
 
     reg clk, rst;
     reg invoke;
-    reg wr_en_input;
+    reg wr_en_data;
+	reg wr_en_command;
     reg [width - 1:0] data_in, command_in;
     reg [1 : 0]  next_mode_in;
     reg rd_en_result;
@@ -44,11 +46,11 @@ module tb_PEA();
 
     fifo #(buffer_size, width)
             data_fifo
-            (clk, rst, wr_en_input, rd_in_data, data_in,
+            (clk, rst, wr_en_data, rd_in_data, data_in,
             data_pop, free_space_data, data_in_fifo_data);
 
     fifo #(buffer_size, width) command_fifo
-            (clk, rst, wr_en_input, rd_in_command, command_in,
+            (clk, rst, wr_en_command, rd_in_command, command_in,
             command_pop, free_space_command, data_in_fifo_command);
 
 	/* OUTPUT FIFOS*/
@@ -107,19 +109,18 @@ module tb_PEA();
         /* Read text files and load the data into memory for input of inner 
         product actor
         */
-        $readmemh("stream.txt", mem_one_window);
-        $readmemh("length.txt", mem_two_L);
-        $readmemh("cmd.txt", mem_three_C);
+        $readmemh("data.txt", mem_data);
+        $readmemh("command.txt", mem_command);
 
         #1;
         rst <= 0;
         wr_en_input <= 0;
-        data_in_one_window <= 0;
-        data_in_two_L <= 0;
-        data_in_three_C <= 0;
+        data_in <= 0;
+        command_in <= 0;
         invoke <= 0;
-        next_mode_in <= MODE_ONE;
-        rd_en_fifo1 <= 0;
+        next_mode_in <= SETUP_COMP;
+        rd_en_result <= 0;
+		rd_en_status <=0;
         #2 rst <= 1;
         #2;
 
@@ -127,28 +128,26 @@ module tb_PEA();
          * signal before the data is loaded, so "size" loop intereation are 
          * required here.
          */
-
+         
+        command_in <= mem_command[i];
+		#2
+		wr_en_command <= 1;
+		#2
+		wr_en_input <= 0;
 
         $fdisplay(descr, "Setting up input FIFOs");
-        for (i = 0; i < size; i = i + 1)
+        for (i = 0; i < b; i = i + 1)
         begin
                #2
-               data_in_one_window <= mem_one_window[i];
-
-               data_in_two_L <= mem_two_L[i];
-
-               data_in_three_C <= mem_three_C[i];
+               data_in <= mem_data[i];
                #2;
-               wr_en_input <= 1;
+               wr_en_data <= 1;
                #2;
-               wr_en_input  <= 0;
+               wr_en_data  <= 0;
         end
 
         #2;     /* ensure that data is stored into memory before continuing */
-        $fdisplay(descr, "pop_win = %d", pop_in_fifo1_window);
-        $fdisplay(descr, "pop_L = %d", pop_in_fifo2_L);
-        $fdisplay(descr, "pop_C = %d", pop_in_fifo3_C);
-        next_mode_in <= MODE_ONE;
+        next_mode_in <= SETUP_COMP;
         #2;
         if (enable)
         begin
@@ -164,7 +163,7 @@ module tb_PEA();
         #2 invoke <= 0;
 
         /* Wait for mode 1 to complete */
-        wait (FC) #2 next_mode_in <= MODE_TWO;
+        wait (FC) #2 next_mode_in <= COMP;
         #2;
         if (enable)
         begin
@@ -180,7 +179,7 @@ module tb_PEA();
         #2 invoke <= 0;
 
         /* Wait for mode 2 to complete */
-        wait(FC) #2 next_mode_in <= MODE_THREE;
+        wait(FC) #2 next_mode_in <= OUTPUT;
         #2;
         if (enable)
         begin
@@ -198,13 +197,13 @@ module tb_PEA();
         /* Wait for mode 3 to complete */
         wait(FC) #2;
         #2/* Read actor output value from result FIFO */
-        rd_en_fifo1 <= 1;
-
+        rd_en_result <= 1;
+		rd_en_status <= 1;
         #2
-        rd_en_fifo1 <= 0;
-
+        rd_en_result <= 0;
+		rd_en_status <= 0;
         #2;
-        next_mode_in <= MODE_ONE;
+        next_mode_in <= SETUP_COMP;
 
         /* Set up recording of results */
         $fdisplay(descr, "time = %d, FIFO[0] = %d", $time, out_fifo1.FIFO_RAM[0]);
