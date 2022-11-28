@@ -36,7 +36,7 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
 	output wr_out;
 	output [2*word_size - 1 : 0] data_out_result,
     output [2*word_size - 1 : 0] data_out_status,
-	output [2:0] mode,//current mode needed for enable
+	output [7:0] mode,//current mode needed for enable
     output [4 : 0] b, // Argument 2 of current command input token, gets used
     output [3 : 0] N
             );
@@ -56,10 +56,11 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
 firing_state_FSM2 #(.word_size(word_size))
            FSM2(.clk(clk), .rst(rst), .data_in(data_in), 
 				.command_in(command_in), .start_fsm2(start_in), 
-				.next_mode_in(next_mode_in), .data_rd_en(rd_in_data), 
-				.command_rd_en(rd_in_command), .done_fsm2(done_out), 
-				.result_wr_en(wr_out_result), .status_wr_en(wr_out_status), 
-				.result_out(data_out_result), .status_out(data_out_status));
+				.next_mode_in(next_mode_in), .instr(mode), 
+				.data_rd_en(rd_in_data), .command_rd_en(rd_in_command), 
+				.done_fsm2(done_out), .result_wr_en(wr_out_result), 
+				.status_wr_en(wr_out_status), .result_out(data_out_result), 
+				.status_out(data_out_status));
 
    /* Update current state */
 	always@(posedge clk)

@@ -6,7 +6,8 @@ module temp2_firing_state_FSM2
         input [word_size - 1 : 0] data_in,
         input [word_size - 1 : 0] command_in,
         input start_fsm2,
-        input [2 : 0] next_mode_in,
+        input [1 : 0] next_mode_in,
+		output reg [7:0] instr,
         output rd_in_data,
         output rd_in_command,
         output reg done_fsm2,
@@ -15,8 +16,16 @@ module temp2_firing_state_FSM2
         output reg [word_size - 1 : 0] data_out_result,
         output reg [word_size - 1 : 0] data_out_status);
    
-   localparam GET_COMMAND=3'b000, STP=3'b001; EVP=3'b010, EVB=3'b011, OUTPUT=3'b100, RST=3'b101;
-   localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, STATE_GET_COMMAND_WAIT=4'b0010, STATE_STP_START=4'b0011, STATE_STP_WAIT=4'b0100, STATE_EVP_START=4'b0101, STATE_EVP_WAIT=4'b0110, STATE_EVB_START=4'b0111, STATE_EVB_WAIT=4'b1000, STATE_OUTPUT=4'b1001, STATE_END=4'b1010;
+	localparam SETUP_COMP = 2'b00, COMP = 2'b01, OUTPUT = 2'b10;
+
+	localparam GET_COMMAND=3'b000, STP=3'b001; EVP=3'b010, 
+		EVB=3'b011, OUTPUT=3'b100, RST=3'b101;
+
+	localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, 
+		STATE_GET_COMMAND_WAIT=4'b0010, STATE_STP_START=4'b0011, 
+		STATE_STP_WAIT=4'b0100, STATE_EVP_START=4'b0101, 
+		STATE_EVP_WAIT=4'b0110, STATE_EVB_START=4'b0111, 
+		STATE_EVB_WAIT=4'b1000, STATE_OUTPUT=4'b1001, STATE_END=4'b1010;
 
    reg [3 : 0] state_module, next_state_module;
    reg en_get_command;
@@ -31,7 +40,7 @@ module temp2_firing_state_FSM2
    reg done_out_rst;
    wire en_mode_check_err;
    wire en_mode_wr_coeff;
-   wire [7:0] instr;
+   //wire [7:0] instr;
    wire [2:0] arg1;
    wire [4:0] arg2; 
    wire [1:0] err_out;
@@ -110,38 +119,42 @@ end
 
 always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_rst, next_mode_in)
 begin
-    case(state_module)
-    STATE_START: 
+case(state_module)
+    STATE_START:
     begin
         case(next_mode_in)
-        GET_COMMAND:
-        begin
-            next_state_module <= STATE_GET_COMMAND_START;
-        end
-        STP:
-        begin
-            next_state_module <= STATE_STP_START;
-        end
-        EVP:
-        begin
-            next_state_module <= STATE_EVP_START;
-        end
-        EVB:
-        begin
-            next_state_module <= STATE_EVB_START;
-        end
-        OUTPUT:
-        begin
+            SETUP_COMP: begin
+                next_state_module <= STATE_GET_COMMAND_START;
+            end
+
+            COMP: begin
+                case(instr)//same mode signal that is passed to enable 
+                    STP: begin
+                        next_state_module <= STATE_STP_START;
+                    end
+
+                    EVP: begin
+                        next_state_module <= STATE_EVP_START;
+                    end
+
+                    EVB: begin
+                        next_state_module <= STATE_EVB_START;
+                    end
+
+                    //RST??
+                endcase
+            end
+
+            OUTPUT: begin
             next_state_module <= STATE_OUTPUT;
-        end
-        default:
-        begin
-            next_state_module <= STATE_START;
-        end
+            end
+
+            default:
+            begin
+                next_state_module <= STATE_START;
+            end
         endcase
-    end
-
-
+    end	
 /***************************************
 CFDF: firing mode_GET_COMMAND
 ***************************************/

@@ -16,7 +16,7 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
         input [log2(buffer_size) - 1 : 0] result_free_space,
         input [log2(buffer_size) - 1 : 0] status_free_space,
 		input [1:0] next_mode_in,
-        input [2 : 0] mode,
+        input [7 : 0] mode,
         input [4 : 0] b, // Second argument of the command token
         input [3 : 0] N, // The degree of a current/specified coefficient vector
         output reg enable

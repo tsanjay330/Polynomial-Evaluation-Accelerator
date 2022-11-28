@@ -33,7 +33,7 @@ module tb_PEA();
 
 	//These signals come from the FSM2/3 level
 	wire wr_out, rd_in_command, rd_in_data;
-	wire [2:0] mode;
+	wire [7:0] mode;
 
     integer i, j, k;
 
