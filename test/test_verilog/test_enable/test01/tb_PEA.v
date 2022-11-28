@@ -5,9 +5,6 @@ module tb_PEA();
     parameter buffer_size = 1024, width = 16, buffer_size_out = 1;
 	parameter GET_COMMAND = 3'b000, STP = 3'b001, EVP = 3'b010, EVB = 3'b011, OUTPUT = 3'b100, RST = 3'b101;
 
-    /* Input vector size for the PEA. */
-    parameter size = 5;//TODO: Different for each test?
-
     reg clk, rst;
     reg invoke;
     reg wr_en_data;
@@ -67,9 +64,9 @@ module tb_PEA();
     Instantiate the enable and invoke modules for the actor under test.
     ***************************************************************************/
 
-	PEA_top_module_1 invoke_module(command_in, data_in, invoke, next_mode_in,
-			rd_in_command, rd_in_data, FC, wr_out, data_out_result,
-			data_out_status, mode, b, N);
+	PEA_top_module_1 invoke_module(clk,rst,command_in, data_in, invoke, 
+			next_mode_in, rd_in_command, rd_in_data, FC, wr_out, 
+			data_out_result,data_out_status, mode, b, N);
 		
 	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
 			free_space_out_status, next_mode_in, mode, b, N, enable);
@@ -206,9 +203,12 @@ module tb_PEA();
         next_mode_in <= SETUP_COMP;
 
         /* Set up recording of results */
-        $fdisplay(descr, "time = %d, FIFO[0] = %d", $time, out_fifo1.FIFO_RAM[0]);
-        $fdisplay(descr, "time = %d, Result = %d", $time, data_out_fifo1);
-        $display("time = %d, Result = %d", $time, data_out_fifo1);
+        //TODO: Not sure about this fdisplay with the out_fifo1.FIFORAM[]
+		$fdisplay(descr, "time = %d, FIFO[0] = %d", $time, out_fifo1.FIFO_RAM[0]);
+        $fdisplay(descr, "time = %d, Result = %d, Status = %d", $time, 
+					data_out_fifo1_result, data_out_fifo2_status);
+        $display("time = %d, Result = %d, Status = %d", $time, 
+			data_out_fifo1_result, data_out_fifo2_status);
     end
 
     function integer log2;
