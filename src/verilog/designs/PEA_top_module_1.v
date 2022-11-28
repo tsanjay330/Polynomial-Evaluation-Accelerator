@@ -70,8 +70,8 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
    
     reg [2:0] state_module;
     reg [2:0] next_state_module;
-    reg start_in_child;//Taken from lab07(might not use the same)
-    wire done_out_child;//Taken from lab07(might not use the same)
+    reg start_fsm1;//Taken from lab07(might not use the same)
+    wire done_out_fsm1;//Taken from lab07(might not use the same)
    
    
    reg [1 : 0] 			     mode;
@@ -79,7 +79,7 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
   // wire 			     enable;
     /*firing state FSM2-module instantiation block*/
    firing_state_FSM2 #(.word_size(word_size))
-           FSM2(clk, rst, data_in, command_in, start_in, next_mode_in, data_rd_en, command_rd_en, next_mode_out, done_out_child, result_wr_en, status_wr_en, result_out, status_out);
+           FSM2(.clk(clk), .rst(rst), .data_in(data_in), .command_in(command_in), .start_fsm1(start_fsm2), .next_mode_in(next_mode_in), .data_rd_en(rd_in_data), .command_rd_en(rd_in_command), .done_out_fsm1(done_fsm2), .result_wr_en(wr_out_result), .status_wr_en(wr_out_status), .result_out(data_out_result), .status_out(data_out_status));
    /* Update current state */
    always@(posedge clk)
      begin
