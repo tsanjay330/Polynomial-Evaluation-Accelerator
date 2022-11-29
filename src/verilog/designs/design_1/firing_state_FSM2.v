@@ -24,7 +24,7 @@ module firing_state_FSM2
         input [word_size - 1 : 0] data_in,
         input [word_size - 1 : 0] command_in,
         input start_fsm2,
-        input [1 : 0] next_mode_in,
+        input [1 : 0] next_instr,
 		output reg [7:0] instr,
         output en_rd_fifo_data,
         output en_rd_fifo_command,
@@ -36,7 +36,7 @@ module firing_state_FSM2
 	localparam SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
 
 	localparam GET_COMMAND=3'b000, STP=3'b001, EVP=3'b010, 
-		EVB=3'b011, OUTPUT=3'b100, RST=3'b101;
+		EVB=3'b011, RST=3'b100, OUTPUT=3'b101;
 
 	localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, 
 		STATE_GET_COMMAND_WAIT=4'b0010, STATE_STP_START=4'b0011, 
@@ -63,7 +63,6 @@ module firing_state_FSM2
    wire [2:0] rd_addr_N;
    wire [log2(buffer_size) - 1 : 0] wr_addr_data, wr_addr_command, wr_addr_S, wr_addr_N;
    wire ram_in_S, ram_in_N, ram_in_data, ram_in_command;
-//   wire [2*word_size - 1 : 0] result, status;
    wire reset_out;
    wire wr_en_ram_command, wr_en_ram_data, wr_en_ram_S, wr_en_ram_N;
    wire rd_en_ram_command, rd_en_ram_data, rd_en_ram_S, rd_en_ram_NN;
@@ -73,7 +72,7 @@ module firing_state_FSM2
 Instantiation of RAM modules
 ****************************************************************/
 single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
-	RAM_COMMAND(.command(ram_in_command), .addr(wr_addr_command), .rd_addr(rd_addr_command), .wr_en(wr_en_ram_command), 
+	RAM_COMMAND(.data(ram_in_command), .addr(wr_addr_command), .rd_addr(rd_addr_command), .wr_en(wr_en_ram_command), 
 	.rd_en(rd_en_ram_command), .clk(clk), .q(ram_out_command));
 
 single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
@@ -83,13 +82,14 @@ single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 	RAM_S(.data(ram_in_S), .addr(wr_addr_S), .rd_addr(rd_addr_S), .wr_en(wr_en_ram_S), .rd_en(rd_en_ram_S), .clk(clk), .q(ram_out_S));
 
-/*	RAM_N((what should this be? arg2, which is sometimes N?), wr_addr, rd_addr,
-			wr_en_ram_N, rd_en_ram_NN, clk, ram_out_N);*/
 N_ram #(.word_size(word_size), .buffer_size(buffer_size))
     RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), .rd_addr(rd_addr_N), .wr_en(wr_en_ram_N), .re_en(rd_en_ram_N), .clk(clk), .q(ram_out_N), .wr_suc(wr_suc_data), .q_en(rd_data_suc));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
-    mem_load_controller(.clk(clk), .rst(rst), 
+    DATA_MEM_CONTROLLER(.clk(clk), .rst(rst), .FIFO_population(), .input_token(ram_in_data), .start_in(), .FIFO_rd_en(), .ram_wr_en(wr_en_ram_data), .ram_wr_addr(wr_addr_data), .output_token(ram_out_data));
+
+mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
+    COMMAND_MEM_CONTROLLER(.clk(clk), .rst(rst), .FIFO_population(), .input_token(ram_in_command), .start_in(), .FIFO_rd_en(), .ram_wr_en(wr_en_ram_command), .ram_wr_addr(wr_addr_command), .output_token(ram_out_command));
 //Would need help to figure this module out during class
 
 /***********************************************************************
@@ -127,7 +127,7 @@ begin
 case(state_module)
     STATE_START:
     begin
-        case(next_mode_in)
+        case(next_instr)
             SETUP_INSTR: begin
                 next_state_module <= STATE_GET_COMMAND_START;
             end
@@ -251,13 +251,9 @@ CFDF: firing mode OUTPUT
 ***********************************************/
     STATE_OUTPUT:
     begin
-        next_state_module <= STATE_END;
-    end
-
-    STATE_END:
-    begin
         next_state_module <= STATE_START;
     end
+
 
   //Still unsure if RST would work like this or not?? 
     default:
