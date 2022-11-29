@@ -1,4 +1,28 @@
-//TODO:Add signals rd_en_command,data,S,N,x,c_i.
+//TODO:Add signals rd_en_command,data,S,N,x,c_i
+/******************************************************************************
+INPUT PORTS
+
+data_in - data from input fifo data
+command_in - data from input fifo command
+start_fsm2 - nested FSM start signal form parent FSM
+next_mode_in - mode to determine the next FSM state
+
+OUTPUT PORTS
+
+instr - The instruction reg within every FSM state
+rd_in_data - read enable signal for input fifo data
+rd_in_command - read enable signal for input fifo command
+done_fsm2 - nested FSM end signal to aprent FSM
+wr_out_result - output result fifo write enable signal
+wr_out_status - output status fifo write enable signal
+data_out_result - output data for writing into output result fifo
+data_out_status - output data for writing into output status fifo
+
+PARAMETERS
+
+word_size - size of each input buffer
+buffer_size - bit width of tokens in regs and output reg
+*******************************************************************************/
 `timescale 1ns/1ps
 module temp2_firing_state_FSM2
         #(parameter word_size = 16, buffer_size = 1024)
@@ -90,7 +114,7 @@ single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST
 ***********************************************************************/
 get_command_FSM_3 #()
-          get_command(.clk(clk), .rst(rst), .en_get_command(start_get_cmd), .ram_out_command(command_in), .en_mode_check_err(en_mode_check_err), .en_rd_cmd(en_rd_cmd), .done_out_get_command(done_get_cmd), .instr(instr), .arg1(arg1), .arg2(arg2), .error_out(error));
+          get_command(.clk(clk), .rst(rst), .en_get_command(start_get_cmd), .ram_out_command(command_in), .en_mode_check_err(en_mode_check_err), .en_rd_cmd(en_rd_cmd), .done_out_get_command(done_get_cmd), (.instr(instr))?, .arg1(arg1), .arg2(arg2), .error_out(error));
 
 STP_FSM_3 #(.buffer_size(buffer_size))
        stp_command(.clk(clk), .rst(rst), .en_stp(start_stp), .rd_addr_data(rd_addr_data), .A(A), .N(N), .next_c(next_c), .done_out_stp(done_stp), .rd_en_ram_data(en_rd_data), .wr_en_ram_S(en_wr_S), .rd_addr_data_updated(rd_addr_data_updated), .wr_addr_S(wr_addr_S), .c(c), .result(result), .status(status));     
