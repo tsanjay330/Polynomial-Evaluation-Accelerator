@@ -1,127 +1,64 @@
-
+/*
+	The memory controller unit is in charge of moving command and data tokens out of the input FIFOs and into the local RAM modules for Command and Data.
+ 
+	This module assumes the FIFOs are the regular fifo.v modules, NOT the edited ones.
+ 	
+ 	There will be TWO instantiated controllers - one for each FIFO/RAM pair (One in charge of command tokens, the other in charge of data tokens)
+ 
+ 	It is also responsible for tracking the current index/write address of the Command and Data RAM (these values should go to 0 on RST instruction). 
+ 
+*/
 `timescale 1ns/1ps
 
 module mem_controller
-#(parameter word_size = 16, buffer_size = 1024, num_vectors = 8, max_degree = 10)(
- input 				   clk, rst,
- input 				   done_get_cmd, // Is this needed?
- input 				   done_STP, // Done/Enable signals from each FSM3 state/mode module
- input 				   done_EVP,
- input 				   done_EVB,
- input 				   done_RST,
- input [log2(buffer_size) - 1 : 0] command_population, // FIFO information - to begin reading tokens
- input [log2(buffer_size) - 1 : 0] data_population,
- input [log2(buffer_size) - 1 : 0] result_free_space, // FIFO information - to stop writing tokens
- input [log2(buffer_size) - 1 : 0] status_free_space,
- input 				   command_FIFO_out_en,
- input 				   data_FIFO_out_en,
- input 				   start_in, // Based on load_loc_mem_FSM_3 of lab 7 - this signal comes from FSM2_firing_state - when data needs to be moved
- input [7 : 0] 			   instr, // Outputs from Get_command_FSM3 - should these be here or in separate FSM3 modules, or both??
- input [2 : 0] 			   arg1,
- input [4 : 0] 			   arg2,
-										  
-										  
-						
+#(parameter word_size = 16, buffer_size = 1024)(
+ input 					clk, rst,
+ input [log2(buffer_size) - 1 : 0] 	FIFO_population, // FIFO information - to begin reading tokens
+// input 					FIFO_out_en,
+ input [log2(word_size) - 1 : 0]	input_token,
+ input 					start_in, // Based on load_loc_mem_FSM_3 of lab 7 - this signal comes from FSM2_firing_state - when data needs to be moved
+ output reg 				FIFO_rd_en,
+ output reg 				ram_wr_en,
+ output reg [log2(buffer_size) - 1 : 0] ram_wr_addr,
+ output reg [log2(word_size) - 1 : 0]   output_token
+);
 
- output reg 			   command_FIFO_rd_en,
- output reg 			   data_FIFO_rd_en,
- output reg 			   result_FIFO_wr_en,
- output reg 			   status_FIFO_wr_en,
- //output reg			   c_ram_wr_en,	// These two signals are handled by edited FIFOs
- //output reg			   d_ram_wr_en,
- output reg 			   n_ram_wr_en,
- output reg 			   s_ram_wr_en,
- output reg 			   c_ram_rd_en,
- output reg 			   d_ram_rd_en,
- output reg 			   n_ram_rd_en,
- output reg 			   s_ram_rd_en,
- output reg 			   c_ram_wr_addr,
- output reg 			   d_ram_wr_addr,
- output reg 			   n_ram_wr_addr,
- output reg 			   s_vec_wr_addr,
- output reg 			   s_coef_wr_addr,
- output reg 			   c_ram_rd_addr,
- output reg 			   d_ram_rd_addr,
- output reg 			   n_ram_rd_addr,
- output reg 			   s_vec_rd_addr,
- output reg 			   s_coef_rd_addr,						
-						);
-
-   // Count variables for how many times a token has been read from FIFO?
-   reg [log2(buffer_size) - 1 : 0]	command_rd_count, next_command_rd_count;
-   reg [log2(buffer_size) - 1 : 0] 	data_rd_count, next_data_rd_count;
-   reg [log2(buffer_size) - 1 : 0]      command_wr_count, next_command_wr_count;
-   reg [log2(buffer_size) - 1 : 0]      data_wr_count, next_data_wr_count;
+   // Count variables for how many times a token has been written to C & D RAM
+   // act as the wr address to the RAM modules
+   reg [log2(buffer_size) - 1 : 0]      next_ram_wr_addr;
    reg [log2(buffer_size) - 1 : 0] 	count, next_count;
-   reg 					EVP_data_count; // These two signals track the number of data tokens 
-   reg [4 : 0] 				EVB_data_count; // read in for EVP & EVB instructions.
-   reg [log2(max_degree) - 1 : 0] 	s_coef_count;	// This signal tracks the current coefficient index within a coefficient vector
+   // This running count will be used to determine if a token needs to be read or not,
+   // this would be for error checking/if for some reason this is not handled by FSM2
+   // (To be implemented later, as of 11/27)
    
+   // 3 bit state register
+   reg [2 : 0] 				state, next_state;
    
+   // All possible states
+   localparam STATE_START = 3'b000, STATE_READ_FIFO_EN = 3'b001, STATE_READ_FIFO = 3'b010, STATE_WR_RAM = 3'b011, STATE_END = 3'b100;
 
-   // Command token signals?
-   reg [7 : 0] 				cur_instr;
-   reg [2 : 0] 				cur_arg1;
-   reg [4 : 0] 				cur_arg2;
-   
-   
-
-   reg [4 : 0] 				state, next_state;
-   
-
-   localparam STATE_START = 4'b0000, STATE_READ_FIFO_EN = 4'b0001, STATE_READ_FIFO = 4'b0010, STATE_READ_RAM_EN, = 4'b0011, STATE_READ_RAM = 4'b0100, STATE_WRITE_RAM_EN = 4'b0101, STATE_WRITE_RAM = 4'b0110, STATE_WRITE_FIFO_EN = 4'b0111, STATE_WRITE_FIFO = 4'b1000, STATE_END = 4'b1001;
-   localparam STP = 2'b00, EVP = 2'b01, EVB = 2'b10, RST = 2'b11;
-   localparam MAX_EVP_DATA = 1'b1, MAX_EVB_DATA = 5'b11111;
-   
-
-   /*
-   
-   always@(posedge clk) begin
-if(command_population > 0 && command_FIFO_out_en == 1'b1) begin
-   command_FIFO_rd_en <= 1'b1;
-end
-else begin
-   command_FIFO_rd_en <= 1'b0;
-   
-end
-      if(data_population > 0 && data_FIFO_out_en == 1'b1) begin
-	 data_FIFO_rd_en <= 1'b1;
-      end
-      else begin
-	 data_FIFO_rd_en <= 1'b0;
-      end
-      
-  */
-   /***	Update current state and counter variables on clk edge (or synch reset)	***/
-   always@(posedge clk or negedge rst)
+   /***	Update current state and counter outputs on clk edge (or synch reset)	***/
+   always@(posedge clk)
    begin
-       if(!rst) begin
+       if(rst) begin
 	  state <= STATE_START;
-	  count <= 0;
-	  data_rd_count <= 0;
-	  command_rd_count <= 0;
-	  data_wr_count <= 0;
-	  command_wr_count <=0;
-	  
+	  ram_wr_addr <= 0; // On reset, write address goes back to start
+	  count <= FIFO_population;
        end
        else
 	begin
 	   state <= next_state;
+	   ram_wr_addr <= next_ram_wr_addr;
 	   count <= next_count;
-	   data_rd_count <= next_data_rd_count;
-	   command_rd_count <= next_command_rd_count;
-	   data_wr_count <= next_data_wr_count;
-	   command_wr_count <= next_command_wr_count;
-	   
-	   
 	end
 
    end
 
    /***	STATE TRANSITION BLOCK	***/
-   always@(state, start_in, done_get_command/*, command_FIFO_out_en, data_FIFO_out_en, counter*/) // what/which counter variable?
+   always@(state, start_in)
    begin
-       case(state) // General flow: start -> read_fifo_en -> read_fifo -> depending on context, either read_ram, write_ram, read fifo, or write_fifo
+       case(state)	// General flow: start -> read_fifo_en -> read_fifo ->
+	 		// write_ram -> end, retrun to start on end or rst
 	STATE_START:
 	begin
            if(start_in)
@@ -131,442 +68,84 @@ end
 	end
 	STATE_READ_FIFO_EN:
         begin
-           next_state <= STATE_READ_FIFO;
+	   if(rst)
+	     next_state <= STATE_START;
+	   else           
+	     next_state <= STATE_READ_FIFO;
         end
 	STATE_READ_FIFO:
         begin
-           if(done_get_command) // If done_get_command is high - make read_ram/write_ram decision based on instr
-             next_state <= STATE_READ_FIFO_EN;
-	     case(instr)
-              	STP:	// STP needs to write data to S and N RAM
-	      	begin
-		   next_state <= STATE_WRITE_RAM_EN;
-		end
-	        EVP:	// EVP and EVB read data from RAM
-                begin
-                   next_state <= STATE_READ_RAM_EN;
-                end
-	        EVB:
-		begin
-		   next_state <= STATE_READ_RAM_EN;     
-                end
-	        RST:	// RST uses no data and immediately writes to result and status FIFOs
-                begin
-                   next_state <= STATE_WRITE_FIFO_EN;
-                end
-	        default: next_state <= STATE_START; // If an invalid instr token occurs, go back to start
-	     endcase
-           else
+	   if(rst)
              next_state <= STATE_START;
-        end
-	STATE_READ_RAM_EN:
-	begin
-	   next_state <= STATE_READ_RAM;
+           else  
+	     next_state <= STATE_WR_RAM;
 	end
-	STATE_READ_RAM:
-	begin
-	    if(done_EVP || done_EVB)
-  	      next_state <= STATE_WRITE_FIFO_EN;
-	    else
-	      next_state <= STATE_READ_RAM_EN; // not too sure about this one - consult w/ group
-	end
-	STATE_WRITE_RAM_EN:
-	begin
-	   next_state <= STATE_WRITE_RAM;
-	end
-	STATE_WRITE_RAM:
-	begin
-	if(done_STP)
-	  next_state <= STATE_END; // not too sure about this one - consult w/ group
-	else
-  	  next_state <= STATE_WRITE_RAM;
-	end
-	STATE_WRITE_FIFO_EN:
+	STATE_WR_RAM:
         begin
-           next_state <= STATE_WRITE_FIFO;
+	   if(rst)
+             next_state <= STATE_START;
+           else  
+             next_state <= STATE_END;
         end
-        STATE_WRITE_FIFO:
-        begin
-	if(result_free_space == 0 || status_free_space == 0)     
-          next_state <= STATE_WRITE_FIFO_EN;
-        else
-          next_state <= STATE_END;
-        end
-	STATE_END:
-	  next_state <= STATE_START;
 	default:
 	  next_state <= STATE_START;
        endcase
    end
 
    /***	OUTPUT SIGNAL BLOCK and Update Counters	***/
-always@(state, start_in, done_get_command,)
+always@(state, start_in)
 begin
 case(state)
    STATE_START:
    begin
-      command_FIFO_rd_en <= 1'b0;
-      data_FIFO_rd_en <= 1'b0;
-      result_FIFO_wr_en <= 1'b0;
-      status_FIFO_wr_en <= 1'b0;
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b0;
-      s_ram_wr_en <= 1'b0;
-      c_ram_rd_en <= 1'b0;
-      d_ram_rd_en <= 1'b0;
-      n_ram_rd_en <= 1'b0;
-      s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= 0;
-      d_ram_wr_addr <= 0;
-      n_ram_wr_addr <= 0;
-      s_vec_wr_addr <= 0;
-      s_coef_wr_addr <= 0;
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      next_data_rd_count <= data_rd_count;
-      next_command_rd_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count;
-      next_command_wr_count <= command_wr_count;
-      
+      FIFO_rd_en <= 1'b0;
+      ram_wr_en <= 1'b0;
+      next_ram_wr_addr <= ram_wr_addr;
+      output_token <= input_token;
+      next_count <= count;
    end // case: START
    STATE_READ_FIFO_EN:
    begin
-      command_FIFO_rd_en <= 1'b1; // HIGH
-      data_FIFO_rd_en <= 1'b1;	  // HIGH
-      result_FIFO_wr_en <= 1'b0;
-      status_FIFO_wr_en <= 1'b0;
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b0;
-      s_ram_wr_en <= 1'b0;
-      c_ram_rd_en <= 1'b0;
-      d_ram_rd_en <= 1'b0;
-      n_ram_rd_en <= 1'b0;
-      s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= command_wr_count;
-      d_ram_wr_addr <= data_wr_count;
-      n_ram_wr_addr <= 0;
-      s_vec_wr_addr <= 0;
-      s_coef_wr_addr <= 0;
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      next_data_rd_count <= data_rd_count;
-      next_command_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count + 1;
-      next_command_wr_count <= command_wr_count + 1;
+      FIFO_rd_en <= 1'b1;
+      ram_wr_en <= 1'b0;
+      next_ram_wr_addr <= ram_wr_addr;
+      output_token <= input_token;
+      next_count <= count;
    end // case: STATE_READ_FIFO_EN
    STATE_READ_FIFO:
    begin
-      command_FIFO_rd_en <= 1'b0;
-      data_FIFO_rd_en <= 1'b0;    
-      result_FIFO_wr_en <= 1'b0;
-      status_FIFO_wr_en <= 1'b0;
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b0;
-      s_ram_wr_en <= 1'b0;
-      c_ram_rd_en <= 1'b0;
-      d_ram_rd_en <= 1'b0;
-      n_ram_rd_en <= 1'b0;
-      s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= 0;
-      d_ram_wr_addr <= 0;
-      n_ram_wr_addr <= 0;
-      s_vec_wr_addr <= 0;
-      s_coef_wr_addr <= 0;
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      next_data_rd_count <= data_rd_count;
-      next_command_rd_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count;
-      next_command_wr_count <= command_wr_count;
+      FIFO_rd_en <= 1'b0;
+      ram_wr_en <= 1'b0;
+      next_ram_wr_addr <= ram_wr_addr;
+      output_token <= input_token; // Here, output token is now the NEW token to be read
+      next_count <= count;
    end // case: STATE_READ_FIFO
-   STATE_READ_RAM_EN:
+   STATE_WR_RAM:
    begin
-      command_FIFO_rd_en <= 1'b0;
-      data_FIFO_rd_en <= 1'b0;
-      result_FIFO_wr_en <= 1'b0;
-      status_FIFO_wr_en <= 1'b0;
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b0;
-      s_ram_wr_en <= 1'b0;
-      case(instr)
-EVP:						/***	REMINDER - ADD data_rd_count and s_coef_count signals to each state to be driven, possibly a next register for EVP_data_count, EVB_data_count, and s_coef_count ***/
-  begin
-     if(EVP_data_count < MAX_EVP_DATA)begin
-        d_ram_rd_en <= 1'b1;
-        d_ram_rd_addr <= data_rd_count;
-	next_data_rd_count <= data_rd_count + 1;
-	// *REMINDER* - Increment EVP data count
-     end
-     else begin
-        d_ram_rd_en <= 1'b0;
-	d_ram_rd_addr <= 0;
-	next_data_rd_count <= data_rd_count + 1;
-     end
-     
-     n_ram_rd_en <= 1'b1;
-     n_ram_rd_addr <= arg1;
-     s_ram_rd_en <= 1'b1;
-     s_vec_rd_addr <= arg1;
-     s_coef_rd_addr <= s_coef_count;
-     // *REMINDER* - Increment s coef count
-     
-  end // case: EVP
-	
-EVB:                                            /***    REMINDER - ADD data_rd_count and s_coef_count signals to \
-each state to be driven, possibly a next register for EVP_data_count, EVB_data_count, and s_coef_count ***/
-  begin
-     if(EVB_data_count < MAX_EVB_DATA)begin
-        d_ram_rd_en <= 1'b1;
-        d_ram_rd_addr <= data_rd_count;
-	next_data_rd_count <= data_rd_count + 1;
-        // *REMINDER* - Increment EVP data count
-     end
-     else begin
-        d_ram_rd_en <= 1'b0;
-        d_ram_rd_addr <= 0;
-	next_data_rd_count <= data_rd_count + 1;
-     end
-
-     n_ram_rd_en <= 1'b1;
-     n_ram_rd_addr <= arg1;
-     s_ram_rd_en <= 1'b1;
-     s_vec_rd_addr <= arg1;
-     s_coef_rd_addr <= s_coef_count;
-     // *REMINDER* - Increment s coef count
-
-  end
-	
-      endcase // case (instr)
-      
-      c_ram_rd_en <= 1'b0;
-      //d_ram_rd_en <= 1'b0;
-      //n_ram_rd_en <= 1'b0;
-      //s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= 0;
-      d_ram_wr_addr <= 0;
-      n_ram_wr_addr <= 0;
-      s_vec_wr_addr <= 0;
-      s_coef_wr_addr <= 0;
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      //next_data_rd_count <= data_rd_count;
-      next_command_rd_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count;
-      next_command_wr_count <= command_wr_count;
-   end // case: STATE_READ_RAM_EN
-   STATE_READ_RAM:
-   begin
-      command_FIFO_rd_en <= 1'b0;
-      data_FIFO_rd_en <= 1'b0;
-      result_FIFO_wr_en <= 1'b0;
-      status_FIFO_wr_en <= 1'b0;
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b0;
-      s_ram_wr_en <= 1'b0;
-      c_ram_rd_en <= 1'b0;
-      d_ram_rd_en <= 1'b0;
-      n_ram_rd_en <= 1'b0;
-      s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= 0;
-      d_ram_wr_addr <= 0;
-      n_ram_wr_addr <= 0;
-      s_vec_wr_addr <= 0;
-      s_coef_wr_addr <= 0;
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      next_data_rd_count <= data_rd_count;
-      next_command_rd_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count;
-      next_command_wr_count <= command_wr_count;
-   end // case: STATE_READ_RAM
-   STATE_WRITE_FIFO_EN:
-   begin
-      command_FIFO_rd_en <= 1'b0;
-      data_FIFO_rd_en <= 1'b0;
-      result_FIFO_wr_en <= 1'b1; // HIGH
-      status_FIFO_wr_en <= 1'b1; // HIGH
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b0;
-      s_ram_wr_en <= 1'b0;
-      c_ram_rd_en <= 1'b0;
-      d_ram_rd_en <= 1'b0;
-      n_ram_rd_en <= 1'b0;
-      s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= 0;
-      d_ram_wr_addr <= 0;
-      n_ram_wr_addr <= 0;
-      s_vec_wr_addr <= 0;
-      s_coef_wr_addr <= 0;
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      next_data_rd_count <= data_rd_count;
-      next_command_rd_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count;
-      next_command_wr_count <= command_wr_count;
-
-   end // case: STATE_WRITE_FIFO_EN
-   STATE_WRITE_FIFO:
-   begin
-      command_FIFO_rd_en <= 1'b0;
-      data_FIFO_rd_en <= 1'b0;
-      result_FIFO_wr_en <= 1'b0;
-      status_FIFO_wr_en <= 1'b0;
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b0;
-      s_ram_wr_en <= 1'b0;
-      c_ram_rd_en <= 1'b0;
-      d_ram_rd_en <= 1'b0;
-      n_ram_rd_en <= 1'b0;
-      s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= 0;
-      d_ram_wr_addr <= 0;
-      n_ram_wr_addr <= 0;
-      s_vec_wr_addr <= 0;
-      s_coef_wr_addr <= 0;
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      next_data_rd_count <= data_rd_count;
-      next_command_rd_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count;
-      next_command_wr_count <= command_wr_count;
-
-   end // case: STATE_WRITE_FIFO
-   STATE_WRITE_RAM_EN:
-   begin
-      command_FIFO_rd_en <= 1'b0;
-      data_FIFO_rd_en <= 1'b0;
-      result_FIFO_wr_en <= 1'b0;
-      status_FIFO_wr_en <= 1'b0;
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b1; // HIGH
-      s_ram_wr_en <= 1'b1; // HIGH
-      c_ram_rd_en <= 1'b0;
-      d_ram_rd_en <= 1'b0;
-      n_ram_rd_en <= 1'b0;
-      s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= 0;
-      d_ram_wr_addr <= 0;
-      n_ram_wr_addr <= arg1;
-      s_vec_wr_addr <= arg1;
-      s_coef_wr_addr <= s_coef_count; /*** REMINDER - NEED TO ADD NEXT SIGNAL FOR THIS AND INCREMENT IT	***/
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      next_data_rd_count <= data_rd_count;
-      next_command_rd_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count;
-      next_command_wr_count <= command_wr_count;
-
-   end
-   STATE_WRITE_RAM:
-   begin
-      command_FIFO_rd_en <= 1'b0;
-      data_FIFO_rd_en <= 1'b0;
-      result_FIFO_wr_en <= 1'b0;
-      status_FIFO_wr_en <= 1'b0;
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b0;
-      s_ram_wr_en <= 1'b0;
-      c_ram_rd_en <= 1'b0;
-      d_ram_rd_en <= 1'b0;
-      n_ram_rd_en <= 1'b0;
-      s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= 0;
-      d_ram_wr_addr <= 0;
-      n_ram_wr_addr <= 0;
-      s_vec_wr_addr <= 0;
-      s_coef_wr_addr <= 0;
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      next_data_rd_count <= data_rd_count;
-      next_command_rd_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count;
-      next_command_wr_count <= command_wr_count;
-
+      FIFO_rd_en <= 1'b0;
+      ram_wr_en <= 1'b1;
+      next_ram_wr_addr <= ram_wr_addr + 1; // Increment RAM write address
+      output_token <= input_token;
+      next_count <= count + 1; // Increment total counter
    end // case: STATE_WRITE_RAM
    STATE_END:
-   begin
-      command_FIFO_rd_en <= 1'b0;
-      data_FIFO_rd_en <= 1'b0;
-      result_FIFO_wr_en <= 1'b0;
-      status_FIFO_wr_en <= 1'b0;
-//      c_ram_wr_en <= 1'b0;
-//      d_ram_wr_en <= 1'b0;
-      n_ram_wr_en <= 1'b0;
-      s_ram_wr_en <= 1'b0;
-      c_ram_rd_en <= 1'b0;
-      d_ram_rd_en <= 1'b0;
-      n_ram_rd_en <= 1'b0;
-      s_ram_rd_en <= 1'b0;
-      c_ram_wr_addr <= 0;
-      d_ram_wr_addr <= 0;
-      n_ram_wr_addr <= 0;
-      s_vec_wr_addr <= 0;
-      s_coef_wr_addr <= 0;
-      c_ram_rd_addr <= 0;
-      d_ram_rd_addr <= 0;
-      n_ram_rd_addr <= 0;
-      s_vec_rd_addr <= 0;
-      s_coef_rd_addr <= 0;
-
-      next_data_rd_count <= data_rd_count;
-      next_command_rd_count <= command_rd_count;
-      next_data_wr_count <= data_wr_count;
-      next_command_wr_count <= command_wr_count;
-
+   begin // Nothing changes in END state
+      FIFO_rd_en <= 1'b0;
+      ram_wr_en <= 1'b0;
+      next_ram_wr_addr <= ram_wr_addr;
+      output_token <= input_token;
+      next_count <= count;
    end
-
-
-  
+   default:
+   begin
+      FIFO_rd_en <= 1'b0;
+      ram_wr_en <= 1'b0;
+      next_ram_wr_addr <= ram_wr_addr;
+      output_token <= input_token;
+      next_count <= count;
+   end
 endcase // case (state)
    
-
-
-
 end
    
     function integer log2;

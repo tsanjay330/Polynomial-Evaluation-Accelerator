@@ -35,9 +35,7 @@ ENHANCEMENTS, OR MODIFICATIONS.
 *              data_in: data for writing into the fifo
 * Output ports: data_out: data that is read out of the fifo
 *               population: number of tokens in the fifo
-*               free_space: current free space level (number of empty tokens) in the fifo
- * 		data_out_en: goes high for 1 clk cycle when data is read from fifo
- * 		data_in_en: goes high for 1 clk cycle when data is written into fifo
+			    free_space: current free space level (number of empty tokens) in the fifo
 * Regs & wires: rd_addr: fifo read address (read pointer)
 *               wr_addr: fifo write address (write pointer)
 * Parameters: buffer_size: max. number of tokens that can coexist in the fifo
@@ -46,35 +44,26 @@ ENHANCEMENTS, OR MODIFICATIONS.
 
 `timescale 1ns / 1ns
 
-module fifo_edited #(parameter buffer_size = 5, width = 6)
+module fifo #(parameter buffer_size = 5, width = 6)
 (
     input clk, rst,
     input wr_en, rd_en,
     input[width - 1 : 0] data_in,
     output reg [log2(buffer_size) - 1 : 0] population,
     output [log2(buffer_size) - 1 : 0] free_space,
-    output reg [width - 1 : 0] data_out,
-    output reg data_out_en, data_in_en     
+    output reg [width - 1 : 0] data_out     
 );
     reg [width - 1 : 0] FIFO_RAM [0 : buffer_size - 1];
     reg [log2(buffer_size) - 1 : 0] rd_addr, wr_addr;
 	reg full;
 	
 	always @(posedge clk)
-	    if(wr_en) begin
+	    if(wr_en)
 		    FIFO_RAM[wr_addr] <= data_in;
-	            data_in_en <= 1'b1;
-	    end
-	    else
-	      data_in_en <= 1'b0;
 			
 	always @(posedge clk)
-	    if(rd_en) begin
+	    if(rd_en)
 		    data_out <= FIFO_RAM[rd_addr];
-	            data_out_en <= 1'b1;
-	    end
-	    else
-	      data_out_en <= 1'b0;
 	
 	/*Write address update*/
     always @(posedge clk or negedge rst)

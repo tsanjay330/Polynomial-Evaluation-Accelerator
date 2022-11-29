@@ -27,19 +27,15 @@ ENHANCEMENTS, OR MODIFICATIONS.
 *******************************************************************************/
 
 /*******************************************************************************
-This is the RAM module designed exclusively for the S coefficient vector array.
+This is an edited version of the single port RAM (random access memory) module.
 
 --- INPUTS: ---
 
 data:  data to be written into the RAM
 
-rd_vector_index:  The index/address of the vector within S that is being read
+wr_addr:  RAM address for writing data
 
-rd_coef_index: The index/address of the coefficient within Si that is being read
- 
-wr_vector_index:  The index/address for which vector within S is being written to
-
-wr_coef_index: The index/address for which coefficient within Si is being written to
+rd_addr: RAM address for reading data
 
 wr_en: enable signal for activating write operation (active high)
 
@@ -51,51 +47,49 @@ clk: clock
 
 q: data that is read out of the RAM
 
-q_en: Binary signal that is meant to go high for a single clock cycle when data is successfully read out of RAM.
- 
-wr_suc: binary signal that is meant to go high for a signel clock cycle when data is successfully written into RAM.
+q_en: binary signal that goes high for a single clock cycle when data is successfully read from RAM
+
+wr_suc: binary signal that goes high for a single clock cycle when data is successfully written to RAM
 
 --- PARAMETERS: ---    
-word_size: the bit width for each of the input data used in computation of the PEA actor.
- 
-num_vectors: The number of coefficient vectors (in this project, 8)
- 
-max_degree: The maximum degree of each polynomial (in this project, 10)
+
+buffer_size: the number of tokens (integers) in each input vector. So, if size =
+N, then this actor performs stream computation.  
+
+word_size: the bit width for each of the input data  used in computation of the PEA actor.
 *******************************************************************************/
 
 `timescale 1ns/1ps
-module S_vector_ram
+module token_ram
 /*Here word_size and buffer_size is treated as width and size parameters from lab 07 respectively*/
-        #(parameter word_size = 16, num_vectors = 8, max_degree = 10)(  
+        #(parameter word_size = 16, buffer_size = 1024)(  
         input [word_size - 1 : 0] 	  data,
-        input [log2(num_vectors) - 1 : 0] rd_vector_addr,
-        input [log2(max_degree) : 0] 	  rd_coef_addr,
-	input [log2(num_vectors) - 1 : 0] wr_vector_addr,
-        input [log2(max_degree) : 0] 	  wr_coef_addr,
+        input [log2(buffer_size) - 1 : 0] wr_addr,
+        input [log2(buffer_size) - 1 : 0] rd_addr,
         input 				  wr_en, re_en, clk,
         output reg [word_size - 1 : 0] 	  q,
-	output reg 			  wr_suc,
+	output reg			  wr_suc,
 	output reg			  q_en); // This signal goes high when data is successfully read out - it is the responsibility of the module that drives the read_enable signal to make sure that re_en only stays high for a single clock cycle.
 
     /* Declare the RAM variable */
-    reg [word_size - 1 : 0] ram[num_vectors - 1 : 0][max_degree : 0];
+    reg [word_size - 1 : 0] ram[buffer_size - 1 : 0];
 	
-    /* Variable to hold the registered read address - old implementation */
-    //reg [log2(buffer_size) - 1 : 0] addr_reg;
+    /* Variable to hold the registered read address */
+    reg [log2(buffer_size) - 1 : 0] addr_reg;
 	
     always @ (posedge clk)
     begin
         /* Write */
         if (wr_en) begin
-           ram[wr_vector_addr][wr_coef_addr] <= data;
+           ram[wr_addr] <= data;
 	   wr_suc <= 1'b1;
 	end
         else
 	  wr_suc <= 1'b0;
-       
+
         /* Read */
         if (re_en) begin
-	   q <= ram[rd_vector_addr][rd_coef_addr];
+	   q <= ram[rd_addr];
 	   q_en <= 1'b1;
 	end
         else
