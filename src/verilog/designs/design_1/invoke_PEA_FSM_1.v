@@ -1,4 +1,4 @@
-
+/*
 Name: PEA top level module
 Description: The top level module for the PEA
 Sub modules: PEA_enable,
@@ -36,7 +36,7 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
     output wr_out;
     output [2*word_size - 1 : 0] data_out_result,
     output [2*word_size - 1 : 0] data_out_status,
-    output [7:0] mode,//current mode needed for enable
+    output [2:0] mode,//current mode needed for enable
     output [4 : 0] b, // Argument 2 of current command input token, gets used
     output [3 : 0] N
             );
