@@ -25,6 +25,8 @@ module firing_state_FSM2
         input [word_size - 1 : 0] command_in,
         input start_fsm2,
         input [1 : 0] next_instr,
+        input [word_size - 1 : 0] pop_in_fifo_data;
+        input [word_size - 1 : 0] pop_in_fifo_command;
 		output reg [7:0] instr,
         output en_rd_fifo_data,
         output en_rd_fifo_command,
@@ -35,8 +37,7 @@ module firing_state_FSM2
    
 	localparam SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
 
-	localparam GET_COMMAND=3'b000, STP=3'b001, EVP=3'b010, 
-		EVB=3'b011, RST=3'b100, OUTPUT=3'b101;
+	localparam STP=8'd0, EVP=8'd1, EVB=8'd2, RST=8'd3;
 
 	localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, 
 		STATE_GET_COMMAND_WAIT=4'b0010, STATE_STP_START=4'b0011, 
@@ -67,7 +68,6 @@ module firing_state_FSM2
    wire wr_en_ram_command, wr_en_ram_data, wr_en_ram_S, wr_en_ram_N;
    wire rd_en_ram_command, rd_en_ram_data, rd_en_ram_S, rd_en_ram_NN;
    wire [word_size - 1 : 0] ram_out_command, ram_out_data, ram_out_S, ram_out_N;
-//   wire rd_out_N, en_ram_out_N;(maybe rename to wr_data_suc and rd_data_suc)
 /****************************************************************
 Instantiation of RAM modules
 ****************************************************************/
@@ -83,7 +83,7 @@ single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 	RAM_S(.data(ram_in_S), .addr(wr_addr_S), .rd_addr(rd_addr_S), .wr_en(wr_en_ram_S), .rd_en(rd_en_ram_S), .clk(clk), .q(ram_out_S));
 
 N_ram #(.word_size(word_size), .buffer_size(buffer_size))
-    RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), .rd_addr(rd_addr_N), .wr_en(wr_en_ram_N), .re_en(rd_en_ram_N), .clk(clk), .q(ram_out_N), .wr_suc(wr_suc_data), .q_en(rd_data_suc));
+    RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), .rd_addr(rd_addr_N), .wr_en(wr_en_ram_N), .re_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
     DATA_MEM_CONTROLLER(.clk(clk), .rst(rst), .FIFO_population(), .input_token(ram_in_data), .start_in(), .FIFO_rd_en(), .ram_wr_en(wr_en_ram_data), .ram_wr_addr(wr_addr_data), .output_token(ram_out_data));
@@ -122,11 +122,13 @@ begin
         end
 end
 
-always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_rst, next_mode_in)
+always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_rst, next_instr)
 begin
 case(state_module)
     STATE_START:
     begin
+        if(start_fsm2)
+        begin
         case(next_instr)
             SETUP_INSTR: begin
                 next_state_module <= STATE_GET_COMMAND_START;
@@ -145,13 +147,18 @@ case(state_module)
                     EVB: begin
                         next_state_module <= STATE_EVB_START;
                     end
+                    RST: begin
+                        next_state_module <= STATE_RST;
+                    end
+                 default:
+                 begin
+                     next_state_module <= STATE_START;
+                 end
 
-                    //RST??
                 endcase
             end
-
-            OUTPUT: begin
-            next_state_module <= STATE_OUTPUT;
+            else begin
+                     next_state_module <= STATE_START;
             end
 
             default:
