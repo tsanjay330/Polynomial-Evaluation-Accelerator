@@ -3,8 +3,7 @@ module tb_PEA();
 	
     parameter SIZE; // This is related to the loop needs to be specified for EACH command you are going to call.
 	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
-    parameter buffer_size = 1024, width = 16, buffer_size_out = 1;
-	parameter GET_COMMAND = 3'b000, STP = 3'b001, EVP = 3'b010, EVB = 3'b011, OUTPUT = 3'b100, RST = 3'b101;
+    parameter buffer_size = 1024, width = 16, buffer_size_out = 32;
 
     reg clk, rst;
     reg invoke;
@@ -200,7 +199,8 @@ module tb_PEA();
 
         /* Set up recording of results */
         //TODO: Not sure about this fdisplay with the out_fifo1.FIFORAM[]
-		$fdisplay(descr, "time = %d, FIFO[0] = %d", $time, out_fifo1.FIFO_RAM[0]);
+		$fdisplay(descr, "time = %d, result.FIFO[0] = %d, status.FIFO[0] = %d"
+		, $time, out_fifo_result.FIFO_RAM[0], out_fifo_status.FIFO_RAM[0]);
 
         $fdisplay(descr, "time = %d, Result = %d, Status = %d", $time, 
 					data_out_fifo1_result, data_out_fifo2_status);
