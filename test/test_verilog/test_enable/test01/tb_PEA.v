@@ -1,7 +1,8 @@
 `timescale 1ns/1ps
 module tb_PEA();
 	
-	parameter SETUP_COMP = 2'b00, COMP = 2'b01, OUTPUT = 2'b10;
+    parameter SIZE; // This is related to the loop needs to be specified for EACH command you are going to call.
+	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
     parameter buffer_size = 1024, width = 16, buffer_size_out = 1;
 	parameter GET_COMMAND = 3'b000, STP = 3'b001, EVP = 3'b010, EVB = 3'b011, OUTPUT = 3'b100, RST = 3'b101;
 
@@ -33,7 +34,7 @@ module tb_PEA();
 
 	//These signals come from the FSM2/3 level
 	wire wr_out, rd_in_command, rd_in_data;
-	wire [7:0] mode;
+	wire [2:0] mode;
 
     integer i, j, k;
 
@@ -88,10 +89,6 @@ module tb_PEA();
     end
 
 
-/******************************Nothing has been changed beyond here***********/
-
-
-
 
 
     /***************************************************************************
@@ -103,8 +100,7 @@ module tb_PEA();
         /* Set up a file to store the test output */
         descr = $fopen("out.txt");
 
-        /* Read text files and load the data into memory for input of inner 
-        product actor
+        /* Read text files and load the data into memory for input of PEA actor
         */
         $readmemh("data.txt", mem_data);
         $readmemh("command.txt", mem_command);
@@ -115,7 +111,7 @@ module tb_PEA();
         data_in <= 0;
         command_in <= 0;
         invoke <= 0;
-        next_mode_in <= SETUP_COMP;
+        next_mode_in <= SETUP_INSTR;
         rd_en_result <= 0;
 		rd_en_status <=0;
         #2 rst <= 1;
@@ -133,7 +129,7 @@ module tb_PEA();
 		wr_en_input <= 0;
 
         $fdisplay(descr, "Setting up input FIFOs");
-        for (i = 0; i < b; i = i + 1)
+        for (i = 0; i < SIZE ; i = i + 1)
         begin
                #2
                data_in <= mem_data[i];
@@ -144,7 +140,7 @@ module tb_PEA();
         end
 
         #2;     /* ensure that data is stored into memory before continuing */
-        next_mode_in <= SETUP_COMP;
+        next_mode_in <= SETUP_INSTR;
         #2;
         if (enable)
         begin
@@ -160,7 +156,7 @@ module tb_PEA();
         #2 invoke <= 0;
 
         /* Wait for mode 1 to complete */
-        wait (FC) #2 next_mode_in <= COMP;
+        wait (FC) #2 next_mode_in <= INSTR;
         #2;
         if (enable)
         begin
@@ -200,11 +196,12 @@ module tb_PEA();
         rd_en_result <= 0;
 		rd_en_status <= 0;
         #2;
-        next_mode_in <= SETUP_COMP;
+        next_mode_in <= SETUP_INSTR;
 
         /* Set up recording of results */
         //TODO: Not sure about this fdisplay with the out_fifo1.FIFORAM[]
 		$fdisplay(descr, "time = %d, FIFO[0] = %d", $time, out_fifo1.FIFO_RAM[0]);
+
         $fdisplay(descr, "time = %d, Result = %d, Status = %d", $time, 
 					data_out_fifo1_result, data_out_fifo2_status);
         $display("time = %d, Result = %d, Status = %d", $time, 

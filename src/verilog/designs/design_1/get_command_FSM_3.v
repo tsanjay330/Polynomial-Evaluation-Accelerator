@@ -5,9 +5,11 @@ module get_command_FSM_3
         input clk, rst,
         input start_get_cmd,
 		input [15 : 0] command_in,
+		input [log2(buffer_size)-1 : 0] rd_addr_command,
 		input en_mode_check_err,
 		output reg en_rd_cmd,
         output reg done_get_cmd,
+		output reg [log2(buffer_size)-1 : 0] rd_addr_command_updated,
         output reg [7 : 0] instr,
         output reg [2 : 0] arg1,
 		output reg [4 : 0] arg2,
@@ -18,12 +20,14 @@ module get_command_FSM_3
 		reg [2 : 0] next_arg1;
 		reg [4 : 0] next_arg2;
 		reg [1 : 0] next_error;
+		reg [log2(buffer_size)-1 : 0] next_rd_addr_command;
 
     localparam STATE_START = 2'b00, STATE_GET_CMD = 2'b01, STATE_CHECK_ERR = 2'b10, STATE_END = 2'b11;
 
 	always @(posedge clk or negedge rst) begin
 		if (! rst) begin
 			state <= STATE_START;
+			rd_addr_data_updated <= 0;
 			instr <= 0;
 			arg1 <= 0;
 			arg2 <= 0;
@@ -31,6 +35,7 @@ module get_command_FSM_3
 		end
 		else begin
 			state <= next_state;
+			rd_addr_data_updated <= next_rd_addr_data;
 			instr <= next_instr;
 			arg1 <= next_arg1;
 			arg2 <= next_arg2;
@@ -38,7 +43,7 @@ module get_command_FSM_3
 		end
 	end
 
-	always @(state, start_get_cmd, en_mode_check_err) begin
+	always @(state, start_get_cmd) begin
 		case (state)
 			STATE_START:
 			begin
@@ -49,12 +54,7 @@ module get_command_FSM_3
 			end
 
 			STATE_GET_CMD:
-			begin
-				if (en_mode_check_err)
-					next_state <= STATE_CHECK_ERR;
-				else
-					next_state <= STATE_GET_CMD;
-			end
+				next_state <= STATE_CHECK_ERROR;
 
 			STATE_CHECK_ERR:
 				next_state <= STATE_END;
@@ -71,6 +71,7 @@ module get_command_FSM_3
 			begin
 				done_get_cmd <= 0;
 				en_rd_cmd <= 0;
+				next_rd_addr_command <= rd_addr_command;
 				next_instr <= instr;
 				next_arg1 <= arg1;
 				next_arg2 <= arg2;
@@ -81,6 +82,7 @@ module get_command_FSM_3
 			begin
 				done_get_cmd <= 0;
 				en_rd_cmd <= 1;
+				next_rd_addr_command <= rd_addr_command_updated + 1;
 				next_instr <= instr;
 				next_arg1 <= arg1;
                 next_arg2 <= arg2;
@@ -95,6 +97,7 @@ module get_command_FSM_3
 						if (command_in[4 : 0] <= 10) begin
 							done_get_cmd <= 0;
 							en_rd_cmd <= 0;
+							next_rd_addr_command <= rd_addr_command_updated;
 							next_instr <= command_in[15 : 8];
 							next_arg1 <= command_in[7 : 5];
 							next_arg2 <= command_in[4 : 0];
@@ -103,6 +106,7 @@ module get_command_FSM_3
 			 			else begin
 							done_get_cmd <= 0;
 							en_rd_cmd <= 0;
+							next_rd_addr_command <= rd_addr_command_updated;
 							next_instr <= instr;
 							next_arg1 <= arg1;
 							next_arg2 <= arg2;
@@ -113,7 +117,8 @@ module get_command_FSM_3
 					1:
 					begin
 						done_get_cmd <= 0;
-                        en_rd_cmd <= 0;
+						en_rd_cmd <= 0;
+						next_rd_addr_command <= rd_addr_command_updated;
                         next_instr <= command_in[15 : 8];
                         next_arg1 <= command_in[7 : 5];
                         next_arg2 <= 0;
@@ -123,7 +128,8 @@ module get_command_FSM_3
 					2:
 					begin
                         done_get_cmd <= 0;
-                        en_rd_cmd <= 0;
+						en_rd_cmd <= 0;
+						next_rd_addr_command <= rd_addr_command_updated; 
                         next_instr <= command_in[15 : 8];
                         next_arg1 <= command_in[7 : 5];
                         next_arg2 <= command_in[4 : 0];
@@ -134,6 +140,7 @@ module get_command_FSM_3
 					begin
 						done_get_cmd <= 0;
 						en_rd_cmd <= 0;
+						next_rd_addr_command <= rd_addr_command_updated;
 						next_instr <= command_in[15 : 8];
 						next_arg1 <= 0;
 						next_arg2 <= 0;
@@ -144,6 +151,7 @@ module get_command_FSM_3
 					begin
 						done_get_cmd <= 0;
 						en_rd_cmd <= 0;
+						next_rd_addr_command <= rd_addr_command_updated;
 						next_instr <= instr;
 						next_arg1 <= arg1;
 						next_arg2 <= arg2;
@@ -157,6 +165,7 @@ module get_command_FSM_3
 			begin
 				done_get_cmd <= 1;
 				en_rd_cmd <= 0;
+				next_rd_addr_command <= rd_addr_command_updated;
 				next_instr <= instr;
 				next_arg1 <= arg1;
 				next_arg2 <= arg2;
