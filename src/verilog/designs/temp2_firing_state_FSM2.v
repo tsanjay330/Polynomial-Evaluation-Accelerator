@@ -17,11 +17,6 @@ wr_out_result - output result fifo write enable signal
 wr_out_status - output status fifo write enable signal
 data_out_result - output data for writing into output result fifo
 data_out_status - output data for writing into output status fifo
-
-PARAMETERS
-
-word_size - size of each input buffer
-buffer_size - bit width of tokens in regs and output reg
 *******************************************************************************/
 `timescale 1ns/1ps
 module temp2_firing_state_FSM2
