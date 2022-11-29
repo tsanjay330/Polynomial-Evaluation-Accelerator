@@ -34,9 +34,9 @@ module testbench();
  Instantiate input FIFOs
  *******************************************************/
 
-  fifo #(word_size, buffer_size) fifo_in_command(clk, rst, fifo_wr_en_c, fifo_rd_en_c, fifo_in_c, fifo_pop_c, fifo_free_space_c, fifo_out_c);
+  fifo #(buffer_size, word_size) fifo_in_command(clk, rst, fifo_wr_en_c, fifo_rd_en_c, fifo_in_c, fifo_pop_c, fifo_free_space_c, fifo_out_c);
 
-  fifo #(word_size, buffer_size) fifo_in_data(clk, rst, fifo_wr_en_d, fifo_rd_en_d, fifo_in_d, fifo_pop_d, fifo_free_space_d, fifo_out_d);
+  fifo #(buffer_size, word_size) fifo_in_data(clk, rst, fifo_wr_en_d, fifo_rd_en_d, fifo_in_d, fifo_pop_d, fifo_free_space_d, fifo_out_d);
  
   integer descr, descr_c, descr_d; 
    
@@ -56,8 +56,8 @@ initial
      //descr_d = $fopen("d_out.txt");
      descr = $fopen("out.txt");
      
-     $readmem("input_c.txt", input_mem_C);
-     $readmem("input_d.txt", input_mem_D);
+     $readmemh("input_c.txt", input_mem_C);
+     $readmemh("input_d.txt", input_mem_D);
 
      $fdisplay(descr, "Setting up input FIFOs");
      for(i = 0; i < NUM_C_TOKENS; i = i + 1)
