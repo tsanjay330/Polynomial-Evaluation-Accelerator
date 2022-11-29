@@ -1,10 +1,7 @@
 This is the project from team1
 Progress So Far:
-Enable.v is compiled
-PEA_top_module_1.v has the state operations defined(Yet to add the FSM-2 instantiation)
-PEA_FSM2.v for get_command is compiled
-Rough draft for get_command_fsm3.v is implemented
-STP_FSM_3.v is compiled and completed
-RAM modules are wip(mem controller, S RAM and single port modules)
-Testbench for the PEA has states defined.
-Tb for the enable module prints out Input FIFO. 
+FSM Top level states modified and module instantiation added
+FSM firing state wriiten
+FSM3 for all instr written 
+RAM modules mem_controller, N RAM and S RAM with various design aspects written
+TB written and module instantiation done for enable and invoke submodules
