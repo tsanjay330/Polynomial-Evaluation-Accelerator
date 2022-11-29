@@ -26,7 +26,7 @@ module temp2_firing_state_FSM2
         input [word_size - 1 : 0] command_in,
         input start_fsm2,
         input [1 : 0] next_mode_in,
-		output reg [7:0] instr,
+		output reg [2:0] mode,
         output rd_in_data,
         output rd_in_command,
         output reg done_fsm2,
@@ -59,7 +59,7 @@ module temp2_firing_state_FSM2
    reg done_out_rst;
    wire en_mode_check_err;
    wire en_mode_wr_coeff;
-   //wire [7:0] instr;
+   wire [7:0] instr;
    wire [2:0] arg1;
    wire [4:0] arg2; 
    wire [1:0] err_out;
@@ -130,8 +130,8 @@ begin
     begin
         state_module <= STATE_START;
         end
-        else
-        begin
+		else
+		begin
             state_module <= next_state_module;
         end
 end
@@ -147,7 +147,7 @@ case(state_module)
             end
 
             COMP: begin
-                case(instr)//same mode signal that is passed to enable 
+                case(instr) 
                     STP: begin
                         next_state_module <= STATE_STP_START;
                     end
@@ -160,7 +160,6 @@ case(state_module)
                         next_state_module <= STATE_EVB_START;
                     end
 
-                    //RST??
                 endcase
             end
 
