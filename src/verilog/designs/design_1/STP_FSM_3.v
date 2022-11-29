@@ -51,6 +51,7 @@ module STP_FSM_3
 		output reg done_stp,
 		output reg en_rd_data,
 		output reg en_wr_S,
+		output reg en_wr_N,
 		output reg [log2(buffer_size)-1 : 0] rd_addr_data_updated,
 		output reg [log2(buffer_size)-1 : 0] wr_addr_S,
 		output reg [15 : 0] c,
@@ -127,6 +128,7 @@ module STP_FSM_3
 				done_stp <= 0;
 				en_rd_data <= 0;
 				en_wr_S <= 0;
+				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated;
 				next_wr_addr_S <= A * 11;
 				next_result <= 0;
@@ -138,6 +140,7 @@ module STP_FSM_3
 				done_stp <= 0;
 				en_rd_data <= 1;
 				en_wr_S <= 0;
+				en_wr_N <= 1;
 				next_rd_addr_data <= rd_addr_data_updated + 1;
 				next_wr_addr_S <= wr_addr_S;
 				next_result <= result;
@@ -149,6 +152,7 @@ module STP_FSM_3
 				done_stp <= 0;
 				en_rd_data <= 1;
 				en_wr_S <= 1;
+				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated + 1;
 				next_wr_addr_S <= wr_addr_S + 1;
 				next_result <= result;
@@ -160,6 +164,7 @@ module STP_FSM_3
 				done_stp <= 0;
 				en_rd_data <= 0;
 				en_wr_S <= 0;
+				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated;
 				next_wr_addr_S <= wr_addr_S;
 				next_result <= 0;
@@ -171,6 +176,7 @@ module STP_FSM_3
 				done_stp <= 1;
 				en_rd_data <= 0;
 				en_wr_S <= 0;
+				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated;
 				next_wr_addr_S <= wr_addr_S;
 				next_result <= 1;
