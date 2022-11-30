@@ -15,12 +15,12 @@ module mem_controller
  input 					clk, rst,
  input [log2(buffer_size) - 1 : 0] 	FIFO_population, // FIFO information - to begin reading tokens
 // input 					FIFO_out_en,
- input [log2(word_size) - 1 : 0]	input_token,
+ input [word_size - 1 : 0]		input_token,
  input 					start_in, // Based on load_loc_mem_FSM_3 of lab 7 - this signal comes from FSM2_firing_state - when data needs to be moved
  output reg 				FIFO_rd_en,
  output reg 				ram_wr_en,
  output reg [log2(buffer_size) - 1 : 0] ram_wr_addr,
- output reg [log2(word_size) - 1 : 0]   output_token
+ output reg [word_size - 1 : 0]  	output_token
 );
 
    // Count variables for how many times a token has been written to C & D RAM
@@ -40,7 +40,7 @@ module mem_controller
    /***	Update current state and counter outputs on clk edge (or synch reset)	***/
    always@(posedge clk)
    begin
-       if(rst) begin
+       if(!rst) begin
 	  state <= STATE_START;
 	  ram_wr_addr <= 0; // On reset, write address goes back to start
 	  count <= FIFO_population;
@@ -68,21 +68,21 @@ module mem_controller
 	end
 	STATE_READ_FIFO_EN:
         begin
-	   if(rst)
+	   if(!rst)
 	     next_state <= STATE_START;
 	   else           
 	     next_state <= STATE_READ_FIFO;
         end
 	STATE_READ_FIFO:
         begin
-	   if(rst)
+	   if(!rst)
              next_state <= STATE_START;
            else  
 	     next_state <= STATE_WR_RAM;
 	end
 	STATE_WR_RAM:
         begin
-	   if(rst)
+	   if(!rst)
              next_state <= STATE_START;
            else  
              next_state <= STATE_END;
