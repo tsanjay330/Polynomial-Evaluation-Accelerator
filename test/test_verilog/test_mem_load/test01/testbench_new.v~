@@ -33,6 +33,8 @@ module testbench();
    
    // Additional Signals   
    integer i;
+   reg [word_size - 1 : 0] input_mem_C [0 : NUM_C_TOKENS - 1];
+   reg [word_size - 1 : 0] input_mem_D [0 : NUM_D_TOKENS - 1];
    
 /********************************************************************
  Instantiate input FIFOs, RAM modules, and Memory Controllers/Loaders
@@ -47,9 +49,10 @@ module testbench();
    single_port_ram #(word_size, buffer_size) ram_data(.data(mc_output_d), .addr(ram_d_wr_addr), .rd_addr(ram_d_rd_addr), .wr_en(ram_d_wr_en), .re_en(ram_d_rd_en), .clk(clk), .q(ram_d_q));
 
    // Memory Controller
-   mem_controller #(word_size, buffer_size) mem_controller_c(.clk(clk), .rst(rst), .FIFO_population(fifo_pop_c), .input_token(fifo_out_c), .FIFO_rd_en(fifo_rd_en_c), .ram_wr_en(ram_c_wr_en), .ram_wr_addr(ram_c_wr_addr), .output_token(mc_output_c));
-   mem_controller #(word_size, buffer_size) mem_controller_d(.clk(clk), .rst(rst), .FIFO_population(fifo_pop_d), .input_token(fifo_out_d), .FIFO_rd_en(fifo_rd_en_d), .ram_wr_en(ram_d_wr_en), .ram_wr_addr(ram_d_wr_addr), .output_token(mc_output_d));
-   
+   /*mem_controller #(word_size, buffer_size) mem_controller_c(.clk(clk), .rst(rst), .FIFO_population(fifo_pop_c), .input_token(fifo_out_c), .start_in(start_in_c), .FIFO_rd_en(fifo_rd_en_c), .ram_wr_en(ram_c_wr_en), .ram_wr_addr(ram_c_wr_addr), .output_token(mc_output_c));
+   mem_controller #(word_size, buffer_size) mem_controller_d(.clk(clk), .rst(rst), .FIFO_population(fifo_pop_d), .input_token(fifo_out_d), .start_in(start_in_d), .FIFO_rd_en(fifo_rd_en_d), .ram_wr_en(ram_d_wr_en), .ram_wr_addr(ram_d_wr_addr), .output_token(mc_output_d));*/
+   mem_controller #(word_size, buffer_size) mem_controller_c(.clk(clk), .rst(rst), .FIFO_population(fifo_pop_c), .input_token(fifo_out_c), .start_in(start_in_c), .FIFO_rd_en(fifo_rd_en_c), .ram_wr_en(ram_c_wr_en), .ram_wr_addr(ram_c_wr_addr), .output_token(mc_output_c));
+   mem_controller #(word_size, buffer_size) mem_controller_d(.clk(clk), .rst(rst), .FIFO_population(fifo_pop_d), .input_token(fifo_out_d), .start_in(start_in_d), .FIFO_rd_en(fifo_rd_en_d), .ram_wr_en(ram_d_wr_en), .ram_wr_addr(ram_d_wr_addr), .output_token(mc_output_d));
   integer descr, descr_c, descr_d; 
    
    
@@ -163,6 +166,16 @@ initial
          $fdisplay(descr, "fifo_in_data.FIFO_RAM[%1d] = %d", i, fifo_in_data.FIFO_RAM[i]);
        end
 
+     // Send in start signals to command and data memory controllers
+     #2;
+     start_in_c <= 1'b1;
+     start_in_d <= 1'b1;
+
+     // Wait for mem_controller to send FIFO tokens to RAM
+     #100;
+     start_in_c <= 1'b0;
+     start_in_d <= 1'b0;
+
      #100;
      // Display contents of command and data ram modules
      for(i = 0; i < NUM_C_TOKENS; i = i + 1)
@@ -173,6 +186,8 @@ initial
        begin
          $fdisplay(descr, "ram_data.ram[%1d] = %d", i, ram_data.ram[i]);
        end
+      
+    // $fdisplay(descr, "ram_command.ram[%1d] = %d", 0, ram_command.ram[0]);
      
   end
 
