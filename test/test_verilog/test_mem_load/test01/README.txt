@@ -22,7 +22,9 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+The purpose of this first test is to set up the input and output FIFOs and ensure that
+data can be successfully read from the input FIFOs to RAM modules via the memory controller/loader.
+
 
 @author Cole Schneider.
 
