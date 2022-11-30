@@ -5,6 +5,7 @@
 module EVB_FSM_3
 		#(parameter buffer_size = 1024)(
 		input clk, rst,
+		input rst_instr,
 		input start_evb,
 		input [2 : 0] A,
 		input [4 : 0] b,
@@ -12,6 +13,7 @@ module EVB_FSM_3
 		input [15 : 0] c_i,
 		input [4 : 0] N,
 		input [log2(buffer_size) - 1 : 0] rd_addr_data,
+		output reg done_evp,
 		output reg done_evb,
 		output reg en_rd_data,
 		output reg en_rd_S,
@@ -22,7 +24,7 @@ module EVB_FSM_3
 		output reg [31 : 0] status);
 
 		reg [2 : 0] state, next_state;
-		reg en_evp, done_evp;
+		reg en_evp;
 		reg [31 : 0] next_result, next_status;
 		reg [4 : 0] b_counter, next_b_counter;
 
@@ -30,8 +32,6 @@ module EVB_FSM_3
 				STATE_FIRST_EVP1 = 3'b010, STATE_FIRST_EVP2 = 3'b011,
 				STATE_EVP0 = 3'b100, STATE_EVP1 = 3'b101, STATE_EVP2 = 3'b110,
 				STATE_END = 3'b111;
-
-	
 
 	EVP_FSM_3 evp
 		(.clk(clk), .rst(rst), .start_evp(en_evp), .A(A), .x(x_b), .c_i(c_i),
@@ -43,7 +43,7 @@ module EVB_FSM_3
 assign rd_addr_data_updated = rd_addr_data + b_counter;
 
 	always @(posedge clk, negedge rst)
-		if (! rst) begin
+		if (! rst || ! rst_instr) begin
 			state <= STATE_START;
 			b_counter <= 0;
 			result <= 0;
