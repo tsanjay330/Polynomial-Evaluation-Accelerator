@@ -14,8 +14,9 @@ module mem_controller
 #(parameter word_size = 16, buffer_size = 1024)(
  input 					clk, rst,
  input [log2(buffer_size) - 1 : 0] 	FIFO_population, // FIFO information - to begin reading tokens
+// input 					FIFO_out_en,
  input [word_size - 1 : 0]		input_token,
-// input 					start_in, // Based on load_loc_mem_FSM_3 of lab 7 - this signal comes from FSM2_firing_state - when data needs to be moved
+ input 					start_in, // Based on load_loc_mem_FSM_3 of lab 7 - this signal comes from FSM2_firing_state - when data needs to be moved
  output reg 				FIFO_rd_en,
  output reg 				ram_wr_en,
  output reg [log2(buffer_size) - 1 : 0] ram_wr_addr,
@@ -25,6 +26,10 @@ module mem_controller
    // Count variables for how many times a token has been written to C & D RAM
    // act as the wr address to the RAM modules
    reg [log2(buffer_size) - 1 : 0]      next_ram_wr_addr;
+   reg [log2(buffer_size) - 1 : 0] 	count, next_count;
+   // This running count will be used to determine if a token needs to be read or not,
+   // this would be for error checking/if for some reason this is not handled by FSM2
+   // (To be implemented later, as of 11/27)
    
    // 3 bit state register
    reg [2 : 0] 				state, next_state;
@@ -38,23 +43,25 @@ module mem_controller
        if(!rst) begin
 	  state <= STATE_START;
 	  ram_wr_addr <= 0; // On reset, write address goes back to start
+	  count <= FIFO_population;
        end
        else
 	begin
 	   state <= next_state;
 	   ram_wr_addr <= next_ram_wr_addr;
+	   count <= next_count;
 	end
 
    end
 
    /***	STATE TRANSITION BLOCK	***/
-   always@(state, FIFO_population, rst)
+   always@(state, start_in)
    begin
        case(state)	// General flow: start -> read_fifo_en -> read_fifo ->
 	 		// write_ram -> end, retrun to start on end or rst
 	STATE_START:
 	begin
-           if(FIFO_population >= 1)
+           if(start_in)
              next_state <= STATE_READ_FIFO_EN;
 	   else
 	     next_state <= STATE_START;
@@ -86,7 +93,7 @@ module mem_controller
    end
 
    /***	OUTPUT SIGNAL BLOCK and Update Counters	***/
-always@(state)
+always@(state, start_in)
 begin
 case(state)
    STATE_START:
@@ -95,6 +102,7 @@ case(state)
       ram_wr_en <= 1'b0;
       next_ram_wr_addr <= ram_wr_addr;
       output_token <= input_token;
+      next_count <= count;
    end // case: START
    STATE_READ_FIFO_EN:
    begin
@@ -102,6 +110,7 @@ case(state)
       ram_wr_en <= 1'b0;
       next_ram_wr_addr <= ram_wr_addr;
       output_token <= input_token;
+      next_count <= count;
    end // case: STATE_READ_FIFO_EN
    STATE_READ_FIFO:
    begin
@@ -109,6 +118,7 @@ case(state)
       ram_wr_en <= 1'b0;
       next_ram_wr_addr <= ram_wr_addr;
       output_token <= input_token; // Here, output token is now the NEW token to be read
+      next_count <= count;
    end // case: STATE_READ_FIFO
    STATE_WR_RAM:
    begin
@@ -116,6 +126,7 @@ case(state)
       ram_wr_en <= 1'b1;
       next_ram_wr_addr <= ram_wr_addr + 1; // Increment RAM write address
       output_token <= input_token;
+      next_count <= count + 1; // Increment total counter
    end // case: STATE_WRITE_RAM
    STATE_END:
    begin // Nothing changes in END state
@@ -123,6 +134,7 @@ case(state)
       ram_wr_en <= 1'b0;
       next_ram_wr_addr <= ram_wr_addr;
       output_token <= input_token;
+      next_count <= count;
    end
    default:
    begin
@@ -130,6 +142,7 @@ case(state)
       ram_wr_en <= 1'b0;
       next_ram_wr_addr <= ram_wr_addr;
       output_token <= input_token;
+      next_count <= count;
    end
 endcase // case (state)
    
