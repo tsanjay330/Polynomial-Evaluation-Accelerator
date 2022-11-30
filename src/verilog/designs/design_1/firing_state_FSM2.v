@@ -92,16 +92,14 @@ N_ram #(.word_size(word_size), .buffer_size(buffer_size))
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
     DATA_MEM_CONTROLLER(.clk(clk), .rst(rst), 
 			.FIFO_population(pop_in_fifo_data), .input_token(data_in), 
-			.start_in(/*TODO*/), .FIFO_rd_en(en_rd_fifo_data), 
-			.ram_wr_en(wr_en_ram_data), .ram_wr_addr(wr_addr_data), 
-			.output_token(ram_in_data));
+			.FIFO_rd_en(en_rd_fifo_data), .ram_wr_en(wr_en_ram_data), 
+			.ram_wr_addr(wr_addr_data), .output_token(ram_in_data));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
     COMMAND_MEM_CONTROLLER(.clk(clk), .rst(rst), 
 			.FIFO_population(pop_in_fifo_command), .input_token(command_in), 
-			.start_in(/*TODO*/), .FIFO_rd_en(en_rd_fifo_command), 
-			.ram_wr_en(wr_en_ram_command), .ram_wr_addr(wr_addr_command), 
-			.output_token(ram_in_command));
+			.FIFO_rd_en(en_rd_fifo_command), .ram_wr_en(wr_en_ram_command), 
+			.ram_wr_addr(wr_addr_command), .output_token(ram_in_command));
 
 /***********************************************************************
 Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST
