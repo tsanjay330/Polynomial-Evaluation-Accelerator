@@ -43,6 +43,7 @@ status: value outputted to the status FIFO
 module STP_FSM_3 
 		#(parameter word_size = 16, buffer_size = 1024)(
 		input clk, rst,
+		input rst_instr,
 		input start_stp,
 		input [log2(buffer_size)-1 : 0] rd_addr_data,
 		input [2 : 0] A,
@@ -69,7 +70,7 @@ module STP_FSM_3
 				STATE_ERROR = 3'b100, STATE_END = 3'b101;
 
 	always @(posedge clk, negedge rst)
-		if (!rst) begin
+		if (! rst || ! rst_instr) begin
 			state <= STATE_START;
 			rd_addr_data_updated <= 0;
 			wr_addr_S <= 0;

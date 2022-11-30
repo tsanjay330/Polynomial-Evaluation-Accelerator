@@ -5,6 +5,7 @@
 module EVP_FSM_3 
 		#(parameter buffer_size = 1024)(
 		input clk, rst,
+		input rst_instr,
 		input start_evp,
 		input [2 : 0] A,
 		input [15 : 0] x,
@@ -36,7 +37,7 @@ module EVP_FSM_3
 assign rd_addr_S = A * 11 + counter;
 
 	always @(posedge clk, negedge rst)
-		if (! rst) begin
+		if (! rst || ! rst_instr) begin
 			state <= STATE_START;
 			monomial <= 1;
 			sum <= 0;

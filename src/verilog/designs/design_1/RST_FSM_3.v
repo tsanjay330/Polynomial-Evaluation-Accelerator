@@ -37,19 +37,19 @@ module RST_FSM_3
 		case (state)
 			STATE_START:
 			begin
-				rst <= 0;
+				rst <= 1;
 				done_rst <= 0;
 			end
 
 			STATE_RESET:
 			begin
-				rst <= 1;
+				rst <= 0;
 				done_rst <= 0;
 			end
 
 			STATE_END:
 			begin
-				rst <= 0;
+				rst <= 1;
 				done_rst <= 1;
 			end
 		
