@@ -30,13 +30,12 @@ module tb_PEA();
     wire FC;
 	
 	/**** b and N wires ***/
-	wire [4:0] b; 
-	wire [3:0] N;
+	wire [4:0] arg2; 
 
 	//These signals come from the FSM2/3 level
 	wire wr_out, rd_in_command, rd_in_data;
 	wire [7:0] instr;
-
+	wire start_in;
     integer i, j, k;
 
     /***************************************************************************
@@ -68,7 +67,7 @@ module tb_PEA();
 
 	PEA_top_module_1 invoke_module(clk,rst,command_in, data_in, invoke, 
 			next_instr, data_pop, command_pop, rd_in_command, rd_in_data, 
-			FC, wr_out, data_out_result,data_out_status, instr, arg2);
+			FC, wr_out, data_out_result,data_out_status, instr, arg2, start_in);
 	
 	
 	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
@@ -99,6 +98,9 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
+
+		$monitor("TIME:%d, start_in:%d, FC:%d", $time,start_in, FC);
+	
         /* Set up a file to store the test output */
         descr = $fopen("out.txt");
 
@@ -134,20 +136,9 @@ module tb_PEA();
 			#2
 			wr_en_command <= 0;
 		end
-        $fdisplay(descr, "Setting up input FIFOs");
-        for (i = 0; i < size ; i = i + 1)
-        begin
-               #2
-               data_in <= mem_data[i];
-               #2;
-               wr_en_data <= 1;
-               #2;
-               wr_en_data  <= 0;
-        end
-		$fdisplay(descr, "arg2 = %d", arg2);
-        #2;     /* ensure that data is stored into memory before continuing */
-        next_instr <= SETUP_INSTR;
+		$fdisplay(descr, "command_pop = %d", command_pop);
         #2;
+
         if (enable)
         begin
             $fdisplay(descr, "Enable Passed!");
@@ -159,8 +150,10 @@ module tb_PEA();
             $fdisplay (descr, "Enable Failed.");
             $finish;
         end
+		$fdisplay(descr, "FC is waiting...");
+		wait(FC);
         #2 invoke <= 0;
- 	
+		 	
 		$fdisplay(descr, "command_pop = %d", command_pop);
         $fdisplay(descr, "data_pop = %d", data_pop);
     		
