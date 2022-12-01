@@ -1,0 +1,4 @@
+Setting up input FIFOs
+Enable Passed!
+command_pop =    1
+data_pop =    8
