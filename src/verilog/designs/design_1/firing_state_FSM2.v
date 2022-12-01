@@ -134,7 +134,7 @@ begin
         end
 end
 
-always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_rst, next_instr)
+always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_rst, next_instr, instr)
 begin
 case(state_module)
     STATE_START:
