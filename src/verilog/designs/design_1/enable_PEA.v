@@ -7,8 +7,7 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
         input [log2(buffer_size) - 1 : 0] status_free_space,
         input [1 : 0] next_mode_in,
         input [7 : 0] mode,
-        input [4 : 0] b, // Second argument of the command token
-        input [3 : 0] N, // The degree of a current/specified coefficient vector
+        input [4 : 0] arg2, // Second argument of the command token
         output reg enable
 
     );
@@ -33,7 +32,7 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
         INSTR: begin
             case(mode)
                 STP: begin
-                    if(data_pop >= N + 1 && result_free_space >= 1
+                    if(data_pop >= arg2 + 1 && result_free_space >= 1
                         && status_free_space >= 1)
                         enable <= 1;
                     else
@@ -41,16 +40,16 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
                 end
 
                 EVP: begin
-                    if(data_pop >= 1 && result_free_space >= b
-                        && status_free_space >= b)
+                    if(data_pop >= 1 && result_free_space >= arg2
+                        && status_free_space >= arg2)
                         enable <= 1;
                     else
                         enable <= 0;
                 end
 
                 EVB: begin
-                    if(data_pop >= b && result_free_space >= b
-                        && status_free_space >= b)
+                    if(data_pop >= arg2 && result_free_space >= arg2
+                        && status_free_space >= arg2)
                         enable <= 1;
                     else
                         enable <= 0;
