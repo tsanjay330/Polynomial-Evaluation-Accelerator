@@ -27,14 +27,14 @@ module firing_state_FSM2
         input [1 : 0] next_instr,
         input [word_size - 1 : 0] pop_in_fifo_data,
         input [word_size - 1 : 0] pop_in_fifo_command,
-		output reg rst_instr,
-		output reg [7:0] instr,
+		output rst_instr,
+		output [7:0] instr,
         output en_rd_fifo_data,
         output en_rd_fifo_command,
         output reg done_fsm2,
         output reg en_wr_output_fifo,
-        output reg [word_size - 1 : 0] result,
-        output reg [word_size - 1 : 0] status);
+        output [word_size - 1 : 0] result,
+        output [word_size - 1 : 0] status);
    
 	localparam SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
 
