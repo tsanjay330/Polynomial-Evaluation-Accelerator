@@ -59,7 +59,6 @@ module firing_state_FSM2
    reg done_out_rst;
    wire [2:0] arg1;
    wire [4:0] arg2; 
-   wire get_command_error;
    wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_command;
    wire [7:0] rd_addr_S;
    wire [2:0] rd_addr_N;
@@ -87,7 +86,7 @@ single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 
 N_ram #(.word_size(word_size), .buffer_size(buffer_size))
     RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), .rd_addr(rd_addr_N),
-			.wr_en(wr_en_ram_N), .re_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
+			.wr_en(wr_en_ram_N), .rd_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
     DATA_MEM_CONTROLLER(.clk(clk), .rst(rst), 
@@ -105,12 +104,29 @@ mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
 Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST
 ***********************************************************************/
 /*Might need to add functionality to get_command if error is non-zero*/
+<<<<<<< HEAD
 get_command_FSM_3 #(.buffer_size(buffer_size))
 		get_command(.clk(clk), .rst(rst), .start_get_cmd(en_get_cmd), .command(ram_out_command), .rd_addr_command(rd_addr_command), .rd_addr_data(rd_addr_data), .en_rd_cmd(rd_en_ram_command), .done_get_cmd(done_out_get_command), .rd_addr_command_updated(rd_addr_command), .rd_addr_data_updated(rd_addr_data), .instr(instr), .arg1(arg1),.arg2(arg2));
 
 STP_FSM_3 #(.buffer_size(buffer_size))
 		stp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), 
 				.start_stp(en_stp), .rd_addr_data(rd_addr_data), .A(arg1), .N(arg2), .next_c(ram_out_S), .done_stp(done_out_stp), .en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), .en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data), .wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(ram_in_S), .result(result), .status(status));  
+=======
+get_command_FSM_3 #()
+		get_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), 
+				.start_get_cmd(en_get_cmd), .command(ram_out_command), 
+				.en_rd_cmd(rd_en_ram_command), 
+				.done_get_cmd(done_out_get_command), .instr(instr), .arg1(arg1),
+				.arg2(arg2));
+
+STP_FSM_3 #(.buffer_size(buffer_size))
+		stp_command(.clk(clk), .rst(rst), 
+				.start_stp(en_stp), .rd_addr_data(rd_addr_data), .A(arg1), 
+				.N(arg2), .next_c(ram_out_S), .done_stp(done_out_stp), 
+				.en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), 
+				.rd_addr_data_updated(rd_addr_data), .wr_addr_S(wr_addr_S), 
+				.c(ram_in_S), .result(result), .status(status));  
+>>>>>>> d82d9b4a3fb5373b67dafc4f6ba935969f274067
 
 EVP_FSM_3 #(.buffer_size(buffer_size))
 		evp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_evp(en_evp), .A(arg1), .x(ram_out_data), .c_i(ram_out_S),.N(arg2), .rd_addr_data(rd_addr_data), .en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N), .rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), .done_evp(done_out_evp), .result(result), .status(status));
@@ -118,12 +134,21 @@ EVP_FSM_3 #(.buffer_size(buffer_size))
 EVB_FSM_3 #(.buffer_size(buffer_size))
 		evb_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), 
 				.start_evb(en_evb), .A(arg1), .b(arg2), .x_b(ram_out_data), 
+<<<<<<< HEAD
 				.c_i(ram_out_S), .N(ram_out_N), .rd_addr_data(rd_addr_data), .done_evp(done_out_evp), .done_evb(done_out_evb), .en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), .en_rd_N(ed_en_ram_N), .rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), .result(result), .status(status));
   
+=======
+				.c_i(ram_out_S), .N(ram_out_N), .rd_addr_data(rd_addr_data), 
+				.done_evb(done_out_evb), .en_rd_data(rd_en_ram_data), 
+				.en_rd_S(rd_en_ram_S), .en_rd_N(ed_en_ram_N), 
+				.rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), 
+				.result(result), .status(status));
+/*  
+>>>>>>> d82d9b4a3fb5373b67dafc4f6ba935969f274067
 RST_FSM_3 #(.buffer_size(buffer_size))
        rst_command(.clk(clk), .rst(rst), .start_rst(en_rst), 
 				.rst_instr(rst_instr), .done_rst(done_out_rst));
-
+*/
 
 always @(posedge clk or negedge rst)
 begin

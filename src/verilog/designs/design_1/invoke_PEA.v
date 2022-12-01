@@ -59,7 +59,7 @@ firing_state_FSM2 #(.word_size(word_size))
                 .rst_instr(rst_instr), .instr(instr),
                 .en_rd_fifo_data(rd_in_data),.en_rd_fifo_command(rd_in_command),
                 .done_fsm2(done_out), .en_wr_output_fifo(wr_out),
-                .result_out(data_out_result),.status_out(data_out_status));
+                .result(data_out_result),.status(data_out_status));
 
    /* Update current state */
     always@(posedge clk, rst_instr)
