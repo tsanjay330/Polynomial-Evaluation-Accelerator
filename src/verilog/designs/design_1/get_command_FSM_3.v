@@ -4,45 +4,43 @@ module get_command_FSM_3
         #(parameter buffer_size = 1024)(
         input clk, rst,
         input start_get_cmd,
-		input [15 : 0] command_in,
+		input [15 : 0] command,
 		input [log2(buffer_size)-1 : 0] rd_addr_command,
-		input en_mode_check_err,
+		input [log2(buffer_size)-1 : 0] rd_addr_data,
 		output reg en_rd_cmd,
         output reg done_get_cmd,
 		output reg [log2(buffer_size)-1 : 0] rd_addr_command_updated,
 		output reg [log2(buffer_size)-1 : 0] rd_addr_data_updated,
         output reg [7 : 0] instr,
         output reg [2 : 0] arg1,
-		output reg [4 : 0] arg2,
-		output reg [1 : 0] error);
+		output reg [4 : 0] arg2);
 
 		reg [1 : 0] state, next_state;
 		reg [7 : 0] next_instr;
 		reg [2 : 0] next_arg1;
 		reg [4 : 0] next_arg2;
-		reg [1 : 0] next_error;
 		reg [log2(buffer_size)-1 : 0] next_rd_addr_command;
 		reg [log2(buffer_size)-1 : 0] next_rd_addr_data;
 
     localparam STATE_START = 2'b00, STATE_GET_CMD = 2'b01, 
-				STATE_CHECK_ERR = 2'b10, STATE_END = 2'b11;
+				STATE_SPLIT_CMD = 2'b10, STATE_END = 2'b11;
 
 	always @(posedge clk or negedge rst) begin
 		if (! rst) begin
 			state <= STATE_START;
+			rd_addr_command_updated <= 0;
 			rd_addr_data_updated <= 0;
-			instr <= 0;
+			instr <= 8'b11111111;
 			arg1 <= 0;
 			arg2 <= 0;
-			error <= 0;
 		end
 		else begin
 			state <= next_state;
+			rd_addr_command_updated <= next_rd_addr_command;
 			rd_addr_data_updated <= next_rd_addr_data;
 			instr <= next_instr;
 			arg1 <= next_arg1;
 			arg2 <= next_arg2;
-			error <= next_error;
 		end
 	end
 
@@ -57,9 +55,9 @@ module get_command_FSM_3
 			end
 
 			STATE_GET_CMD:
-				next_state <= STATE_CHECK_ERR;
+				next_state <= STATE_SPLIT_CMD;
 
-			STATE_CHECK_ERR:
+			STATE_SPLIT_CMD:
 				next_state <= STATE_END;
 
 			STATE_END:
@@ -68,17 +66,20 @@ module get_command_FSM_3
 		endcase
 	end
 
-	always @(state, start_get_cmd, command_in, instr, arg1, arg2, error) begin
+	always @(state, start_get_cmd, rd_addr_command, rd_addr_data, 
+			rd_addr_command_updated, rd_addr_data_updated, command, instr, arg1,
+			arg2) 
+	begin
 		case (state)
 			STATE_START:
 			begin
 				done_get_cmd <= 0;
 				en_rd_cmd <= 0;
 				next_rd_addr_command <= rd_addr_command;
+				next_rd_addr_data <= rd_addr_data;
 				next_instr <= instr;
 				next_arg1 <= arg1;
 				next_arg2 <= arg2;
-				next_error <= error;
 			end
 
 			STATE_GET_CMD:
@@ -86,82 +87,21 @@ module get_command_FSM_3
 				done_get_cmd <= 0;
 				en_rd_cmd <= 1;
 				next_rd_addr_command <= rd_addr_command_updated + 1;
+				next_rd_addr_data <= rd_addr_data_updated + 1;
 				next_instr <= instr;
 				next_arg1 <= arg1;
                 next_arg2 <= arg2;
-                next_error <= error;
 			end
 
-			STATE_CHECK_ERR:
+			STATE_SPLIT_CMD:
 			begin
-				case (command_in[15 : 8])
-					0:
-					begin 
-						if (command_in[4 : 0] <= 10) begin
-							done_get_cmd <= 0;
-							en_rd_cmd <= 0;
-							next_rd_addr_command <= rd_addr_command_updated;
-							next_instr <= command_in[15 : 8];
-							next_arg1 <= command_in[7 : 5];
-							next_arg2 <= command_in[4 : 0];
-							next_error <= 0;
-						end
-			 			else begin
-							done_get_cmd <= 0;
-							en_rd_cmd <= 0;
-							next_rd_addr_command <= rd_addr_command_updated;
-							next_instr <= instr;
-							next_arg1 <= arg1;
-							next_arg2 <= arg2;
-							next_error <= 2;
-						end
-					end
-		
-					1:
-					begin
-						done_get_cmd <= 0;
-						en_rd_cmd <= 0;
-						next_rd_addr_command <= rd_addr_command_updated;
-                        next_instr <= command_in[15 : 8];
-                        next_arg1 <= command_in[7 : 5];
-                        next_arg2 <= 0;
-                        next_error <= 0;
-					end
-
-					2:
-					begin
-                        done_get_cmd <= 0;
-						en_rd_cmd <= 0;
-						next_rd_addr_command <= rd_addr_command_updated; 
-                        next_instr <= command_in[15 : 8];
-                        next_arg1 <= command_in[7 : 5];
-                        next_arg2 <= command_in[4 : 0];
-                        next_error <= 0;
-                    end
-
-					3:
-					begin
-						done_get_cmd <= 0;
-						en_rd_cmd <= 0;
-						next_rd_addr_command <= rd_addr_command_updated;
-						next_instr <= command_in[15 : 8];
-						next_arg1 <= 0;
-						next_arg2 <= 0;
-						next_error <= 0;
-					end
-
-					default:
-					begin
-						done_get_cmd <= 0;
-						en_rd_cmd <= 0;
-						next_rd_addr_command <= rd_addr_command_updated;
-						next_instr <= instr;
-						next_arg1 <= arg1;
-						next_arg2 <= arg2;
-						next_error <= 1;
-					end
-				
-				endcase
+				done_get_cmd <= 0;
+				en_rd_cmd <= 0;
+				next_rd_addr_command <= rd_addr_command_updated;
+				next_rd_addr_data <= rd_addr_data_updated;
+				next_instr <= command[15 : 8];
+				next_arg1 <= command[7 : 5];
+				next_arg2 <= command[4 : 0];
 			end
 
 			STATE_END:
@@ -169,10 +109,10 @@ module get_command_FSM_3
 				done_get_cmd <= 1;
 				en_rd_cmd <= 0;
 				next_rd_addr_command <= rd_addr_command_updated;
+				next_rd_addr_data <= rd_addr_data_updated;
 				next_instr <= instr;
 				next_arg1 <= arg1;
 				next_arg2 <= arg2;
-				next_error <= error;
 			end
 
 		endcase
