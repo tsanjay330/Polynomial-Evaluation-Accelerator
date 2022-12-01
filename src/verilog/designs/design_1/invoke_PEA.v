@@ -64,7 +64,7 @@ firing_state_FSM2 #(.word_size(word_size))
    /* Update current state */
     always@(posedge clk, rst_instr)
         begin
-            if(!rst || rst_instr)
+            if(!rst || !rst_instr)
                 state_module <= STATE_IDLE;
             else
                 state_module <= next_state_module;
