@@ -41,7 +41,7 @@ status: value outputted to the status FIFO
 //TODO: could change initial values of result and status
 
 module STP_FSM_3 
-		#(parameter word_size = 16, buffer_size = 1024)(
+		#(parameter buffer_size = 1024)(
 		input clk, rst,
 		input rst_instr,
 		input start_stp,
@@ -55,13 +55,14 @@ module STP_FSM_3
 		output reg en_wr_N,
 		output reg [log2(buffer_size)-1 : 0] rd_addr_data_updated,
 		output reg [log2(buffer_size)-1 : 0] wr_addr_S,
+		output reg [log2(buffer_size)-1 : 0] wr_addr_N,
 		output reg [15 : 0] c,
 		output reg [31 : 0] result,
 		output reg [31 : 0] status);
 
-		reg [1 : 0] state, next_state;
+		reg [2 : 0] state, next_state;
 		reg [31 : 0] next_result;
-		reg [4 : 0] next_status;
+		reg [31 : 0] next_status;
 		reg [log2(buffer_size)-1 : 0] next_rd_addr_data;
 		reg [log2(buffer_size)-1 : 0] next_wr_addr_S;
 
@@ -74,6 +75,7 @@ module STP_FSM_3
 			state <= STATE_START;
 			rd_addr_data_updated <= 0;
 			wr_addr_S <= 0;
+			wr_addr_N <= 0;
 			c <= 0;
 			result <= 0;
 			status <= 32'b11111111111111111111111111111111;
@@ -82,12 +84,13 @@ module STP_FSM_3
 			state <= next_state;
 			rd_addr_data_updated <= next_rd_addr_data;
 			wr_addr_S <= next_wr_addr_S;
+			wr_addr_N <= wr_addr_N;
 			c <= next_c;
 			result <= next_result;
 			status <= next_status;
 		end
 
-	always @(state, start_stp, N, wr_addr_S)
+	always @(state, start_stp, N, wr_addr_S, A, N)
 		case (state)
 			STATE_START:
 				if (start_stp)
@@ -121,8 +124,8 @@ module STP_FSM_3
 	
 		endcase
 
-	always @(state, start_stp, A, c, rd_addr_data_updated, wr_addr_S, result, 
-				status)
+	always @(state, start_stp, rd_addr_data, rd_addr_data_updated, wr_addr_S, 
+				wr_addr_N, A, c, result, status)
 		case (state)
 			STATE_START:
 			begin
@@ -130,8 +133,9 @@ module STP_FSM_3
 				en_rd_data <= 0;
 				en_wr_S <= 0;
 				en_wr_N <= 0;
-				next_rd_addr_data <= rd_addr_data_updated;
-				next_wr_addr_S <= A * 11;
+				next_rd_addr_data <= rd_addr_data;
+				next_wr_addr_S <= wr_addr_S;
+				wr_addr_N <= wr_addr_N;
 				next_result <= 0;
 				next_status <= 32'b11111111111111111111111111111111;
 			end
@@ -143,7 +147,8 @@ module STP_FSM_3
 				en_wr_S <= 0;
 				en_wr_N <= 1;
 				next_rd_addr_data <= rd_addr_data_updated + 1;
-				next_wr_addr_S <= wr_addr_S;
+				next_wr_addr_S <= A * 11;
+				wr_addr_N <= A;
 				next_result <= result;
 				next_status <= status;
 			end
@@ -156,8 +161,9 @@ module STP_FSM_3
 				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated + 1;
 				next_wr_addr_S <= wr_addr_S + 1;
-				next_result <= result;
-				next_status <= status;
+				wr_addr_N <= wr_addr_N;
+				next_result <= 1;
+				next_status <= 0;
 			end
 
 			STATE_ERROR:
@@ -168,6 +174,7 @@ module STP_FSM_3
 				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated;
 				next_wr_addr_S <= wr_addr_S;
+				wr_addr_N <= wr_addr_N;
 				next_result <= 0;
 				next_status <= 2'b10;
 			end
@@ -180,8 +187,8 @@ module STP_FSM_3
 				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated;
 				next_wr_addr_S <= wr_addr_S;
-				next_result <= 1;
-				next_status <= 0;
+				next_result <= result;
+				next_status <= status;
 			end  
 		endcase
 
