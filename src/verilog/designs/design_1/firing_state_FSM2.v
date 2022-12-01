@@ -34,7 +34,8 @@ module firing_state_FSM2
         output reg done_fsm2,
         output reg en_wr_output_fifo,
         output [word_size - 1 : 0] result,
-        output [word_size - 1 : 0] status);
+        output [word_size - 1 : 0] status,
+        output [4 : 0] arg2);
    
 	localparam SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
 
@@ -58,7 +59,7 @@ module firing_state_FSM2
    wire done_out_evb;
    wire done_out_rst;
    wire [2:0] arg1;
-   wire [4:0] arg2; 
+//   wire [4:0] arg2; 
    wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_command;
    wire [7:0] rd_addr_S;
    wire [2:0] rd_addr_N;
@@ -110,7 +111,7 @@ get_command_FSM_3 #(.buffer_size(buffer_size))
 STP_FSM_3 #(.buffer_size(buffer_size))
 		stp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_stp(en_stp), .rd_addr_data(rd_addr_data), .A(arg1), .N(arg2), .next_c(ram_out_S), .done_stp(done_out_stp), .en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), .en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data), .wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(ram_in_S), .result(result), .status(status));  
 EVP_FSM_3 #(.buffer_size(buffer_size))
-		evp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_evp(en_evp), .A(arg1), .x(ram_out_data), .c_i(ram_out_S),.N(arg2), .rd_addr_data(rd_addr_data), .en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N), .rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), .done_evp(done_out_evp), .result(result), .status(status));
+		evp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_evp(en_evp), .A(arg1), .x(ram_out_data), .c_i(ram_out_S),.N(arg2), .rd_addr_data(rd_addr_data), .en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N), .rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), .rd_addr_N(rd_addr_N), .done_evp(done_out_evp), .result(result), .status(status));
  
 EVB_FSM_3 #(.buffer_size(buffer_size))
 		evb_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_evb(en_evb), .A(arg1), .b(arg2), .x_b(ram_out_data), .c_i(ram_out_S), .N(ram_out_N), .rd_addr_data(rd_addr_data), .done_evp(done_out_evp), .done_evb(done_out_evb), .en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), .en_rd_N(ed_en_ram_N), .rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), .result(result), .status(status));
