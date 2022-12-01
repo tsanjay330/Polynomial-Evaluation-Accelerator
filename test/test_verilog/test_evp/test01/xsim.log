@@ -1,0 +1,53 @@
+#-----------------------------------------------------------
+# xsim v2022.1 (64-bit)
+# SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+# IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+# Start of session at: Thu Dec  1 12:58:31 2022
+# Process ID: 73562
+# Current directory: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test01
+# Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
+# Log file: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test01/xsim.log
+# Journal file: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test01/xsim.jou
+# Running On: ucompute1.physics.umd.edu, OS: Linux, CPU Frequency: 2294.609 MHz, CPU Physical cores: 4, Host memory: 25221 MB
+#-----------------------------------------------------------
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+rst
+state = 0, next_state = 1
+state = 1, next_state = 2
+hit condition exp_counter == S_idx_counter
+S_idx_counter =  0, next_S_idx_counter =  0
+exp_counter =  0, next_exp_counter =  0
+S_idx_counter =  0, next_S_idx_counter =  0
+exp_counter =  0, next_exp_counter =  0
+state = 2, next_state = 3
+S_idx_counter =  0, next_S_idx_counter =  0
+exp_counter =  1, next_exp_counter =  1
+state = 3, next_state = 2
+exp_counter =  0, S_idx_counter =  1
+S_idx_counter =  1, next_S_idx_counter =  1
+exp_counter =  0, next_exp_counter =  0
+a: done_evp = 0
+b: done_evp = 0
+state = 2, next_state = 2
+S_idx_counter =  1, next_S_idx_counter =  1
+exp_counter =  1, next_exp_counter =  1
+c: done_evp = 0
+d: done_evp = 0
+state = 2, next_state = 2
+S_idx_counter =  1, next_S_idx_counter =  1
+exp_counter =  2, next_exp_counter =  2
+e: done_evp = 0
+f: done_evp = 0
+state = 2, next_state = 2
+S_idx_counter =  1, next_S_idx_counter =  1
+exp_counter =  3, next_exp_counter =  3
+g: done_evp = 0
+result =          0
+status = 4294967295
+$finish called at time : 14 ns : File "/afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test01/tb_evp.v" Line 199
+## quit
+INFO: [Common 17-206] Exiting xsim at Thu Dec  1 12:58:35 2022...

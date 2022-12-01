@@ -19,7 +19,7 @@ module EVB_FSM_3
 		output reg en_rd_S,
 		output reg en_rd_N,
 		output [log2(buffer_size) - 1 : 0] rd_addr_data_updated,
-		output [7 : 0] rd_addr_S,
+		output [6 : 0] rd_addr_S, 
 		output reg [31 : 0] result,
 		output reg [31 : 0] status);
 

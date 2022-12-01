@@ -1,5 +1,3 @@
-//TODO: add error handling
-
 `timescale 1ns/1ps
 
 module EVP_FSM_3 
@@ -11,54 +9,58 @@ module EVP_FSM_3
 		input [15 : 0] x,
 		input [15 : 0] c_i,
 		input [4 : 0] N,
-		input [log2(buffer_size) - 1 : 0] rd_addr_data, 
+		input [log2(buffer_size)-1 : 0] rd_addr_data, 
 		output reg en_rd_data,
 		output reg en_rd_S,
 		output reg en_rd_N,
-		output reg [log2(buffer_size) - 1 : 0] rd_addr_data_updated,
-		output [7 : 0] rd_addr_S,
+		output reg [log2(buffer_size)-1 : 0] rd_addr_data_updated,
+		output [6 : 0] rd_addr_S,
+		output reg [2 : 0] rd_addr_N,
 		output reg done_evp,
 		output reg [31 : 0] result,
 		output reg [31 : 0] status);
 
-		reg [1 : 0] state, next_state;
+		reg [2 : 0] state, next_state;
 		reg [31 : 0] next_result;
 		reg [31 : 0] next_status;
-		reg [3 : 0] counter, next_counter;
+		reg [3 : 0] S_idx_counter, next_S_idx_counter;
 		reg [3 : 0] exp_counter, next_exp_counter;
 		reg [31 : 0] monomial, next_monomial;
 		reg [31 : 0] sum, next_sum;
-		reg [log2(buffer_size) : 0] next_rd_addr_data;
+		reg [log2(buffer_size)-1 : 0] next_rd_addr_data;
 
 	localparam STATE_START = 3'b000, STATE_COMPUTE0 = 3'b001, 
 				STATE_COMPUTE1 = 3'b010, STATE_COMPUTE2 = 3'b011,
 				STATE_ERROR = 3'b100, STATE_END = 3'b101;
 
-assign rd_addr_S = A * 11 + counter;
+assign rd_addr_data = rd_addr_data_updated;
+assign rd_addr_S = A * 11 + S_idx_counter;
 
 	always @(posedge clk, negedge rst)
 		if (! rst || ! rst_instr) begin
+			$display("rst");
 			state <= STATE_START;
 			monomial <= 1;
 			sum <= 0;
-			counter <= 0;
+			S_idx_counter <= 0;
 			exp_counter <= 0;
 			rd_addr_data_updated <= 0;
 			result <= 0;
 			status <= 32'b11111111111111111111111111111111;
 		end
 		else begin
+			$display("state = ", state, ", next_state = ", next_state);
 			state <= next_state;
 			monomial <= next_monomial;
 			sum <= next_sum;
-			counter <= next_counter;
+			S_idx_counter <= next_S_idx_counter;
 			exp_counter <= next_exp_counter;
 			rd_addr_data_updated <= next_rd_addr_data;
 			result <= next_result;
 			status <= next_status;
 		end
 
-	always @(state, start_evp, counter, N)
+	always @(state, start_evp, S_idx_counter, N)
 		case (state)
 			STATE_START:
 			begin
@@ -76,18 +78,26 @@ assign rd_addr_S = A * 11 + counter;
 
 			STATE_COMPUTE1:
 			begin
-				if (exp_counter == counter)
+				if (S_idx_counter > N) begin
+					$display("S_idx_counter > N: ", S_idx_counter, " > ", N);
+					next_state <= STATE_END;
+				end
+				else if (exp_counter == S_idx_counter) begin
+					$display("hit condition exp_counter == S_idx_counter");
 					next_state <= STATE_COMPUTE2;
-				else
+				end
+				else begin
+					$display("exp_counter = ", exp_counter, ", S_idx_counter = ", S_idx_counter);
 					next_state <= STATE_COMPUTE1;
+				end
 			end
 
 			STATE_COMPUTE2:
 			begin
-				if (counter == N)
-					next_state <= STATE_END;
-				else
-					next_state <= STATE_COMPUTE1;
+				//if (S_idx_counter > N)
+				//	next_state <= STATE_END;
+				//else
+				next_state <= STATE_COMPUTE1;
 			end
 
 			STATE_ERROR:
@@ -98,8 +108,9 @@ assign rd_addr_S = A * 11 + counter;
 	
 		endcase
 
-	always @(state, start_evp, c_i, x, monomial, sum, counter, exp_counter, 
-				result, status)
+	always @(state, start_evp, rd_addr_data, rd_addr_data_updated, 
+				S_idx_counter, exp_counter, c_i, x, monomial, sum, result, 
+				status)
 		case (state)
 			STATE_START:
 			begin
@@ -109,9 +120,10 @@ assign rd_addr_S = A * 11 + counter;
 				en_rd_N <= 0;
 				next_monomial <= 1;
 				next_sum <= 0;
-				next_counter <= 0;
+				next_S_idx_counter <= 0;
 				next_exp_counter <= 0;
 				next_rd_addr_data <= rd_addr_data;
+				rd_addr_N <= rd_addr_N;
 				next_result <= 0;
 				next_status <= 32'b11111111111111111111111111111111;
 			end
@@ -122,11 +134,12 @@ assign rd_addr_S = A * 11 + counter;
 				en_rd_data <= 1;
 				en_rd_S <= 1;
 				en_rd_N <= 1;
-				next_monomial <= monomial;
+				next_monomial <= 1;
 				next_sum <= sum;
-				next_counter <= counter;
+				next_S_idx_counter <= S_idx_counter;
 				next_exp_counter <= exp_counter;
 				next_rd_addr_data <= rd_addr_data_updated + 1;
+				rd_addr_N <= A;
 				next_result <= result;
 				next_status <= status;
 			end
@@ -139,9 +152,12 @@ assign rd_addr_S = A * 11 + counter;
 				en_rd_N <= 0;
 				next_monomial <= monomial * x;
 				next_sum <= sum;
-				next_counter <= counter;
+				next_S_idx_counter <= S_idx_counter;
+				$display("S_idx_counter = ", S_idx_counter, ", next_S_idx_counter = ", next_S_idx_counter);
 				next_exp_counter <= exp_counter + 1;
+				$display("exp_counter = ", exp_counter, ", next_exp_counter = ", next_exp_counter);
 				next_rd_addr_data <= rd_addr_data_updated;
+				rd_addr_N <= rd_addr_N;
 				next_result <= result;
 				next_status <= status; 
 			end
@@ -154,9 +170,12 @@ assign rd_addr_S = A * 11 + counter;
 				en_rd_N <= 0;
 				next_monomial <= 1;
 				next_sum <= sum + monomial * c_i;
-				next_counter <= counter + 1;
+				next_S_idx_counter <= S_idx_counter + 1;
+				$display("S_idx_counter = ", S_idx_counter, ", next_S_idx_counter = ", next_S_idx_counter);
 				next_exp_counter <= 0;
+				$display("exp_counter = ", exp_counter, ", next_exp_counter = ", next_exp_counter);
 				next_rd_addr_data <= rd_addr_data_updated;
+				rd_addr_N <= rd_addr_N;
 				next_result <= result;
 				next_status <= status;
 			end
@@ -169,9 +188,10 @@ assign rd_addr_S = A * 11 + counter;
 				en_rd_N <= 0;
 				next_monomial <= monomial;
 				next_sum <= sum;
-				next_counter <= counter;
+				next_S_idx_counter <= S_idx_counter;
 				next_exp_counter <= exp_counter;
 				next_rd_addr_data <= rd_addr_data_updated;
+				rd_addr_N <= rd_addr_N;
 				next_result <= 0;
 				next_status <= 2'b10;
 			end
@@ -184,9 +204,10 @@ assign rd_addr_S = A * 11 + counter;
 				en_rd_N <= 0;
 				next_monomial <= monomial;
 				next_sum <= sum;
-				next_counter <= counter;
+				next_S_idx_counter <= S_idx_counter;
 				next_exp_counter <= exp_counter;
 				next_rd_addr_data <= rd_addr_data_updated;
+				rd_addr_N <= rd_addr_N;
 				next_result <= sum;
 				next_status <= 0;
 			end
