@@ -1,0 +1,1 @@
+This is the first test suite for the STP instruction which confirms if the input FIFOs
