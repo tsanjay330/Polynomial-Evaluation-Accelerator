@@ -66,13 +66,13 @@ module tb_PEA();
     Instantiate the enable and invoke modules for the actor under test.
     ***************************************************************************/
 
-	/*PEA_top_module_1 invoke_module(clk,rst,command_in, data_in, invoke, 
+	PEA_top_module_1 invoke_module(clk,rst,command_in, data_in, invoke, 
 			next_instr, data_pop, command_pop, rd_in_command, rd_in_data, 
-			FC, wr_out, data_out_result,data_out_status, instr, b, N);
-	*/
+			FC, wr_out, data_out_result,data_out_status, instr, arg2);
+	
 	
 	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
-			free_space_out_status, next_instr, instr, b, N, enable);
+			free_space_out_status, next_instr, instr, arg2, enable);
 
     integer descr;
 
@@ -144,7 +144,7 @@ module tb_PEA();
                #2;
                wr_en_data  <= 0;
         end
-
+		$fdisplay(descr, "arg2 = %d", arg2);
         #2;     /* ensure that data is stored into memory before continuing */
         next_instr <= SETUP_INSTR;
         #2;
