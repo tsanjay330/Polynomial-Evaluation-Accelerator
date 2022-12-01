@@ -59,7 +59,6 @@ module firing_state_FSM2
    reg done_out_rst;
    wire [2:0] arg1;
    wire [4:0] arg2; 
-   wire get_command_error;
    wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_command;
    wire [7:0] rd_addr_S;
    wire [2:0] rd_addr_N;
@@ -110,10 +109,10 @@ get_command_FSM_3 #()
 				.start_get_cmd(en_get_cmd), .command(ram_out_command), 
 				.en_rd_cmd(rd_en_ram_command), 
 				.done_get_cmd(done_out_get_command), .instr(instr), .arg1(arg1),
-				.arg2(arg2), .error(get_command_error));
+				.arg2(arg2));
 
 STP_FSM_3 #(.buffer_size(buffer_size))
-		stp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), 
+		stp_command(.clk(clk), .rst(rst), 
 				.start_stp(en_stp), .rd_addr_data(rd_addr_data), .A(arg1), 
 				.N(arg2), .next_c(ram_out_S), .done_stp(done_out_stp), 
 				.en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), 
@@ -136,11 +135,11 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 				.en_rd_S(rd_en_ram_S), .en_rd_N(ed_en_ram_N), 
 				.rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), 
 				.result(result), .status(status));
-  
+/*  
 RST_FSM_3 #(.buffer_size(buffer_size))
        rst_command(.clk(clk), .rst(rst), .start_rst(en_rst), 
 				.rst_instr(rst_instr), .done_rst(done_out_rst));
-
+*/
 
 always @(posedge clk or negedge rst)
 begin
