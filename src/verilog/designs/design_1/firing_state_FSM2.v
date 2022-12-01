@@ -87,7 +87,7 @@ single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 
 N_ram #(.word_size(word_size), .buffer_size(buffer_size))
     RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), .rd_addr(rd_addr_N),
-			.wr_en(wr_en_ram_N), .re_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
+			.wr_en(wr_en_ram_N), .rd_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
     DATA_MEM_CONTROLLER(.clk(clk), .rst(rst), 
@@ -107,7 +107,7 @@ Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST
 /*Might need to add functionality to get_command if error is non-zero*/
 get_command_FSM_3 #()
 		get_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), 
-				.start_get_cmd(en_get_cmd), .command_in(ram_out_command), 
+				.start_get_cmd(en_get_cmd), .command(ram_out_command), 
 				.en_rd_cmd(rd_en_ram_command), 
 				.done_get_cmd(done_out_get_command), .instr(instr), .arg1(arg1),
 				.arg2(arg2), .error(get_command_error));

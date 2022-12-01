@@ -62,7 +62,7 @@ module single_port_ram
         input [word_size - 1 : 0] data,
         input [log2(buffer_size) - 1 : 0] addr,
         input [log2(buffer_size) - 1 : 0] rd_addr,
-        input wr_en, re_en, clk,
+        input wr_en, rd_en, clk,
         output [word_size - 1 : 0] q);
 
     /* Declare the RAM variable */
@@ -79,7 +79,7 @@ module single_port_ram
     end
 		
 		/* Read */
-    assign q = (re_en) ? ram[rd_addr] : 0;
+    assign q = (rd_en) ? ram[rd_addr] : 0;
  
     function integer log2;
     input [31 : 0] value;

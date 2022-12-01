@@ -67,7 +67,7 @@ module N_ram
 	input 				  rst, // This rst is from the INSTRUCTION not the general rst signal
         input [log2(buffer_size) - 1 : 0] wr_addr,
         input [log2(buffer_size) - 1 : 0] rd_addr,
-        input 				  wr_en, re_en, clk,
+        input wr_en, rd_en, clk,
         output reg [word_size - 1 : 0] 	  q);
 
     /* Declare the RAM variable */
@@ -93,7 +93,7 @@ module N_ram
 	end
 	
         /* Read */
-        if (re_en) begin
+        if (rd_en) begin
 	   q <= ram[rd_addr];
 	end
         /*else
