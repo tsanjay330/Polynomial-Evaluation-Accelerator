@@ -116,9 +116,9 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 		evb_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_evb(en_evb), .A(arg1), .b(arg2), .x_b(ram_out_data), .c_i(ram_out_S), .N(ram_out_N), .rd_addr_data(rd_addr_data), .done_evp(done_out_evp), .done_evb(done_out_evb), .en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), .en_rd_N(ed_en_ram_N), .rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), .result(result), .status(status));
   
   
-RST_FSM_3 #(.buffer_size(buffer_size))
-       rst_command(.clk(clk), .rst(rst), .start_rst(en_rst), 
-				.rst_instr(rst_instr), .done_rst(done_out_rst));
+RST_FSM_3 #()
+       rst_command(.clk(clk), .start_rst(en_rst), 
+				.rst(rst_instr), .done_rst(done_out_rst));
 
 
 always @(posedge clk or negedge rst)
