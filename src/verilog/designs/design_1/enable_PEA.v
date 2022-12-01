@@ -19,7 +19,7 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
                EVB = 8'd2, RST = 8'd3;
 
     always @(next_mode_in,mode, command_pop, data_pop, result_free_space,
-            status_free_space, b)
+            status_free_space, arg2)
     begin
     case(next_mode_in)
         SETUP_INSTR: begin
