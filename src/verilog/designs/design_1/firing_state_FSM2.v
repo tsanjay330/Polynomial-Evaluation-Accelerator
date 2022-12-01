@@ -25,8 +25,8 @@ module firing_state_FSM2
         input [word_size - 1 : 0] command_in,
         input start_fsm2,
         input [1 : 0] next_instr,
-        input [word_size - 1 : 0] pop_in_fifo_data;
-        input [word_size - 1 : 0] pop_in_fifo_command;
+        input [word_size - 1 : 0] pop_in_fifo_data,
+        input [word_size - 1 : 0] pop_in_fifo_command,
 		output reg rst_instr,
 		output reg [7:0] instr,
         output en_rd_fifo_data,
@@ -44,7 +44,7 @@ module firing_state_FSM2
 		STATE_GET_COMMAND_WAIT=4'b0010, STATE_STP_START=4'b0011, 
 		STATE_STP_WAIT=4'b0100, STATE_EVP_START=4'b0101, 
 		STATE_EVP_WAIT=4'b0110, STATE_EVB_START=4'b0111, 
-		STATE_EVB_WAIT=4'b1000, STATE_RST=4'b1001, STATE_OUTPUT=4'b1010;
+		STATE_EVB_WAIT=4'b1000, STATE_EVB_OUTPUT=4'b1001, STATE_RST=4'b1010, STATE_OUTPUT=4'b1011;
 
    reg [3 : 0] state_module, next_state_module;
    reg en_get_command;
@@ -118,7 +118,7 @@ STP_FSM_3 #(.buffer_size(buffer_size))
 				.N(arg2), .next_c(ram_out_S), .done_stp(done_out_stp), 
 				.en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), 
 				.rd_addr_data_updated(rd_addr_data), .wr_addr_S(wr_addr_S), 
-				.c(ram_in_S), .result(result), .status(status)  
+				.c(ram_in_S), .result(result), .status(status));  
 
 EVP_FSM_3 #(.buffer_size(buffer_size))
 		evp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), 
@@ -126,7 +126,7 @@ EVP_FSM_3 #(.buffer_size(buffer_size))
 				.rd_addr_data(rd_addr_data), .en_rd_data(rd_en_ram_data), 
 				.en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N), 
 				.rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), 
-				.done_evp(done_out_evp), .result(result), .status(status);
+				.done_evp(done_out_evp), .result(result), .status(status));
  
 EVB_FSM_3 #(.buffer_size(buffer_size))
 		evb_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), 
@@ -135,7 +135,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 				.done_evb(done_out_evb), .en_rd_data(rd_en_ram_data), 
 				.en_rd_S(rd_en_ram_S), .en_rd_N(ed_en_ram_N), 
 				.rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), 
-				.result(result), .status(status);
+				.result(result), .status(status));
   
 RST_FSM_3 #(.buffer_size(buffer_size))
        rst_command(.clk(clk), .rst(rst), .start_rst(en_rst), 
@@ -162,43 +162,52 @@ case(state_module)
         if(start_fsm2)
         begin
         case(next_instr)
-            SETUP_INSTR: begin
+            SETUP_INSTR: 
+            begin
                 next_state_module <= STATE_GET_COMMAND_START;
             end
 
-            INSTR: begin
+            INSTR: 
+            begin
                 case(instr)//same mode signal that is passed to enable 
-                    STP: begin
+                    STP:
+                    begin
                         next_state_module <= STATE_STP_START;
                     end
 
-                    EVP: begin
+                    EVP:
+                    begin
                         next_state_module <= STATE_EVP_START;
                     end
 
-                    EVB: begin
+                    EVB: 
+                    begin
                         next_state_module <= STATE_EVB_START;
                     end
-                    RST: begin
+                    RST: 
+                    begin
                         next_state_module <= STATE_RST;
                     end
-                 default:
-                 begin
-                     next_state_module <= STATE_START;
-                 end
+                    default:
+                    begin
+                        next_state_module <= STATE_START;
+                    end
 
                 endcase
             end
-            else begin
-                     next_state_module <= STATE_START;
-            end
-
             default:
             begin
                 next_state_module <= STATE_START;
             end
         endcase
-    end	
+        end
+        else 
+        begin
+            next_state_module <= STATE_START;
+        end
+    end
+
+	
 /***************************************
 CFDF: firing mode_GET_COMMAND
 ***************************************/
