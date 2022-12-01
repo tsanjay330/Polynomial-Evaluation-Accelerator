@@ -37,8 +37,8 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
     output [2*word_size - 1 : 0] data_out_result,
     output [2*word_size - 1 : 0] data_out_status,
     output [7:0] instr,//current mode needed for enable
-    output [4 : 0] arg2, // Argument 2 of current command input token.
-            );
+    output [4 : 0] arg2); // Argument 2 of current command input token.
+            
 
     localparam STATE_IDLE = 2'b00, STATE_FIRING_START = 2'b01, STATE_FIRING_WAIT = 2'b10;
 
