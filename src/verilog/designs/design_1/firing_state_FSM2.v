@@ -52,11 +52,11 @@ module firing_state_FSM2
    reg en_evp;
    reg en_evb;
    reg en_rst;
-   reg done_out_get_command;
-   reg done_out_stp;
-   reg done_out_evp;
-   reg done_out_evb;
-   reg done_out_rst;
+   wire done_out_get_command;
+   wire done_out_stp;
+   wire done_out_evp;
+   wire done_out_evb;
+   wire done_out_rst;
    wire [2:0] arg1;
    wire [4:0] arg2; 
    wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_command;
