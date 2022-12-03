@@ -2,7 +2,7 @@
 module tb_PEA();
 	
     parameter size = 8; // This is related to the loop needs to be specified for EACH command you are going to call.
-	parameter c_size = 1; //Number of commands to pass in
+	parameter c_size = 2; //Number of commands to pass in
 
 	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
     parameter buffer_size = 1024, width = 16, buffer_size_out = 32;
@@ -37,7 +37,10 @@ module tb_PEA();
 	wire [7:0] instr;
 	wire start_in;
     integer i, j, k;
-
+	
+	wire [3:0]state_FSM2;
+	wire [1:0] state_GC;
+	wire [15:0] ram_out_c; 
     /***************************************************************************
     Instantiate the input and output FIFOs for the actor under test.
     ***************************************************************************/
@@ -67,7 +70,8 @@ module tb_PEA();
 
 	PEA_top_module_1 invoke_module(clk,rst,command_in, data_in, invoke, 
 			next_instr, data_pop, command_pop, rd_in_command, rd_in_data, 
-			FC, wr_out, data_out_result,data_out_status, instr, arg2, start_in);
+			FC, wr_out, data_out_result,data_out_status, instr, arg2,
+			state_FSM2, state_GC, ram_out_c);
 	
 	
 	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
@@ -99,8 +103,7 @@ module tb_PEA();
     initial
     begin
 
-		$monitor("TIME:%d, start_in:%d, FC:%d", $time,start_in, FC);
-	
+		$monitor("TIME:%d, FSM2:%d, FSM3:%d, instr:%d, ram_out_c:%d" ,$time, state_FSM2, state_GC, instr, ram_out_c);	
         /* Set up a file to store the test output */
         descr = $fopen("out.txt");
 
