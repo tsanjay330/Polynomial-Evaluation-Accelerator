@@ -45,7 +45,7 @@ initial begin
 end	
 
 initial begin
-	for(i = 0; i < 200; i = i + 1) begin
+	for(i = 0; i < 1000; i = i + 1) begin
 		#1 clk <= 1;
 		#1 clk <= 0;
 	end
@@ -81,117 +81,102 @@ initial begin
 
 	#2;
 
-	/* STATE_COMPUTE0 */
-
-	if (en_rd_data)
-		x = data[rd_addr_data];
-	else begin
-		$display("1: en_rd_data is ", en_rd_data);
-		$finish;
-	end
-
-	rd_addr_data = rd_addr_data_updated;
-	
-	if (en_rd_S)
-		c_i = S[rd_addr_S];
-	else begin
-		$display("2: en_rd_S is low when it should be high");
-		$finish;
-	end
+	/* STATE_RD_N */
 
 	if (en_rd_N)
 		N_i = N[rd_addr_N];
 	else begin
-		$display("3: en_rd_N is low when it should be high");
-		$finish;
+		$display("1: en_rd_N is ", en_rd_N);
 	end
 
-	#1;
+	#2;
 
-	/* STATE_COMPUTE2 */		
+	/* STATE_CHECK_N */
+
+	#2;
+
+	/* STATE_RD_DATA: 3 */
+
+	if (en_rd_data)
+		x = data[rd_addr_data];
+	else begin
+		$display("2: en_rd_data is ", en_rd_data);
+	end
+
+	//rd_addr_data = rd_addr_data_updated;
 
 	if (en_rd_S)
 		c_i = S[rd_addr_S];
 	else begin
-		$display("4: en_rd_S is low when it should be high");
-		$finish;
+		$display("3: en_rd_S is ", en_rd_S);
 	end
-
-	#1;
-
-	/* STATE_COMPUTE1 */
 
 	#2;
 
-	/* STATE_COMPUTE2 */
+	/* STATE_COMPUTE_SUM */
+
+	#2;
+
+	/* STATE_GET_NEXT_COEFF: 2x */
+
+	#2;
+
+	/* STATE_COMPUTE_EXP */		
+
+	if (en_rd_S)
+		c_i = S[rd_addr_S];
+	else begin
+		$display("4: en_rd_S is ", en_rd_S);
+	end
+
+	#2;
+
+	/* STATE_COMPUTE_SUM */
+
+	#2;
+
+	/* STATE_GET_NEXT_COEFF: 4x^2 */
+
+	#2;
+
+	/* STATE_COMPUTE_EXP */
 
 	if (en_rd_S)
 		c_i = S[rd_addr_S];
 	else begin
 		$display("5: en_rd_S is ", en_rd_S);
-		$finish;
 	end
 
-	#1;
+	#2;
 
-	/* STATE_COMPUTE1 */
+	/* STATE_COMPUTE_SUM */
 
-	/*$display("a: en_rd_S is ", en_rd_S);
+	#2;
 
-	#1
+	/* STATE_GET_NEXT_COEFF: x^3 */
 
-	$display("b: en_rd_S is ", en_rd_S);
+	#2;
 
-	#1;
-
-	$display("c: en_rd_S is ", en_rd_S);
-
-	#1;
-
-	$display("d: en_rd_S is ", en_rd_S);
-
-	#1;
-
-	$display("e: en_rd_S is ", en_rd_S);*/
-
-	/* STATE_COMPUTE2 */
+	/* STATE_COMPUTE_EXP */
 
 	if (en_rd_S)
 		c_i = S[rd_addr_S];
 	else begin
-		$display("6: en_rd_S is low when it should be high");
-		$finish;
+		$display("6: en_rd_S is ", en_rd_S);
 	end
 
-	#1;
+	#2;
 
-	/* STATE_COMPUTE1 */
+	/* STATE_COMPUTE_SUM */
 
-	$display("a: done_evp = ", done_evp);
+	#2;
 
-	#1;
+	/* STATE_END */
 
-	$display("b: done_evp = ", done_evp);
+	$display("result = ", result);
+	$display("status = ", status);
 
-	#1;
-
-	$display("c: done_evp = ", done_evp);
-
-	#1;
-
-	$display("d: done_evp = ", done_evp);
-
-	#1;
-
-	$display("e: done_evp = ", done_evp);
-
-	#1;
-
-	$display("f: done_evp = ", done_evp);
-
-	#1;
-
-	$display("g: done_evp = ", done_evp);
+	#2;
 
 	$display("result = ", result);
 	$display("status = ", status);

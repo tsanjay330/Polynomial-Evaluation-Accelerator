@@ -2,8 +2,8 @@
 # xsim v2022.1 (64-bit)
 # SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
 # IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
-# Start of session at: Thu Dec  1 12:45:29 2022
-# Process ID: 72220
+# Start of session at: Sat Dec  3 03:53:46 2022
+# Process ID: 345292
 # Current directory: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test01
 # Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
 # Log file: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test01/xsim.log
@@ -11,4 +11,12 @@
 # Running On: ucompute1.physics.umd.edu, OS: Linux, CPU Frequency: 2294.609 MHz, CPU Physical cores: 4, Host memory: 25221 MB
 #-----------------------------------------------------------
 source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
 source run.tcl
+## run all
+2: en_rd_S is 0
+FATAL_ERROR: Iteration limit 10000 is reached. Possible zero delay oscillation detected where simulation time can not advance. Please check your source code. Note that the iteration limit can be changed using switch -maxdeltaid.
+Time: 9 ns  Iteration: 10000
+## quit
+INFO: [Common 17-206] Exiting xsim at Sat Dec  3 03:53:50 2022...
