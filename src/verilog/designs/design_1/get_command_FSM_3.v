@@ -2,7 +2,7 @@
 
 module get_command_FSM_3
         #(parameter buffer_size = 1024)(
-        input clk, rst,
+        input clk, rst, rst_instr,
         input start_get_cmd,
 		input [15 : 0] command,
 		output reg en_rd_cmd,
@@ -21,11 +21,10 @@ module get_command_FSM_3
 		reg [4 : 0] next_arg2;
 		reg [log2(buffer_size)-1 : 0] next_rd_addr_command;
 
-    localparam STATE_START = 2'b00, STATE_GET_CMD = 2'b01, 
-				STATE_SPLIT_CMD = 2'b10, STATE_END = 2'b11;
+    localparam STATE_START = 2'b00, STATE_SPLIT_CMD = 2'b01, STATE_END = 2'b10;
 
 	always @(posedge clk or negedge rst) begin
-		if (! rst) begin
+		if (! rst || !rst_instr) begin
 			state <= STATE_START;
 			rd_addr_command_updated <= 0;
 			instr <= 8'b11111111;
@@ -47,13 +46,10 @@ module get_command_FSM_3
 			STATE_START:
 			begin
 				if (start_get_cmd)
-					next_state <= STATE_GET_CMD;
+					next_state <= STATE_SPLIT_CMD;
 				else
 					next_state <= STATE_START;
 			end
-
-			STATE_GET_CMD:
-				next_state <= STATE_SPLIT_CMD;
 
 			STATE_SPLIT_CMD:
 				next_state <= STATE_END;
@@ -77,7 +73,7 @@ module get_command_FSM_3
 				next_arg2 <= arg2;
 			end
 
-			STATE_GET_CMD:
+/*			STATE_GET_CMD:
 			begin
 				done_get_cmd <= 0;
 				en_rd_cmd <= 0;
@@ -86,7 +82,7 @@ module get_command_FSM_3
 				next_arg1 <= arg1;
                 next_arg2 <= arg2;
 			end
-
+*/
 			STATE_SPLIT_CMD:
 			begin
 				done_get_cmd <= 0;

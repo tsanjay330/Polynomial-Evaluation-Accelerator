@@ -2,12 +2,12 @@
 # xsim v2022.1 (64-bit)
 # SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
 # IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
-# Start of session at: Sun Dec  4 01:25:39 2022
-# Process ID: 585602
-# Current directory: /afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01
+# Start of session at: Sun Dec  4 16:13:36 2022
+# Process ID: 679931
+# Current directory: /afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01
 # Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
-# Log file: /afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01/xsim.log
-# Journal file: /afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01/xsim.jou
+# Log file: /afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01/xsim.log
+# Journal file: /afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01/xsim.jou
 # Running On: ucompute1.physics.umd.edu, OS: Linux, CPU Frequency: 2294.609 MHz, CPU Physical cores: 4, Host memory: 25221 MB
 #-----------------------------------------------------------
 source xsim.dir/top/xsim_script.tcl

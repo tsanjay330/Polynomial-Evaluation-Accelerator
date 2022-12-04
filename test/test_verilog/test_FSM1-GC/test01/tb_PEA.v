@@ -99,12 +99,13 @@ module tb_PEA();
     initial
     begin
 
-		$monitor("TIME:%d, FSM2:%d,FSM1:%d ramin:%d, ramo:%d instr:%d, arg2:%d" ,$time, 
-		invoke_module.FSM2.state_module,
+		$monitor("FSM1:%d,FSM2:%d, FSM3_MEM:%d, FSM3_GC:%d, ramo:%d, instr:%d", 
 		invoke_module.state_module,
-		invoke_module.FSM2.COMMAND_MEM_CONTROLLER.output_token,
+		invoke_module.FSM2.state_module,
+		invoke_module.FSM2.COMMAND_MEM_CONTROLLER.state,
+		invoke_module.FSM2.get_command.state,
 		invoke_module.FSM2.ram_out_command,
-		instr, arg2
+		instr
 		);	
         /* Set up a file to store the test output */
         descr = $fopen("out.txt");
@@ -137,12 +138,11 @@ module tb_PEA();
 			#2
         	command_in <= mem_command[i];
 			#2
-			$fdisplay(descr, "input[%d] = %d", i, command_in);
+			$fdisplay(descr, "input[%d] = %b", i, command_in);
 			wr_en_command <= 1;
 			#2
 			wr_en_command <= 0;
 		end
-		$fdisplay(descr, "%d", command_pop);
         if (enable)
         begin
             $fdisplay(descr, "Enable Passed!");
@@ -161,7 +161,7 @@ module tb_PEA();
 		wait(FC);
        	#2
 		$fdisplay(descr, "GC finished.");
-
+		$fdisplay(descr, "instr:%d, arg2:%d", instr, arg2);
     end
 
     function integer log2;

@@ -90,11 +90,11 @@ N_ram #(.word_size(word_size), .buffer_size(buffer_size))
 			.wr_en(wr_en_ram_N), .rd_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
-    DATA_MEM_CONTROLLER(.clk(clk), .rst(rst), 
+    DATA_MEM_CONTROLLER(.clk(clk), .rst(rst), .rst_instr(rst_instr),
 			.FIFO_population(pop_in_fifo_data), .input_token(data_in), .FIFO_rd_en(en_rd_fifo_data), .ram_wr_en(wr_en_ram_data), .ram_wr_addr(wr_addr_data), .output_token(ram_in_data));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
-    COMMAND_MEM_CONTROLLER(.clk(clk), .rst(rst), 
+    COMMAND_MEM_CONTROLLER(.clk(clk), .rst(rst), .rst_instr(rst_instr), 
 			.FIFO_population(pop_in_fifo_command), .input_token(command_in), .FIFO_rd_en(en_rd_fifo_command), .ram_wr_en(wr_en_ram_command), .ram_wr_addr(wr_addr_command), .output_token(ram_in_command));
 
 /***********************************************************************
@@ -102,12 +102,13 @@ Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST
 ***********************************************************************/
 /*Might need to add functionality to get_command if error is non-zero*/
 get_command_FSM_3 #(.buffer_size(buffer_size))
-		get_command(.clk(clk), .rst(rst), .start_get_cmd(en_get_command), 
+		get_command(.clk(clk), .rst(rst), .rst_instr(rst_instr),
+		 .start_get_cmd(en_get_command), 
 		.command(ram_out_command), .en_rd_cmd(rd_en_ram_command), 
 		.done_get_cmd(done_out_get_command), 
 		.rd_addr_command_updated(rd_addr_command), 
 		.instr(instr), .arg1(arg1),.arg2(arg2));
-/*
+
 STP_FSM_3 #(.word_size(word_size), .buffer_size(buffer_size), .n_size(n_size), .s_size(s_size))
 		stp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_stp(en_stp), .rd_addr_data(rd_addr_data), .A(arg1), .N(arg2), .next_c(ram_out_S), .done_stp(done_out_stp), .en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), .en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data), .wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(ram_in_S), .N_out(ram_out_N), .result(result), .status(status), .fifo_wr_en_r(en_wr_output_fifo), .fifo_wr_en_s(en_wr_output_fifo));  
 EVP_FSM_3 #(.buffer_size(buffer_size))
@@ -120,7 +121,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 RST_FSM_3 #()
        rst_command(.clk(clk), .start_rst(en_rst), 
 				.rst(rst_instr), .done_rst(done_out_rst));
-*/
+
 
 always @(posedge clk or negedge rst)
 begin

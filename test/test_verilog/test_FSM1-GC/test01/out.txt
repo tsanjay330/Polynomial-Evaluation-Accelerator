@@ -1,5 +1,5 @@
-input[          0] =   771
-   1
+input[          0] = 0000001100000011
 Enable Passed!
 Waiting for GC to finish...
 GC finished.
+instr:  3, arg2: 3

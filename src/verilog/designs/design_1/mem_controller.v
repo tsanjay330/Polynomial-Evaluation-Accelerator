@@ -12,7 +12,7 @@
 
 module mem_controller
 #(parameter word_size = 16, buffer_size = 1024)(
-	input clk, rst,
+	input clk, rst, rst_instr,
 	input [log2(buffer_size) - 1 : 0] FIFO_population, // FIFO information - to begin reading tokens
 	input [word_size - 1 : 0] input_token,
 	output reg 	FIFO_rd_en,
@@ -36,7 +36,7 @@ module mem_controller
    /***	Update current state and counter outputs on clk edge (or synch reset)	***/
 	always@(posedge clk)
 	begin
-    	if(!rst) begin
+    	if(!rst || !rst_instr) begin
 			state <= STATE_START;
 	 		temp_ram_wr_addr <= 0;
        	end

@@ -4,18 +4,19 @@ Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb
 Multi-threading is on. Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01/tb_PEA.v:58]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01/tb_PEA.v:59]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01/tb_PEA.v:62]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01/tb_PEA.v:63]
-WARNING: [VRFC 10-3091] actual bit length 10 differs from formal bit length 16 for port 'data_pop' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01/tb_PEA.v:71]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01/tb_PEA.v:58]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01/tb_PEA.v:59]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01/tb_PEA.v:62]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01/tb_PEA.v:63]
+WARNING: [VRFC 10-3091] actual bit length 10 differs from formal bit length 16 for port 'data_pop' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01/tb_PEA.v:71]
 WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 16 for port 'result' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/invoke_PEA.v:62]
-WARNING: [VRFC 10-3091] actual bit length 8 differs from formal bit length 10 for port 'rd_addr' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:83]
-WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 10 for port 'rd_addr' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:87]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:92]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:99]
-WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'result_free_space' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01/tb_PEA.v:73]
-WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'status_free_space' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_enable/test01/tb_PEA.v:74]
+WARNING: [VRFC 10-3091] actual bit length 7 differs from formal bit length 10 for port 'addr' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:85]
+WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 10 for port 'wr_addr' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:89]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:94]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:98]
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'result_free_space' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01/tb_PEA.v:73]
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'status_free_space' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test01/tb_PEA.v:74]
+WARNING: [VRFC 10-3645] port 'rd_addr_data_updated' remains unconnected for this instance [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:104]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis
