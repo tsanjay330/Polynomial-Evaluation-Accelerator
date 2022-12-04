@@ -23,10 +23,12 @@ module EVP_FSM_3
 		reg [3 : 0] state, next_state;
 		reg [31 : 0] next_result;
 		reg [31 : 0] next_status;
-		reg [3 : 0] S_idx_counter;
-		reg [31 : 0] monomial;
-		reg [31 : 0] sum;
+		reg [3 : 0] S_idx_counter, next_S_idx_counter;
+		reg [31 : 0] monomial, next_monomial;
+		reg [31 : 0] sum, next_sum;
 		reg [log2(buffer_size)-1 : 0] next_rd_addr_data;
+		reg [6 : 0] next_rd_addr_S;
+		reg [2 : 0] next_rd_addr_N;
 
 	localparam STATE_START = 4'b0000, STATE_RD_N = 4'b0001, 
 				STATE_CHECK_N = 4'b0010, STATE_RD_DATA = 4'b0011, 
@@ -40,17 +42,25 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 		if (! rst || ! rst_instr) begin
 			state <= STATE_START;
 			rd_addr_data_updated <= 0;
+			S_idx_counter <= 0;
+			rd_addr_N <= 0;
+			monomial <= 1;
+			sum <= 0;
 			result <= 0;
 			status <= 32'b11111111111111111111111111111111;
 		end
 		else begin
 			state <= next_state;
 			rd_addr_data_updated <= next_rd_addr_data;
+			S_idx_counter <= next_S_idx_counter;
+			rd_addr_N <= next_rd_addr_N;
+			monomial <= next_monomial;
+			sum <= next_sum;
 			result <= next_result;
 			status <= next_status;
 		end
 
-	always @(*) // state, start_evp, S_idx_counter, N 
+	always @(*) // state, start_evp, S_idx_counter, N)
 		case (state)
 			STATE_START:
 			begin
@@ -76,7 +86,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 
 			STATE_COMPUTE_SUM:
 			begin
-				if (S_idx_counter == N)
+				if (S_idx_counter > N)
 					next_state <= STATE_END;
 				else
 					next_state <= STATE_GET_NEXT_COEFF;
@@ -98,7 +108,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 
 	always @(*) // state, rd_addr_data, rd_addr_data_updated, 
 				// rd_addr_N, S_idx_counter, A, c_i, sum, x,
-				// monomial, result, status
+				// monomial, result, status)
 		case (state)
 			STATE_START:
 			begin
@@ -106,11 +116,11 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 				en_rd_data <= 0;
 				next_rd_addr_data <= rd_addr_data;
 				en_rd_S <= 0;
-				S_idx_counter <= 0;
+				next_S_idx_counter <= 0;
 				en_rd_N <= 0;
-				rd_addr_N <= rd_addr_N;
-				monomial <= 1;
-				sum <= 0;
+				next_rd_addr_N <= A;
+				next_monomial <= 1;
+				next_sum <= 0;
 				next_result <= 0;
 				next_status <= 32'b11111111111111111111111111111111;
 			end
@@ -121,11 +131,11 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 				en_rd_data <= 0;
 				next_rd_addr_data <= rd_addr_data;
 				en_rd_S <= 0;
-				S_idx_counter <= S_idx_counter;
+				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 1;
-				rd_addr_N <= A;
-				monomial <= 1;
-				sum <= sum;
+				next_rd_addr_N <= rd_addr_N;
+				next_monomial <= 1;
+				next_sum <= sum;
 				next_result <= result;
 				next_status <= status;
 			end
@@ -136,11 +146,11 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 				en_rd_data <= 0;
 				next_rd_addr_data <= rd_addr_data;
 				en_rd_S <= 0;
-				S_idx_counter <= S_idx_counter;
+				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 0;
-				rd_addr_N <= rd_addr_N;
-				monomial <= monomial;
-				sum <= sum;
+				next_rd_addr_N <= rd_addr_N;
+				next_monomial <= monomial;
+				next_sum <= sum;
 				next_result <= result;
 				next_status <= status;
 			end
@@ -151,11 +161,11 @@ assign rd_addr_S = A * 11 + S_idx_counter;
                 en_rd_data <= 1;
 				next_rd_addr_data <= rd_addr_data + 1;
                 en_rd_S <= 1;
-				S_idx_counter <= 0;
+				next_S_idx_counter <= S_idx_counter + 1;
                 en_rd_N <= 0;
-				rd_addr_N <= rd_addr_N;
-                monomial <= 1;
-                sum <= 0;
+				next_rd_addr_N <= rd_addr_N;
+                next_monomial <= monomial;
+                next_sum <= sum;
                 next_result <= result;
                 next_status <= status;
             end	
@@ -164,13 +174,13 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= next_rd_addr_data;
+				next_rd_addr_data <= rd_addr_data_updated;
 				en_rd_S <= 0;
-				S_idx_counter <= S_idx_counter;
+				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 0;
-				rd_addr_N <= rd_addr_N;
-				monomial <= monomial;
-				sum <= sum + monomial * c_i;
+				next_rd_addr_N <= rd_addr_N;
+				next_monomial <= monomial;
+				next_sum <= sum + monomial * c_i;
 				next_result <= result;
 				next_status <= status;
 			end
@@ -179,13 +189,13 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= next_rd_addr_data;
+				next_rd_addr_data <= rd_addr_data_updated;
 				en_rd_S <= 1;
-				S_idx_counter <= S_idx_counter + 1;
+				next_S_idx_counter <= S_idx_counter + 1;
 				en_rd_N <= 0;
-				rd_addr_N <= rd_addr_N;
-				monomial <= monomial;
-				sum <= sum;
+				next_rd_addr_N <= rd_addr_N;
+				next_monomial <= monomial;
+				next_sum <= sum;
 				next_result <= result;
 				next_status <= status;
 			end
@@ -194,13 +204,13 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= next_rd_addr_data;
+				next_rd_addr_data <= rd_addr_data_updated;
 				en_rd_S <= 0;
-				S_idx_counter <= S_idx_counter;
+				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 0;
-				rd_addr_N <= rd_addr_N;
-				monomial <= monomial * x;
-				sum <= sum;
+				next_rd_addr_N <= rd_addr_N;
+				next_monomial <= monomial * x;
+				next_sum <= sum;
 				next_result <= result;
 				next_status <= status; 
 			end
@@ -209,13 +219,13 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= next_rd_addr_data;
+				next_rd_addr_data <= rd_addr_data;
 				en_rd_S <= 0;
-				S_idx_counter <= S_idx_counter;
+				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 0;
-				rd_addr_N <= rd_addr_N;
-				monomial <= monomial;
-				sum <= sum;
+				next_rd_addr_N <= rd_addr_N;
+				next_monomial <= monomial;
+				next_sum <= sum;
 				next_result <= 0;
 				next_status <= 2'b10;
 			end
@@ -224,13 +234,13 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 1;
 				en_rd_data <= 0;
-				next_rd_addr_data <= next_rd_addr_data;
+				next_rd_addr_data <= rd_addr_data_updated;
 				en_rd_S <= 0;
-				S_idx_counter <= S_idx_counter;
+				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 0;
-				rd_addr_N <= rd_addr_N;
-				monomial <= monomial;
-				sum <= sum;
+				next_rd_addr_N <= rd_addr_N;
+				next_monomial <= monomial;
+				next_sum <= sum;
 				next_result <= sum;
 				next_status <= 0;
 			end

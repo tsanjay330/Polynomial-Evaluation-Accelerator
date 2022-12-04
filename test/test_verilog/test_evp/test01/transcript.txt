@@ -22,7 +22,11 @@ source xsim.dir/top/xsim_script.tcl
 Time resolution is 1 ps
 source run.tcl
 ## run all
-FATAL_ERROR: Iteration limit 10000 is reached. Possible zero delay oscillation detected where simulation time can not advance. Please check your source code. Note that the iteration limit can be changed using switch -maxdeltaid.
-Time: 7 ns  Iteration: 10000
+6: en_rd_S is 0
+result =          0
+status = 4294967295
+result =          0
+status = 4294967295
+$finish called at time : 30 ns : File "/afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test01/tb_evp.v" Line 184
 ## quit
-INFO: [Common 17-206] Exiting xsim at Sat Dec  3 04:52:33 2022...
+INFO: [Common 17-206] Exiting xsim at Sat Dec  3 20:49:06 2022...

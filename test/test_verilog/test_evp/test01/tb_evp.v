@@ -81,7 +81,7 @@ initial begin
 
 	#2;
 
-	/* STATE_RD_N */
+	/* STATE_RD_N: 1 */
 
 	if (en_rd_N)
 		N_i = N[rd_addr_N];
@@ -91,11 +91,11 @@ initial begin
 
 	#2;
 
-	/* STATE_CHECK_N */
+	/* STATE_CHECK_N: 2 */
 
 	#2;
 
-	/* STATE_RD_DATA: 3 */
+	/* STATE_RD_DATA: 3: 3 */
 
 	if (en_rd_data)
 		x = data[rd_addr_data];
@@ -113,65 +113,65 @@ initial begin
 
 	#2;
 
-	/* STATE_COMPUTE_SUM */
+	/* STATE_COMPUTE_SUM: 4 */
 
 	#2;
 
-	/* STATE_GET_NEXT_COEFF: 2x */
-
-	#2;
-
-	/* STATE_COMPUTE_EXP */		
+	/* STATE_GET_NEXT_COEFF: 5: 2x */
 
 	if (en_rd_S)
-		c_i = S[rd_addr_S];
-	else begin
-		$display("4: en_rd_S is ", en_rd_S);
-	end
+        c_i = S[rd_addr_S];
+    else begin
+        $display("4: en_rd_S is ", en_rd_S);
+    end
 
 	#2;
 
-	/* STATE_COMPUTE_SUM */
+	/* STATE_COMPUTE_EXP: 6 */	
 
 	#2;
 
-	/* STATE_GET_NEXT_COEFF: 4x^2 */
+	/* STATE_COMPUTE_SUM: 4 */
 
 	#2;
 
-	/* STATE_COMPUTE_EXP */
+	/* STATE_GET_NEXT_COEFF: 5: 4x^2 */
 
 	if (en_rd_S)
-		c_i = S[rd_addr_S];
-	else begin
-		$display("5: en_rd_S is ", en_rd_S);
-	end
+        c_i = S[rd_addr_S];
+    else begin
+        $display("5: en_rd_S is ", en_rd_S);
+    end
 
 	#2;
 
-	/* STATE_COMPUTE_SUM */
+	/* STATE_COMPUTE_EXP: 6 */
 
 	#2;
 
-	/* STATE_GET_NEXT_COEFF: x^3 */
+	/* STATE_COMPUTE_SUM: 4 */
 
 	#2;
 
-	/* STATE_COMPUTE_EXP */
+	/* STATE_GET_NEXT_COEFF: 5: x^3 */
 
 	if (en_rd_S)
-		c_i = S[rd_addr_S];
-	else begin
-		$display("6: en_rd_S is ", en_rd_S);
-	end
+        c_i = S[rd_addr_S];
+    else begin
+        $display("6: en_rd_S is ", en_rd_S);
+    end
 
 	#2;
 
-	/* STATE_COMPUTE_SUM */
+	/* STATE_COMPUTE_EXP: 6 */
 
 	#2;
 
-	/* STATE_END */
+	/* STATE_COMPUTE_SUM: 4 */
+
+	#2;
+
+	/* STATE_END: 8 */
 
 	$display("result = ", result);
 	$display("status = ", status);
