@@ -37,9 +37,8 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
     output [2*word_size - 1 : 0] data_out_result,
     output [2*word_size - 1 : 0] data_out_status,
     output [7:0] instr,//current mode needed for enable
-    output [4 : 0] b, // Argument 2 of current command input token, gets used
-    output [3 : 0] N
-            );
+    output [4 : 0] arg2); // Argument 2 of current command input token.
+            
 
     localparam STATE_IDLE = 2'b00, STATE_FIRING_START = 2'b01, STATE_FIRING_WAIT = 2'b10;
 
@@ -59,12 +58,12 @@ firing_state_FSM2 #(.word_size(word_size))
                 .rst_instr(rst_instr), .instr(instr),
                 .en_rd_fifo_data(rd_in_data),.en_rd_fifo_command(rd_in_command),
                 .done_fsm2(done_out), .en_wr_output_fifo(wr_out),
-                .result(data_out_result),.status(data_out_status));
+                .result(data_out_result),.status(data_out_status), .arg2(arg2));
 
    /* Update current state */
     always@(posedge clk, rst_instr)
         begin
-            if(!rst || rst_instr)
+            if(!rst || !rst_instr)
                 state_module <= STATE_IDLE;
             else
                 state_module <= next_state_module;

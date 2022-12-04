@@ -27,24 +27,22 @@ module firing_state_FSM2
         input [1 : 0] next_instr,
         input [word_size - 1 : 0] pop_in_fifo_data,
         input [word_size - 1 : 0] pop_in_fifo_command,
-		output reg rst_instr,
-		output reg [7:0] instr,
+		output rst_instr,
+		output [7:0] instr,
         output en_rd_fifo_data,
         output en_rd_fifo_command,
         output reg done_fsm2,
         output reg en_wr_output_fifo,
-        output reg [word_size - 1 : 0] result,
-        output reg [word_size - 1 : 0] status);
+        output [word_size - 1 : 0] result,
+        output [word_size - 1 : 0] status,
+        output [4 : 0] arg2);
    
 	localparam SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
 
 	localparam STP=8'd0, EVP=8'd1, EVB=8'd2, RST=8'd3;
 
 	localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, 
-		STATE_GET_COMMAND_WAIT=4'b0010, STATE_STP_START=4'b0011, 
-		STATE_STP_WAIT=4'b0100, STATE_EVP_START=4'b0101, 
-		STATE_EVP_WAIT=4'b0110, STATE_EVB_START=4'b0111, 
-		STATE_EVB_WAIT=4'b1000, STATE_EVB_OUTPUT=4'b1001, STATE_RST=4'b1010, STATE_OUTPUT=4'b1011;
+		STATE_GET_COMMAND_WAIT=4'b0010, STATE_GET_COMMAND_FINISH=4'b0011,STATE_STP_START=4'b0100, STATE_STP_WAIT=4'b0101, STATE_EVP_START=4'b0110, STATE_EVP_WAIT=4'b0111, STATE_EVB_START=4'b1000, STATE_EVB_WAIT=4'b1001, STATE_EVB_OUTPUT=4'b1010, STATE_RST=4'b1011, STATE_OUTPUT=4'b1100;
 
    reg [3 : 0] state_module, next_state_module;
    reg en_get_command;
@@ -52,13 +50,13 @@ module firing_state_FSM2
    reg en_evp;
    reg en_evb;
    reg en_rst;
-   reg done_out_get_command;
-   reg done_out_stp;
-   reg done_out_evp;
-   reg done_out_evb;
-   reg done_out_rst;
+   wire done_out_get_command;
+   wire done_out_stp;
+   wire done_out_evp;
+   wire done_out_evb;
+   wire done_out_rst;
    wire [2:0] arg1;
-   wire [4:0] arg2; 
+//   wire [4:0] arg2; 
    wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_command;
    wire [7:0] rd_addr_S;
    wire [2:0] rd_addr_N;
@@ -105,35 +103,35 @@ Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST
 ***********************************************************************/
 /*Might need to add functionality to get_command if error is non-zero*/
 get_command_FSM_3 #(.buffer_size(buffer_size))
-		get_command(.clk(clk), .rst(rst), .start_get_cmd(en_get_cmd), .command(ram_out_command), .rd_addr_command(rd_addr_command), .rd_addr_data(rd_addr_data), .en_rd_cmd(rd_en_ram_command), .done_get_cmd(done_out_get_command), .rd_addr_command_updated(rd_addr_command), .rd_addr_data_updated(rd_addr_data), .instr(instr), .arg1(arg1),.arg2(arg2));
+		get_command(.clk(clk), .rst(rst), .start_get_cmd(en_get_command), .command(ram_out_command), .rd_addr_command(rd_addr_command), .rd_addr_data(rd_addr_data), .en_rd_cmd(rd_en_ram_command), .done_get_cmd(done_out_get_command), .rd_addr_command_updated(rd_addr_command), .rd_addr_data_updated(rd_addr_data), .instr(instr), .arg1(arg1),.arg2(arg2));
 
 STP_FSM_3 #(.buffer_size(buffer_size))
 		stp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_stp(en_stp), .rd_addr_data(rd_addr_data), .A(arg1), .N(arg2), .next_c(ram_out_S), .done_stp(done_out_stp), .en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), .en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data), .wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(ram_in_S), .result(result), .status(status));  
 EVP_FSM_3 #(.buffer_size(buffer_size))
-		evp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_evp(en_evp), .A(arg1), .x(ram_out_data), .c_i(ram_out_S),.N(arg2), .rd_addr_data(rd_addr_data), .en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N), .rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), .done_evp(done_out_evp), .result(result), .status(status));
+		evp_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_evp(en_evp), .A(arg1), .x(ram_out_data), .c_i(ram_out_S),.N(arg2), .rd_addr_data(rd_addr_data), .en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N), .rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), .rd_addr_N(rd_addr_N), .done_evp(done_out_evp), .result(result), .status(status));
  
 EVB_FSM_3 #(.buffer_size(buffer_size))
 		evb_command(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_evb(en_evb), .A(arg1), .b(arg2), .x_b(ram_out_data), .c_i(ram_out_S), .N(ram_out_N), .rd_addr_data(rd_addr_data), .done_evp(done_out_evp), .done_evb(done_out_evb), .en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), .en_rd_N(ed_en_ram_N), .rd_addr_data_updated(rd_addr_data), .rd_addr_S(rd_addr_S), .result(result), .status(status));
   
   
-RST_FSM_3 #(.buffer_size(buffer_size))
-       rst_command(.clk(clk), .rst(rst), .start_rst(en_rst), 
-				.rst_instr(rst_instr), .done_rst(done_out_rst));
+RST_FSM_3 #()
+       rst_command(.clk(clk), .start_rst(en_rst), 
+				.rst(rst_instr), .done_rst(done_out_rst));
 
 
 always @(posedge clk or negedge rst)
 begin
-    if(!rst)
+    if(!rst || !rst_instr)
     begin
         state_module <= STATE_START;
-        end
-        else
-        begin
-            state_module <= next_state_module;
-        end
+    end
+    else
+    begin
+        state_module <= next_state_module;
+    end
 end
 
-always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_rst, next_instr)
+always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_rst, next_instr, instr)
 begin
 case(state_module)
     STATE_START:
@@ -199,12 +197,16 @@ CFDF: firing mode_GET_COMMAND
     begin
         if(done_out_get_command)
         begin
-            next_state_module <= STATE_START;
+            next_state_module <= STATE_GET_COMMAND_FINISH;
         end
         else
         begin
             next_state_module <= STATE_GET_COMMAND_WAIT;
         end
+    end
+    STATE_GET_COMMAND_FINISH:
+    begin
+        next_state_module <= STATE_START;
     end
 
 /*********************************************
@@ -334,6 +336,16 @@ begin
         en_evb <= 0;
         en_rst <= 0;
         done_fsm2 <= 0;
+    end
+    STATE_GET_COMMAND_FINISH:
+    begin
+        en_wr_output_fifo <= 0;
+        en_get_command <= 0;
+        en_stp <= 0;
+        en_evp <= 0;
+        en_evb <= 0;
+        en_rst <= 0;
+        done_fsm2 <= 1;
     end
     STATE_STP_START:
     begin

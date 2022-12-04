@@ -13,11 +13,11 @@ module EVB_FSM_3
 		input [15 : 0] c_i,
 		input [4 : 0] N,
 		input [log2(buffer_size) - 1 : 0] rd_addr_data,
-		output reg done_evp,
+		output done_evp,
 		output reg done_evb,
-		output reg en_rd_data,
-		output reg en_rd_S,
-		output reg en_rd_N,
+		output en_rd_data,
+		output en_rd_S,
+		output en_rd_N,
 		output [log2(buffer_size) - 1 : 0] rd_addr_data_updated,
 		output [6 : 0] rd_addr_S, 
 		output reg [31 : 0] result,
@@ -25,7 +25,7 @@ module EVB_FSM_3
 
 		reg [2 : 0] state, next_state;
 		reg en_evp;
-		reg [31 : 0] next_result, next_status;
+		wire [31 : 0] next_result, next_status;
 		reg [4 : 0] b_counter, next_b_counter;
 
 	localparam STATE_START = 3'b000, STATE_FIRST_EVP0 = 3'b001, 

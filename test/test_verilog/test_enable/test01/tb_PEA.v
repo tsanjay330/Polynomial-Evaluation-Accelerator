@@ -2,7 +2,7 @@
 module tb_PEA();
 	
     parameter size = 8; // This is related to the loop needs to be specified for EACH command you are going to call.
-	parameter c_size = 1; //Number of commands to pass in
+	parameter c_size = 2; //Number of commands to pass in
 
 	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
     parameter buffer_size = 1024, width = 16, buffer_size_out = 32;
@@ -30,15 +30,17 @@ module tb_PEA();
     wire FC;
 	
 	/**** b and N wires ***/
-	wire [4:0] b; 
-	wire [3:0] N;
+	wire [4:0] arg2; 
 
 	//These signals come from the FSM2/3 level
 	wire wr_out, rd_in_command, rd_in_data;
 	wire [7:0] instr;
-
+	wire start_in;
     integer i, j, k;
-
+	
+	wire [3:0]state_FSM2;
+	wire [1:0] state_GC;
+	wire [15:0] ram_out_c; 
     /***************************************************************************
     Instantiate the input and output FIFOs for the actor under test.
     ***************************************************************************/
@@ -66,13 +68,14 @@ module tb_PEA();
     Instantiate the enable and invoke modules for the actor under test.
     ***************************************************************************/
 
-	/*PEA_top_module_1 invoke_module(clk,rst,command_in, data_in, invoke, 
+	PEA_top_module_1 invoke_module(clk,rst,command_in, data_in, invoke, 
 			next_instr, data_pop, command_pop, rd_in_command, rd_in_data, 
-			FC, wr_out, data_out_result,data_out_status, instr, b, N);
-	*/
+			FC, wr_out, data_out_result,data_out_status, instr, arg2,
+			state_FSM2, state_GC, ram_out_c);
+	
 	
 	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
-			free_space_out_status, next_instr, instr, b, N, enable);
+			free_space_out_status, next_instr, instr, arg2, enable);
 
     integer descr;
 
@@ -99,6 +102,8 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
+
+		$monitor("TIME:%d, FSM2:%d, FSM3:%d, instr:%d, ram_out_c:%d" ,$time, state_FSM2, state_GC, instr, ram_out_c);	
         /* Set up a file to store the test output */
         descr = $fopen("out.txt");
 
@@ -134,20 +139,9 @@ module tb_PEA();
 			#2
 			wr_en_command <= 0;
 		end
-        $fdisplay(descr, "Setting up input FIFOs");
-        for (i = 0; i < size ; i = i + 1)
-        begin
-               #2
-               data_in <= mem_data[i];
-               #2;
-               wr_en_data <= 1;
-               #2;
-               wr_en_data  <= 0;
-        end
-
-        #2;     /* ensure that data is stored into memory before continuing */
-        next_instr <= SETUP_INSTR;
+		$fdisplay(descr, "command_pop = %d", command_pop);
         #2;
+
         if (enable)
         begin
             $fdisplay(descr, "Enable Passed!");
@@ -159,8 +153,10 @@ module tb_PEA();
             $fdisplay (descr, "Enable Failed.");
             $finish;
         end
+		$fdisplay(descr, "FC is waiting...");
+		wait(FC);
         #2 invoke <= 0;
- 	
+		 	
 		$fdisplay(descr, "command_pop = %d", command_pop);
         $fdisplay(descr, "data_pop = %d", data_pop);
     		
