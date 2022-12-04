@@ -1,0 +1,85 @@
+#-----------------------------------------------------------
+# xsim v2022.1 (64-bit)
+# SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+# IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+# Start of session at: Sun Dec  4 00:29:54 2022
+# Process ID: 570684
+# Current directory: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_STP/test01
+# Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
+# Log file: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_STP/test01/xsim.log
+# Journal file: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_STP/test01/xsim.jou
+# Running On: ucompute1.physics.umd.edu, OS: Linux, CPU Frequency: 2294.609 MHz, CPU Physical cores: 4, Host memory: 25221 MB
+#-----------------------------------------------------------
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+state: 0
+rd_addr_data:    0, en_rd_data: 0
+wr_addr_S:   0, en_wr_S: 0, coeff:     0
+wr_addr_N: 0, en_wr_N: 0, degree: 15
+fifo_wr_en_r: 0, result:          0
+fifo_wr_en_s: 0, status: 4294967295
+state: 0
+rd_addr_data:    0, en_rd_data: 0
+wr_addr_S:   0, en_wr_S: 0, coeff:     0
+wr_addr_N: 0, en_wr_N: 0, degree:  x
+fifo_wr_en_r: 0, result:          0
+fifo_wr_en_s: 0, status: 4294967295
+state: 1
+rd_addr_data:    0, en_rd_data: 0
+wr_addr_S:   0, en_wr_S: 0, coeff:     0
+wr_addr_N: 0, en_wr_N: 0, degree:  3
+fifo_wr_en_r: 0, result:          0
+fifo_wr_en_s: 0, status: 4294967295
+state: 2
+rd_addr_data:    0, en_rd_data: 1
+wr_addr_S:   0, en_wr_S: 0, coeff:     0
+wr_addr_N: 1, en_wr_N: 1, degree:  3
+fifo_wr_en_r: 0, result:          0
+fifo_wr_en_s: 0, status: 4294967295
+state: 3
+rd_addr_data:    1, en_rd_data: 1
+wr_addr_S:  22, en_wr_S: 1, coeff:   100
+wr_addr_N: 0, en_wr_N: 0, degree:  3
+fifo_wr_en_r: 0, result:          0
+fifo_wr_en_s: 0, status: 4294967295
+state: 3
+rd_addr_data:    2, en_rd_data: 1
+wr_addr_S:  23, en_wr_S: 1, coeff:   200
+wr_addr_N: 0, en_wr_N: 0, degree:  3
+fifo_wr_en_r: 0, result:          1
+fifo_wr_en_s: 0, status:          0
+state: 3
+rd_addr_data:    3, en_rd_data: 1
+wr_addr_S:  24, en_wr_S: 1, coeff:   300
+wr_addr_N: 0, en_wr_N: 0, degree:  3
+fifo_wr_en_r: 0, result:          1
+fifo_wr_en_s: 0, status:          0
+state: 3
+rd_addr_data:    4, en_rd_data: 1
+wr_addr_S:  25, en_wr_S: 1, coeff:   400
+wr_addr_N: 0, en_wr_N: 0, degree:  3
+fifo_wr_en_r: 0, result:          1
+fifo_wr_en_s: 0, status:          0
+state: 5
+rd_addr_data:    5, en_rd_data: 0
+wr_addr_S:  26, en_wr_S: 0, coeff:   500
+wr_addr_N: 0, en_wr_N: 0, degree:  3
+fifo_wr_en_r: 1, result:          1
+fifo_wr_en_s: 1, status:          0
+state: 0
+rd_addr_data:    5, en_rd_data: 0
+wr_addr_S:  26, en_wr_S: 0, coeff:     0
+wr_addr_N: 0, en_wr_N: 0, degree:  3
+fifo_wr_en_r: 0, result:          1
+fifo_wr_en_s: 0, status:          0
+state: 0
+rd_addr_data:    5, en_rd_data: 0
+wr_addr_S:  26, en_wr_S: 0, coeff:     0
+wr_addr_N: 0, en_wr_N: 0, degree:  3
+fifo_wr_en_r: 0, result:          0
+fifo_wr_en_s: 0, status: 4294967295
+## quit
+INFO: [Common 17-206] Exiting xsim at Sun Dec  4 00:29:58 2022...

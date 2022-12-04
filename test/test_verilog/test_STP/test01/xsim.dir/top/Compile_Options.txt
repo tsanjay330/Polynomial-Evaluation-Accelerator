@@ -1,0 +1,1 @@
+"testbench" -debug "typical" -s "top" 
