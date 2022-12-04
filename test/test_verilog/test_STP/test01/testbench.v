@@ -1,0 +1,254 @@
+`timescale 1ns / 1ps
+module testbench();
+   parameter word_size = 16, buffer_size = 1024,  n_size = 8;
+   parameter NUM_C_TOKENS = 3, NUM_D_TOKENS = 6, s_size = 8*11;
+
+   // External Inputs
+   reg clk;
+   reg rst;
+   reg rst_instr;
+   reg [2:0] A;
+   reg [4:0] N;
+   
+   // Inputs to FIFOs
+   reg 	     fifo_wr_en_c, fifo_wr_en_d;
+   wire      fifo_wr_en_r, fifo_wr_en_s;
+   wire fifo_rd_en_c, fifo_rd_en_d, fifo_rd_en_r, fifo_rd_en_s;
+   reg [word_size - 1 : 0] fifo_in_c, fifo_in_d;
+   wire [2*word_size - 1 : 0] fifo_in_r, fifo_in_s;
+
+   // FIFO Outputs
+   wire [log2(buffer_size) - 1 : 0] fifo_pop_c, fifo_pop_d, fifo_pop_r, fifo_pop_s;
+   wire [log2(buffer_size) - 1 : 0] fifo_free_space_c, fifo_free_space_d, fifo_free_space_r, fifo_free_space_s;
+   wire [word_size - 1 : 0] 	    fifo_out_c, fifo_out_d;
+   wire [2*word_size - 1 : 0] 	    fifo_out_r, fifo_out_s;
+
+   // Additional RAM signals
+   wire [word_size - 1 : 0] 	    ram_c_q, ram_d_q, ram_s_q;
+   wire [4 : 0] 		    ram_n_q;
+   wire [log2(buffer_size) - 1 : 0]  ram_c_rd_addr, ram_d_rd_addr;
+   reg [log2(s_size) - 1 : 0] 	    ram_s_rd_addr;
+   reg [log2(n_size) - 1 : 0] 	    ram_n_rd_addr;
+   wire 			    ram_c_rd_en, ram_d_rd_en, ram_s_rd_en, ram_n_rd_en;
+   wire [log2(n_size) - 1 : 0] 	    ram_n_wr_addr;
+   wire [log2(s_size) - 1 : 0] 	    ram_s_wr_addr; // 7 bits long for wide 1D array
+   
+   // Inputs to STP module
+   reg 				    start_stp;
+
+   // STP Module Outputs
+   wire 			    done_stp;
+   wire [log2(buffer_size) - 1 : 0] ram_d_rd_addr_updated;
+   wire [4 : 0] 		    N_out;
+   wire [word_size - 1 : 0] 	    stp_out_coef;
+
+   // Memory Controller Outputs
+   wire 			    ram_c_wr_en, ram_d_wr_en;
+   wire [log2(buffer_size) - 1 : 0] ram_c_wr_addr, ram_d_wr_addr;
+   wire [word_size - 1 : 0]   	    mc_output_c, mc_output_d;
+   
+   // Additional Signals   
+   integer i;
+
+   // States of the STP module
+   localparam STATE_START = 3'b000, STATE_RD_FIRST_DATA = 3'b001,
+              STATE_WR_COEFF0 = 3'b010, STATE_WR_COEFF1 = 3'b011,
+              STATE_ERROR = 3'b100, STATE_END = 3'b101;
+   
+/********************************************************************
+ Instantiate modules
+ ********************************************************************/
+
+   // Input FIFO Instantiations
+  fifo #(buffer_size, word_size) fifo_in_command(clk, rst, fifo_wr_en_c, fifo_rd_en_c, fifo_in_c, fifo_pop_c, fifo_free_space_c, fifo_out_c);
+
+  fifo #(buffer_size, word_size) fifo_in_data(clk, rst, fifo_wr_en_d, fifo_rd_en_d, fifo_in_d, fifo_pop_d, fifo_free_space_d, fifo_out_d);
+
+   // Output FIFO Instantiations
+   fifo #(buffer_size, 2*word_size) fifo_out_result(clk, rst, fifo_wr_en_r, fifo_rd_en_r, fifo_in_r, fifo_pop_r, fifo_free_space_r, fifo_out_r);
+
+   fifo #(buffer_size, 2*word_size) fifo_out_status(clk, rst, fifo_wr_en_s, fifo_rd_en_s, fifo_in_s, fifo_pop_s, fifo_free_space_s, fifo_out_s);
+   
+
+   // *Note* - buffer size and word size parameters switch locations between fifos and everything else
+   /*single_port_ram #(word_size, buffer_size) ram_command(.data(mc_output_c), .addr(ram_c_wr_addr), .rd_addr(ram_c_rd_addr), .wr_en(ram_c_wr_en), .re_en(ram_c_rd_en), .clk(clk), .q(ram_c_q));*/ // The command RAM is not needed for this TB
+   single_port_ram #(word_size, buffer_size) ram_data(.data(mc_output_d), .addr(ram_d_wr_addr), .rd_addr(ram_d_rd_addr), .wr_en(ram_d_wr_en), .rd_en(ram_d_rd_en), .clk(clk), .q(ram_d_q));
+   
+   single_port_ram #(word_size, s_size) ram_S(.data(stp_out_coef), .addr(ram_s_wr_addr), .rd_addr(ram_s_rd_addr), .wr_en(ram_s_wr_en), .rd_en(ram_s_rd_en), .clk(clk), .q(ram_s_q));
+   
+   N_ram ram_N(.data(N_out), .rst(rst), .wr_addr(ram_n_wr_addr), .rd_addr(ram_n_rd_addr), .wr_en(ram_n_wr_en), .rd_en(ram_n_rd_en), .clk(clk), .q(ram_n_q));
+   
+
+   // Memory Controller
+   /*mem_controller #(word_size, buffer_size) mem_controller_c(.clk(clk), .rst(rst), .FIFO_population(fifo_pop_c), .input_token(fifo_out_c), .FIFO_rd_en(fifo_rd_en_c), .ram_wr_en(ram_c_wr_en), .ram_wr_addr(ram_c_wr_addr), .output_token(mc_output_c));*/ // The command memory controller is not needed for this TB
+   mem_controller #(word_size, buffer_size) mem_controller_d(.clk(clk), .rst(rst), .FIFO_population(fifo_pop_d), .input_token(fifo_out_d), .FIFO_rd_en(fifo_rd_en_d), .ram_wr_en(ram_d_wr_en), .ram_wr_addr(ram_d_wr_addr), .output_token(mc_output_d));
+
+   STP_FSM_3 STP_module(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_stp(start_stp), .rd_addr_data(ram_d_rd_addr), .A(A), .N(N), .next_c(ram_d_q), .done_stp(done_stp), .en_rd_data(ram_d_rd_en), .en_wr_S(ram_s_wr_en), .en_wr_N(ram_n_wr_en), .rd_addr_data_updated(ram_d_rd_addr/*_updated*/), .wr_addr_S(ram_s_wr_addr), .wr_addr_N(ram_n_wr_addr), .c(stp_out_coef), .N_out(N_out),  .result(fifo_in_r), .status(fifo_in_s), .fifo_wr_en_r(fifo_wr_en_r), .fifo_wr_en_s(fifo_wr_en_s));
+   
+   
+  integer descr, descr_c, descr_d; 
+   
+   
+initial begin
+   rst <= 1'b0;
+   #4 rst <= 1'b1;
+end
+initial begin   
+   // Clock alternates with a period of 2 time units
+   for(i = 0; i < 200; i = i + 1) begin
+      #1 clk <= 1;
+      #1 clk <= 0;
+   end
+
+end
+
+initial 
+  begin
+     descr = $fopen("out.txt");
+
+     // Manually set each fifo command token and fifo write enable signal
+    /* #2;
+     fifo_in_c <= 10;
+     #2;
+     fifo_wr_en_c <= 1'b1;
+     #2;
+     fifo_wr_en_c <= 1'b0;
+     
+     #2;
+     fifo_in_c <= 20;
+     #2;
+     fifo_wr_en_c <= 1'b1;
+     #2;
+     fifo_wr_en_c <= 1'b0;
+
+     #2;
+     fifo_in_c <= 30;
+     #2;
+     fifo_wr_en_c <= 1'b1;
+     #2;
+     fifo_wr_en_c <= 1'b0;
+     
+     for(i = 0; i < NUM_C_TOKENS; i = i + 1)
+       begin
+         $fdisplay(descr, "fifo_in_command.FIFO_RAM[%1d] = %d", i, fifo_in_command.FIFO_RAM[i]);
+       end
+     */
+     // Manually set each fifo data token and fifo write enable signal
+     #2;
+     fifo_in_d <= 100;
+     #2;
+     fifo_wr_en_d <= 1'b1;
+     #2;
+     fifo_wr_en_d <= 1'b0;
+
+     #2;
+     fifo_in_d <= 200;
+     #2;
+     fifo_wr_en_d <= 1'b1;
+     #2;
+     fifo_wr_en_d <= 1'b0;
+
+     #2;
+     fifo_in_d <= 300;
+     #2;
+     fifo_wr_en_d <= 1'b1;
+     #2;
+     fifo_wr_en_d <= 1'b0;
+     
+     #2;
+     fifo_in_d <= 400;
+     #2;
+     fifo_wr_en_d <= 1'b1;
+     #2;
+     fifo_wr_en_d <= 1'b0;
+
+     #2;
+     fifo_in_d <= 500;
+     #2;
+     fifo_wr_en_d <= 1'b1;
+     #2;
+     fifo_wr_en_d <= 1'b0;
+
+     #2;
+     fifo_in_d <= 600;
+     #2;
+     fifo_wr_en_d <= 1'b1;
+     #2;
+     fifo_wr_en_d <= 1'b0;
+
+     $fdisplay(descr, "Entering tokens in data input FIFO:");
+     for(i = 0; i < NUM_D_TOKENS; i = i + 1)
+       begin
+         $fdisplay(descr, "fifo_in_data.FIFO_RAM[%1d] = %d", i, fifo_in_data.FIFO_RAM[i]);
+       end
+
+     #28;
+     // Display contents of data ram module
+     /*for(i = 0; i < NUM_C_TOKENS; i = i + 1)
+       begin
+         $fdisplay(descr, "ram_command.ram[%1d] = %d", i, ram_command.ram[i]);
+       end*/ // initial begin
+     $fdisplay(descr, "Loading data tokens from FIFO to RAM...");
+     for(i = 0; i < NUM_D_TOKENS; i = i + 1)
+       begin
+         $fdisplay(descr, "ram_data.ram[%1d] = %d", i, ram_data.ram[i]);
+       end
+
+     // Start STP with a valid A and N value
+     $fdisplay(descr, "Starting STP: w/ A = 2, N = 3");
+     #2;
+     A <= 3'b010; // Here, A = 2, N = 3
+     N <= 5'b011;
+     start_stp <= 1'b1;
+     #2;
+     start_stp <= 1'b0;
+     
+     #50;
+     $fdisplay(descr, "... ending STP");
+     // Display contents of N RAM, S RAM, Result FIFO, Status FIFO
+     for(i = 0; i < n_size; i = i + 1)
+       begin
+	  $fdisplay(descr, "ram_N[%1d] = %d", i, ram_N.ram[i]);
+       end
+      for(i = 0; i < s_size; i = i + 1)
+       begin
+          $fdisplay(descr, "ram_S[%2d] = %d", i, ram_S.ram[i]);
+       end
+      $fdisplay(descr, "fifo_out_result.FIFO_RAM[%1d] = %d", 0, fifo_out_result.FIFO_RAM[0]);
+     $fdisplay(descr, "fifo_out_status.FIFO_RAM[%1d] = %d", 0, fifo_out_status.FIFO_RAM[0]);
+     
+  end // initial begin
+/*
+   // Monitor important signal changes
+   always@(STP_module.state)
+     $fdisplay(descr, "STATE CHANGE - state = %d", STP_module.state);
+  */ 
+  initial
+    begin
+//case(STP_module.state)
+       $monitor("state: %d\nrd_addr_data: %d, en_rd_data: %b\nwr_addr_S: %d, en_wr_S: %b, coeff: %d\nwr_addr_N: %d, en_wr_N: %b, degree: %d\nfifo_wr_en_r: %b, result: %d\nfifo_wr_en_s: %b, status: %d", STP_module.state, ram_d_rd_addr, ram_d_rd_en, ram_s_wr_addr, ram_s_wr_en, stp_out_coef, ram_n_wr_en, ram_n_wr_en, N_out, fifo_wr_en_r, fifo_in_r, fifo_wr_en_s, fifo_in_s);
+      
+    end
+
+   
+   
+
+
+
+ function integer log2;
+    input [31 : 0] value;
+        integer i;
+    begin
+                  if(value==1)
+                                log2=1;
+                  else
+                          begin
+                          i = value - 1;
+                          for (log2 = 0; i > 0; log2 = log2 + 1) begin
+                                        i = i >> 1;
+                          end
+                          end
+    end
+    endfunction
+
+endmodule
