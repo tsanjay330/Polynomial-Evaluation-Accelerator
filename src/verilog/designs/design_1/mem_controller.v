@@ -12,68 +12,70 @@
 
 module mem_controller
 #(parameter word_size = 16, buffer_size = 1024)(
- input 					clk, rst,
- input [log2(buffer_size) - 1 : 0] 	FIFO_population, // FIFO information - to begin reading tokens
- input [word_size - 1 : 0]		input_token,
-// input 					start_in, // Based on load_loc_mem_FSM_3 of lab 7 - this signal comes from FSM2_firing_state - when data needs to be moved
- output reg 				FIFO_rd_en,
- output reg 				ram_wr_en,
- output reg [log2(buffer_size) - 1 : 0] ram_wr_addr,
- output reg [word_size - 1 : 0]  	output_token
+	input clk, rst,
+	input [log2(buffer_size) - 1 : 0] FIFO_population, // FIFO information - to begin reading tokens
+	input [word_size - 1 : 0] input_token,
+	input start_in,
+	output reg 	FIFO_rd_en,
+	output reg 	ram_wr_en,
+	output reg [log2(buffer_size) - 1 : 0] ram_wr_addr,
+	output reg [word_size - 1 : 0] output_token
 );
+    // Count variables for how many times a token has been written to C & D RAM
+    // act as the wr address to the RAM modules
+    reg [log2(buffer_size) - 1 : 0]      next_ram_wr_addr;
+	reg [log2(buffer_size) - 1 : 0] temp_ram_wr_addr;
 
-   // Count variables for how many times a token has been written to C & D RAM
-   // act as the wr address to the RAM modules
-   reg [log2(buffer_size) - 1 : 0]      next_ram_wr_addr;
-   
-   // 3 bit state register
-   reg [2 : 0] 				state, next_state;
-   
+
+
+    // 3 bit state register
+    reg [2 : 0] 				state, next_state;
+	   
    // All possible states
    localparam STATE_START = 3'b000, STATE_READ_FIFO_EN = 3'b001, STATE_READ_FIFO = 3'b010, STATE_WR_RAM = 3'b011, STATE_END = 3'b100;
 
    /***	Update current state and counter outputs on clk edge (or synch reset)	***/
-   always@(posedge clk)
-   begin
-       if(!rst) begin
-	  state <= STATE_START;
-	  ram_wr_addr <= 0; // On reset, write address goes back to start
-       end
-       else
+	always@(posedge clk)
 	begin
-	   state <= next_state;
-	   ram_wr_addr <= next_ram_wr_addr;
+    	if(!rst) begin
+			state <= STATE_START;
+	 		temp_ram_wr_addr <= 0;
+       	end
+    else
+	begin
+		state <= next_state;
+		temp_ram_wr_addr <= next_ram_wr_addr;
 	end
 
-   end
+    end
 
    /***	STATE TRANSITION BLOCK	***/
-   always@(state, FIFO_population, rst)
-   begin
-       case(state)	// General flow: start -> read_fifo_en -> read_fifo ->
-	 		// write_ram -> end, retrun to start on end or rst
-	STATE_START:
+	always@(state,start_in, FIFO_population, rst)
 	begin
-           if(FIFO_population >= 1)
-             next_state <= STATE_READ_FIFO_EN;
-	   else
-	     next_state <= STATE_START;
-	end
-	STATE_READ_FIFO_EN:
+    	case(state)	// General flow: start -> read_fifo_en -> read_fifo ->
+	 		// write_ram -> end, retrun to start on end or rst
+		STATE_START:
+		begin
+        	if(FIFO_population >= 1)
+            	next_state <= STATE_READ_FIFO_EN;
+	  		else
+	    		next_state <= STATE_START;
+		end
+		STATE_READ_FIFO_EN:
         begin
-	   if(!rst)
-	     next_state <= STATE_START;
-	   else           
-	     next_state <= STATE_READ_FIFO;
+	    	if(!rst)
+	     		next_state <= STATE_START;
+	   		else           
+	     		next_state <= STATE_READ_FIFO;
         end
-	STATE_READ_FIFO:
+		STATE_READ_FIFO:
         begin
-	   if(!rst)
-             next_state <= STATE_START;
-           else  
-	     next_state <= STATE_WR_RAM;
-	end
-	STATE_WR_RAM:
+	   		if(!rst)
+            	next_state <= STATE_START;
+            else  
+	     		next_state <= STATE_WR_RAM;
+		end
+	    STATE_WR_RAM:
         begin
 	   if(!rst)
              next_state <= STATE_START;
@@ -86,52 +88,57 @@ module mem_controller
    end
 
    /***	OUTPUT SIGNAL BLOCK and Update Counters	***/
-always@(state)
-begin
-case(state)
-   STATE_START:
-   begin
-      FIFO_rd_en <= 1'b0;
-      ram_wr_en <= 1'b0;
-      next_ram_wr_addr <= ram_wr_addr;
-      output_token <= input_token;
-   end // case: START
-   STATE_READ_FIFO_EN:
-   begin
-      FIFO_rd_en <= 1'b1;
-      ram_wr_en <= 1'b0;
-      next_ram_wr_addr <= ram_wr_addr;
-      output_token <= input_token;
-   end // case: STATE_READ_FIFO_EN
-   STATE_READ_FIFO:
-   begin
-      FIFO_rd_en <= 1'b0;
-      ram_wr_en <= 1'b0;
-      next_ram_wr_addr <= ram_wr_addr;
-      output_token <= input_token; // Here, output token is now the NEW token to be read
-   end // case: STATE_READ_FIFO
-   STATE_WR_RAM:
-   begin
-      FIFO_rd_en <= 1'b0;
-      ram_wr_en <= 1'b1;
-      next_ram_wr_addr <= ram_wr_addr + 1; // Increment RAM write address
-      output_token <= input_token;
-   end // case: STATE_WRITE_RAM
-   STATE_END:
-   begin // Nothing changes in END state
-      FIFO_rd_en <= 1'b0;
-      ram_wr_en <= 1'b0;
-      next_ram_wr_addr <= ram_wr_addr;
-      output_token <= input_token;
-   end
-   default:
-   begin
-      FIFO_rd_en <= 1'b0;
-      ram_wr_en <= 1'b0;
-      next_ram_wr_addr <= ram_wr_addr;
-      output_token <= input_token;
-   end
-endcase // case (state)
+	always@(state)
+	begin
+		case(state)
+   		STATE_START:
+   		begin
+      		FIFO_rd_en <= 0;
+      		ram_wr_en <= 0;
+      		next_ram_wr_addr <= temp_ram_wr_addr;
+			ram_wr_addr <= temp_ram_wr_addr;
+      		output_token <= 0;
+   		end 
+   		STATE_READ_FIFO_EN:
+   		begin
+      		FIFO_rd_en <= 1;
+      		ram_wr_en <= 0;
+      		next_ram_wr_addr <= temp_ram_wr_addr;
+			ram_wr_addr <= temp_ram_wr_addr;
+	  		output_token <= input_token;
+   		end 
+   		STATE_READ_FIFO:
+   		begin
+      		FIFO_rd_en <= 0;
+      		ram_wr_en <= 0;
+      		next_ram_wr_addr <= temp_ram_wr_addr;
+			ram_wr_addr <= temp_ram_wr_addr;
+      		output_token <= input_token;
+		end
+   		STATE_WR_RAM:
+   		begin
+      		FIFO_rd_en <= 0;
+      		ram_wr_en <= 1;
+      		next_ram_wr_addr <= temp_ram_wr_addr + 1; // Increment RAM Address
+			ram_wr_addr <= temp_ram_wr_addr;
+  			output_token <= input_token;
+   		end
+   		STATE_END:
+   		begin 
+      		FIFO_rd_en <= 0;
+      		ram_wr_en <= 0;
+      		next_ram_wr_addr <= temp_ram_wr_addr;
+			ram_wr_addr <= temp_ram_wr_addr;
+      		output_token <= input_token;   
+		end
+   		default:
+  		begin
+      		FIFO_rd_en <= 0;
+      		ram_wr_en <= 0;
+      		next_ram_wr_addr <= ram_wr_addr;
+      		output_token <= input_token;
+   		end
+		endcase
    
 end
    
