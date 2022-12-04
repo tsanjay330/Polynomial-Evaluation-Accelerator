@@ -171,15 +171,18 @@ initial begin
 
 	#2;
 
-	/* STATE_END: 8 */
-
-	$display("result = ", result);
-	$display("status = ", status);
+	/* STATE_OUTPUT */
 
 	#2;
 
-	$display("result = ", result);
-	$display("status = ", status);
+	/* STATE_END: 8 */
+
+	if (done_evp) begin
+		$display("result = ", result);
+		$display("status = ", status);
+	end
+
+	#2;
 
 	$finish;
 

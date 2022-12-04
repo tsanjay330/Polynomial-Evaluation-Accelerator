@@ -1,0 +1,25 @@
+#-----------------------------------------------------------
+# xsim v2022.1 (64-bit)
+# SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+# IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+# Start of session at: Sun Dec  4 00:04:39 2022
+# Process ID: 557744
+# Current directory: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test03
+# Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
+# Log file: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test03/xsim.log
+# Journal file: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test03/xsim.jou
+# Running On: ucompute1.physics.umd.edu, OS: Linux, CPU Frequency: 2294.609 MHz, CPU Physical cores: 4, Host memory: 25221 MB
+#-----------------------------------------------------------
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+Test 1
+result =      25432
+status =          0
+Test 2: using rst_instr
+rd_addr_data is    2
+$finish called at time : 14 ns : File "/afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test03/tb_evp.v" Line 144
+## quit
+INFO: [Common 17-206] Exiting xsim at Sun Dec  4 00:04:43 2022...

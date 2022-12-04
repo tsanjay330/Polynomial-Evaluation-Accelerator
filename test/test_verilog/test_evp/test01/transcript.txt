@@ -22,11 +22,8 @@ source xsim.dir/top/xsim_script.tcl
 Time resolution is 1 ps
 source run.tcl
 ## run all
-6: en_rd_S is 0
-result =          0
-status = 4294967295
-result =          0
-status = 4294967295
-$finish called at time : 30 ns : File "/afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test01/tb_evp.v" Line 184
+result =         27
+status =          0
+$finish called at time : 32 ns : File "/afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test01/tb_evp.v" Line 187
 ## quit
-INFO: [Common 17-206] Exiting xsim at Sat Dec  3 20:49:06 2022...
+INFO: [Common 17-206] Exiting xsim at Sat Dec  3 22:51:42 2022...

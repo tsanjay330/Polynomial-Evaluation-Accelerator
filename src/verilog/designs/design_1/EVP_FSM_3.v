@@ -33,8 +33,8 @@ module EVP_FSM_3
 	localparam STATE_START = 4'b0000, STATE_RD_N = 4'b0001, 
 				STATE_CHECK_N = 4'b0010, STATE_RD_DATA = 4'b0011, 
 				STATE_COMPUTE_SUM = 4'b0100, STATE_GET_NEXT_COEFF = 4'b0101, 
-				STATE_COMPUTE_EXP = 4'b0110, STATE_ERROR = 4'b0111, 
-				STATE_END = 4'b1000;
+				STATE_COMPUTE_EXP = 4'b0110, STATE_OUTPUT = 4'b0111, 
+				STATE_ERROR = 4'b1000, STATE_END = 4'b1001;
 
 assign rd_addr_S = A * 11 + S_idx_counter;
 
@@ -87,7 +87,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			STATE_COMPUTE_SUM:
 			begin
 				if (S_idx_counter > N)
-					next_state <= STATE_END;
+					next_state <= STATE_OUTPUT;
 				else
 					next_state <= STATE_GET_NEXT_COEFF;
 			end		
@@ -97,6 +97,9 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 
 			STATE_COMPUTE_EXP:
 				next_state <= STATE_COMPUTE_SUM;
+
+			STATE_OUTPUT:
+				next_state <= STATE_END;
 
 			STATE_ERROR:
 				next_state <= STATE_END;
@@ -215,6 +218,21 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 				next_status <= status; 
 			end
 
+			STATE_OUTPUT:
+			begin
+				done_evp <= 0;
+                en_rd_data <= 0;
+                next_rd_addr_data <= rd_addr_data_updated;
+                en_rd_S <= 0;
+                next_S_idx_counter <= S_idx_counter;
+                en_rd_N <= 0;
+                next_rd_addr_N <= rd_addr_N;
+                next_monomial <= monomial;
+                next_sum <= sum;
+                next_result <= sum;
+                next_status <= 0;
+			end
+
 			STATE_ERROR:
 			begin
 				done_evp <= 0;
@@ -241,8 +259,8 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 				next_rd_addr_N <= rd_addr_N;
 				next_monomial <= monomial;
 				next_sum <= sum;
-				next_result <= sum;
-				next_status <= 0;
+				next_result <= result;
+				next_status <= status;
 			end
 		endcase
 
