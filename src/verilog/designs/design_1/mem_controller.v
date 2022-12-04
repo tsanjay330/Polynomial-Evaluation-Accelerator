@@ -49,7 +49,7 @@ module mem_controller
     end
 
    /***	STATE TRANSITION BLOCK	***/
-	always@(state,start_in, FIFO_population, rst)
+	always@(state, FIFO_population, rst)
 	begin
     	case(state)	// General flow: start -> read_fifo_en -> read_fifo ->
 	 		// write_ram -> end, retrun to start on end or rst
