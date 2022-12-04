@@ -15,7 +15,6 @@ module mem_controller
 	input clk, rst,
 	input [log2(buffer_size) - 1 : 0] FIFO_population, // FIFO information - to begin reading tokens
 	input [word_size - 1 : 0] input_token,
-	input start_in,
 	output reg 	FIFO_rd_en,
 	output reg 	ram_wr_en,
 	output reg [log2(buffer_size) - 1 : 0] ram_wr_addr,
@@ -23,7 +22,7 @@ module mem_controller
 );
     // Count variables for how many times a token has been written to C & D RAM
     // act as the wr address to the RAM modules
-    reg [log2(buffer_size) - 1 : 0]      next_ram_wr_addr;
+    reg [log2(buffer_size) - 1 : 0] next_ram_wr_addr;
 	reg [log2(buffer_size) - 1 : 0] temp_ram_wr_addr;
 
 
