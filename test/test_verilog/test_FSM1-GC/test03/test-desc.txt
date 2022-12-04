@@ -1,0 +1,1 @@
+This test one command being passed in to the PEA. Testing invoke,enable,fsm2, mem_control, single_port_rm, and get_command functionality.
