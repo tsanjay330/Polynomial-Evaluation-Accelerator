@@ -1,0 +1,30 @@
+#-----------------------------------------------------------
+# xsim v2022.1 (64-bit)
+# SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+# IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+# Start of session at: Sun Dec  4 20:29:35 2022
+# Process ID: 1028548
+# Current directory: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evb/test02
+# Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
+# Log file: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evb/test02/xsim.log
+# Journal file: /afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evb/test02/xsim.jou
+# Running On: ucompute2.physics.umd.edu, OS: Linux, CPU Frequency: 2294.609 MHz, CPU Physical cores: 4, Host memory: 25221 MB
+#-----------------------------------------------------------
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+New rd_addr_data is    1
+result =         10
+status =          0
+New rd_addr_data is    2
+result =         27
+status =          0
+New rd_addr_data is    3
+result =         60
+status =          0
+done_evb
+$finish called at time : 110 ns : File "/afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evb/test02/tb_evb.v" Line 446
+## quit
+INFO: [Common 17-206] Exiting xsim at Sun Dec  4 20:29:39 2022...
