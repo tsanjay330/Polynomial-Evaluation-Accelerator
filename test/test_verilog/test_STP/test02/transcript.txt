@@ -1,0 +1,54 @@
+Vivado Simulator v2022.1
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb_PEA -debug typical -s top 
+Multi-threading is on. Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02/tb_PEA.v:58]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02/tb_PEA.v:59]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02/tb_PEA.v:62]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02/tb_PEA.v:63]
+WARNING: [VRFC 10-3091] actual bit length 10 differs from formal bit length 16 for port 'data_pop' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02/tb_PEA.v:71]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 16 for port 'result' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/invoke_PEA.v:62]
+WARNING: [VRFC 10-3091] actual bit length 7 differs from formal bit length 10 for port 'addr' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:85]
+WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 10 for port 'wr_addr' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:89]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:94]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:98]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 5 for port 'N_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:113]
+WARNING: [VRFC 10-3091] actual bit length 8 differs from formal bit length 7 for port 'rd_addr_S' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:115]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 5 for port 'N' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:118]
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'result_free_space' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02/tb_PEA.v:73]
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'status_free_space' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02/tb_PEA.v:74]
+ERROR: [VRFC 10-3236] concurrent assignment to a non-net 'en_wr_output_fifo' is not permitted [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:113]
+ERROR: [XSIM 43-3322] Static elaboration of top level Verilog design unit(s) in library work failed.
+
+****** xsim v2022.1 (64-bit)
+  **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+  **** IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+FSM1:x,FSM2: x, FSM3_MEM:x, FSM3_GC:x, ramo:    x, instr:  x
+FSM1:0,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:255
+FSM1:0,FSM2: 0, FSM3_MEM:1, FSM3_GC:0, ramo:    0, instr:255
+FSM1:0,FSM2: 0, FSM3_MEM:2, FSM3_GC:0, ramo:    0, instr:255
+FSM1:0,FSM2: 0, FSM3_MEM:3, FSM3_GC:0, ramo:    0, instr:255
+FSM1:0,FSM2: 0, FSM3_MEM:4, FSM3_GC:0, ramo:    0, instr:255
+FSM1:1,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:255
+FSM1:2,FSM2: 1, FSM3_MEM:1, FSM3_GC:0, ramo:    0, instr:255
+FSM1:2,FSM2: 2, FSM3_MEM:2, FSM3_GC:1, ramo:  771, instr:255
+FSM1:2,FSM2: 2, FSM3_MEM:3, FSM3_GC:2, ramo:    0, instr:  3
+FSM1:2,FSM2: 3, FSM3_MEM:4, FSM3_GC:0, ramo:    0, instr:  3
+FSM1:0,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  3
+FSM1:1,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  3
+FSM1:2,FSM2: 1, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  3
+FSM1:2,FSM2: 2, FSM3_MEM:0, FSM3_GC:1, ramo:  297, instr:  3
+FSM1:2,FSM2: 2, FSM3_MEM:0, FSM3_GC:2, ramo:    0, instr:  1
+FSM1:2,FSM2: 3, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  1
+FSM1:0,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  1
+## quit
+INFO: [Common 17-206] Exiting xsim at Mon Dec  5 17:51:05 2022...

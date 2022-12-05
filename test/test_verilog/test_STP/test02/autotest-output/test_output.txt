@@ -1,0 +1,10 @@
+Tests started on:
+Mon 05 Dec 2022 05:50:27 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02
+-----------------------------------------------------
+Error comparison result for: 
+/homes/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02
+Tests completed on:
+Mon 05 Dec 2022 05:50:37 PM EST
