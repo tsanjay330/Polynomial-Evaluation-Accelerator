@@ -1,5 +1,9 @@
 input[          0] = 0000001100000011
+input[          1] = 0000000100101001
 Enable Passed!
-Waiting for GC to finish...
-GC finished.
+Waiting for GC-1 to finish...
+GC-1 finished.
 instr:  3, arg2: 3
+Waiting for GC-2 to finish...
+GC-2 finished.
+instr:  1, arg2: 9

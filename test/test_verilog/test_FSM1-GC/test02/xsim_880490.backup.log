@@ -2,8 +2,8 @@
 # xsim v2022.1 (64-bit)
 # SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
 # IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
-# Start of session at: Sun Dec  4 16:18:32 2022
-# Process ID: 681286
+# Start of session at: Mon Dec  5 17:50:18 2022
+# Process ID: 880490
 # Current directory: /afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02
 # Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
 # Log file: /afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test02/xsim.log
@@ -18,20 +18,20 @@ source run.tcl
 FSM1:x,FSM2: x, FSM3_MEM:x, FSM3_GC:x, ramo:    x, instr:  x
 FSM1:0,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:255
 FSM1:0,FSM2: 0, FSM3_MEM:1, FSM3_GC:0, ramo:    0, instr:255
+FSM1:0,FSM2: 0, FSM3_MEM:2, FSM3_GC:0, ramo:    0, instr:255
 FSM1:0,FSM2: 0, FSM3_MEM:3, FSM3_GC:0, ramo:    0, instr:255
 FSM1:0,FSM2: 0, FSM3_MEM:4, FSM3_GC:0, ramo:    0, instr:255
-FSM1:0,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:255
-FSM1:1,FSM2: 0, FSM3_MEM:1, FSM3_GC:0, ramo:    0, instr:255
-FSM1:2,FSM2: 1, FSM3_MEM:3, FSM3_GC:0, ramo:    0, instr:255
-FSM1:2,FSM2: 2, FSM3_MEM:4, FSM3_GC:1, ramo:    x, instr:255
-FSM1:2,FSM2: 2, FSM3_MEM:0, FSM3_GC:2, ramo:    0, instr:  x
-FSM1:2,FSM2: 3, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  x
-FSM1:0,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  x
-FSM1:1,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  x
-FSM1:2,FSM2: 1, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  x
-FSM1:2,FSM2: 2, FSM3_MEM:0, FSM3_GC:1, ramo:  771, instr:  x
-FSM1:2,FSM2: 2, FSM3_MEM:0, FSM3_GC:2, ramo:    0, instr:  3
-FSM1:2,FSM2: 3, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  3
+FSM1:1,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:255
+FSM1:2,FSM2: 1, FSM3_MEM:1, FSM3_GC:0, ramo:    0, instr:255
+FSM1:2,FSM2: 2, FSM3_MEM:2, FSM3_GC:1, ramo:  771, instr:255
+FSM1:2,FSM2: 2, FSM3_MEM:3, FSM3_GC:2, ramo:    0, instr:  3
+FSM1:2,FSM2: 3, FSM3_MEM:4, FSM3_GC:0, ramo:    0, instr:  3
 FSM1:0,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  3
+FSM1:1,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  3
+FSM1:2,FSM2: 1, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  3
+FSM1:2,FSM2: 2, FSM3_MEM:0, FSM3_GC:1, ramo:  297, instr:  3
+FSM1:2,FSM2: 2, FSM3_MEM:0, FSM3_GC:2, ramo:    0, instr:  1
+FSM1:2,FSM2: 3, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  1
+FSM1:0,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  1
 ## quit
-INFO: [Common 17-206] Exiting xsim at Sun Dec  4 16:18:36 2022...
+INFO: [Common 17-206] Exiting xsim at Mon Dec  5 17:50:22 2022...
