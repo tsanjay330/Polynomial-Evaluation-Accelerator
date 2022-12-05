@@ -2,13 +2,12 @@
 
 module get_command_FSM_3
         #(parameter buffer_size = 1024)(
-        input clk, rst, rst_instr,
+        input clk, rst,
         input start_get_cmd,
 		input [15 : 0] command,
 		output reg en_rd_cmd,
         output reg done_get_cmd,
-		output reg [log2(buffer_size)-1 : 0] rd_addr_command_updated,
-		output reg [log2(buffer_size)-1 : 0] rd_addr_data_updated,
+		output reg [log2(buffer_size)-1 : 0] rd_addr_command,
         output reg [7 : 0] instr,
         output reg [2 : 0] arg1,
 		output reg [4 : 0] arg2
@@ -24,16 +23,16 @@ module get_command_FSM_3
     localparam STATE_START = 2'b00, STATE_SPLIT_CMD = 2'b01, STATE_END = 2'b10;
 
 	always @(posedge clk or negedge rst) begin
-		if (! rst || !rst_instr) begin
+		if (! rst) begin
 			state <= STATE_START;
-			rd_addr_command_updated <= 0;
+			rd_addr_command <= 0;
 			instr <= 8'b11111111;
 			arg1 <= 0;
 			arg2 <= 0;
 		end
 		else begin
 			state <= next_state;
-			rd_addr_command_updated <= next_rd_addr_command;
+			rd_addr_command <= next_rd_addr_command;
 			instr <= next_instr;
 			arg1 <= next_arg1;
 			arg2 <= next_arg2;
@@ -67,7 +66,7 @@ module get_command_FSM_3
 			begin
 				done_get_cmd <= 0;
 				en_rd_cmd <= 0;
-				next_rd_addr_command <= rd_addr_command_updated;
+				next_rd_addr_command <= rd_addr_command;
 				next_instr <= instr;
 				next_arg1 <= arg1;
 				next_arg2 <= arg2;
@@ -87,7 +86,7 @@ module get_command_FSM_3
 			begin
 				done_get_cmd <= 0;
 				en_rd_cmd <= 1;
-				next_rd_addr_command <= rd_addr_command_updated + 1;
+				next_rd_addr_command <= rd_addr_command + 1;
 			    next_instr <= command[15 : 8];
 				next_arg1 <= command[7 : 5];
 				next_arg2 <= command[4 : 0];
@@ -97,7 +96,7 @@ module get_command_FSM_3
 			begin
 				done_get_cmd <= 1;
 				en_rd_cmd <= 0;
-				next_rd_addr_command <= rd_addr_command_updated;
+				next_rd_addr_command <= rd_addr_command;
 				next_instr <= instr;
 				next_arg1 <= arg1;
 				next_arg2 <= arg2;

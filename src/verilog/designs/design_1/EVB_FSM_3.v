@@ -3,7 +3,6 @@
 module EVB_FSM_3
 		#(parameter buffer_size = 1024)(
 		input clk, rst,
-		input rst_instr,
 		input start_evb,
 		input [2 : 0] A,
 		input [4 : 0] b,
@@ -35,9 +34,9 @@ module EVB_FSM_3
 				STATE_END = 4'b1000;
 
 	EVP_FSM_3 evp
-		(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_evp(en_evp), 
-			.A(A), .x(x_b), .c_i(c_i), .N(N), .rd_addr_data(rd_addr_data), 
-			.en_rd_data(en_rd_data), .en_rd_S(en_rd_S), .en_rd_N(en_rd_N), 
+		(.clk(clk), .rst(rst), .start_evp(en_evp), .A(A), .x(x_b), .c_i(c_i), 
+			.N(N), .rd_addr_data(rd_addr_data), .en_rd_data(en_rd_data), 
+			.en_rd_S(en_rd_S), .en_rd_N(en_rd_N), 
 			.rd_addr_data_updated(rd_addr_data_updated), .rd_addr_S(rd_addr_S), 
 			.rd_addr_N(rd_addr_N), .done_evp(next_done_evp), 
 			.result(next_result), .status(next_status));
@@ -45,7 +44,7 @@ module EVB_FSM_3
 //assign rd_addr_data_updated = rd_addr_data + b_counter;
 
 	always @(posedge clk, negedge rst)
-		if (! rst || ! rst_instr) begin
+		if (! rst) begin
 			state <= STATE_START;
 			b_counter <= 0;
 			done_evp <= 0;

@@ -39,7 +39,7 @@ module EVP_FSM_3
 assign rd_addr_S = A * 11 + S_idx_counter;
 
 	always @(posedge clk, negedge rst)
-		if (! rst || ! rst_instr) begin
+		if (! rst) begin
 			state <= STATE_START;
 			rd_addr_data_updated <= 0;
 			S_idx_counter <= 0;

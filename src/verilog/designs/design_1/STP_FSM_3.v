@@ -51,7 +51,6 @@ fifo_wr_en_s: Write enable signal to the status output FIFO
 module STP_FSM_3 
 		#(parameter word_size = 16, buffer_size = 1024, n_size = 8, s_size = 88)(
 		input 				     clk, rst,
-		input 				     rst_instr,
 		input 				     start_stp,
 		input [log2(buffer_size)-1 : 0]      rd_addr_data,
 		input [2 : 0] 			     A,
@@ -84,23 +83,23 @@ module STP_FSM_3
 
    /*	Update State and Outputs Block	*/
 	always @(posedge clk, negedge rst)
-		if (! rst || ! rst_instr) begin
+		if (! rst) begin
 			state <= STATE_START;
 		   	rd_addr_data_updated <= 0;
 			wr_addr_S <= 0;
 			wr_addr_N <= 0;
 			c <= 0;
-		        N_out <= 5'b1111; // is this necessary?
+			N_out <= 5'b1111; // is this necessary?
 			result <= 0;
 			status <= 32'b11111111111111111111111111111111;
 		end
 		else begin
 			state <= next_state;
-		        rd_addr_data_updated <= next_rd_addr_data;
+			rd_addr_data_updated <= next_rd_addr_data;
 			wr_addr_S <= next_wr_addr_S;
 			wr_addr_N <= A; // Is this correct?
 			c <= next_c;
-		        N_out <= N;
+			N_out <= N;
 			result <= next_result;
 			status <= next_status;
 		end
