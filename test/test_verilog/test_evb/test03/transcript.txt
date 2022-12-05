@@ -1,0 +1,38 @@
+Vivado Simulator v2022.1
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb_evb -debug typical -s top 
+Multi-threading is on. Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.EVP_FSM_3
+Compiling module work.EVB_FSM_3
+Compiling module work.tb_evb
+Built simulation snapshot top
+
+****** xsim v2022.1 (64-bit)
+  **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+  **** IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+1st EVP
+result =          0
+status =          2
+2nd EVP
+result =          0
+status =          2
+3rd EVP
+result =          0
+status =          2
+done_evb
+$finish called at time : 44 ns : File "/afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evb/test03/tb_evb.v" Line 229
+## quit
+INFO: [Common 17-206] Exiting xsim at Sun Dec  4 21:16:35 2022...
