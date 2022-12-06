@@ -33,8 +33,8 @@ module firing_state_FSM2
         output en_rd_fifo_command,
         output reg done_fsm2,
         output reg en_wr_output_fifo,
-        output [word_size - 1 : 0] result,
-        output [word_size - 1 : 0] status,
+        output [2*word_size - 1 : 0] result,
+        output [2*word_size - 1 : 0] status,
         output [4 : 0] arg2);
    
 	localparam SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
@@ -43,6 +43,9 @@ module firing_state_FSM2
 
 	localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, 
 		STATE_GET_COMMAND_WAIT=4'b0010, STATE_GET_COMMAND_FINISH=4'b0011,STATE_STP_START=4'b0100, STATE_STP_WAIT=4'b0101, STATE_EVP_START=4'b0110, STATE_EVP_WAIT=4'b0111, STATE_EVB_START=4'b1000, STATE_EVB_WAIT=4'b1001, STATE_EVB_OUTPUT=4'b1010, STATE_RST=4'b1011, STATE_OUTPUT=4'b1100;
+
+   parameter s_size = 8*11, n_size = 9;
+   
 
    reg [3 : 0] state_module, next_state_module;
    reg en_get_command;
@@ -81,12 +84,11 @@ single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 			.wr_en(wr_en_ram_data), .rd_en(rd_en_ram_data), .clk(clk), 
 			.q(ram_out_data));
 
-single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
+single_port_ram #(.word_size(word_size), .buffer_size(s_size))
 	RAM_S(.data(ram_in_S), .addr(wr_addr_S), .rd_addr(rd_addr_S), 
 			.wr_en(wr_en_ram_S), .rd_en(rd_en_ram_S), .clk(clk), .q(ram_out_S));
 
-N_ram #(.word_size(word_size), .buffer_size(buffer_size))
-    RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), .rd_addr(rd_addr_N),
+N_ram RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), .rd_addr(rd_addr_N),
 			.wr_en(wr_en_ram_N), .rd_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
@@ -112,11 +114,11 @@ STP_FSM_3 #(.word_size(word_size), .buffer_size(buffer_size), .n_size(n_size),
 			.s_size(s_size))
 		stp_command(.clk(clk), .rst(rst), .start_stp(en_stp), 
 					.rd_addr_data(rd_addr_data), .A(arg1), .N(arg2), 
-					.next_c(ram_out_S), .done_stp(done_out_stp), 
+					.next_c(ram_out_data), .done_stp(done_out_stp), 
 					.en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), 
 					.en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data),
 					.wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(ram_in_S),
-					.N_out(ram_out_N), .result(result), .status(status),
+					.N_out(ram_in_N), .result(result), .status(status),
 					.fifo_wr_en_r(en_wr_output_fifo),
 					.fifo_wr_en_s(en_wr_output_fifo));  
 
