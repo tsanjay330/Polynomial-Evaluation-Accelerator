@@ -118,13 +118,13 @@ module STP_FSM_3
 					next_state <= STATE_WR_COEFF0;
 			
 			STATE_WR_COEFF0:
-				if (wr_addr_S == A * 11 + N)
+				if (wr_addr_S == A * 11 + (N-1))
 					next_state <= STATE_END;
 				else
 					next_state <= STATE_WR_COEFF1;
 
 			STATE_WR_COEFF1:
-				if (wr_addr_S == A * 11 + (N-2))//Minus two becasue one cycle is used to get a value in STATE_WR_COEFF0 and it should already be (N-1) for the if statement.
+				if (wr_addr_S == A * 11 + (N-2))//Minus two becasue one cycle is used to get a value in STATE_WR_COEFF0 and it should already be (N-1) for the if statement since wr_addr_S starts at 0.
 					next_state <= STATE_END;
 				else
 					next_state <= STATE_WR_COEFF1;
