@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
 module tb_PEA();
 	
-    parameter size = 8; // This is related to the loop needs to be specified for EACH command you are going to call.
-	parameter c_size = 2; //Number of commands to pass in
+    parameter d_size = 3; // This is related to the loop needs to be specified for EACH command you are going to call.
+	parameter c_size = 1; //Number of commands to pass in
 
 	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
     parameter buffer_size = 1024, width = 16, buffer_size_out = 32;
@@ -17,8 +17,8 @@ module tb_PEA();
 	reg rd_en_status;
 
     /* Input memories for PEA. */
-    reg [width - 1 : 0] mem_data [0 : size - 1];
-    reg [width - 1 : 0] mem_command [0 : size - 1];
+    reg [width - 1 : 0] mem_data [0 : d_size - 1];
+    reg [width - 1 : 0] mem_command [0 : c_size - 1];
 
     wire [1:0] next_mode_out;
     wire [width - 1 : 0] data_in_fifo_data, data_in_fifo_command, data_out_result, data_out_fifo1_result, data_out_status, data_out_fifo2_status;
@@ -98,13 +98,14 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
-    $monitor("FSM1:%d,FSM2:%d, FSM3_MEM:%d, FSM3_GC:%d, ramo:%d, instr:%d",
+    $monitor("FSM1:%1d,FSM2:%1d, FSM3_CMEM:%1d, FSM3_DMEM:%1d, FSM3_STP:%1d, rdadd:%1d, ramout:%1d",
         invoke_module.state_module,
         invoke_module.FSM2.state_module,
         invoke_module.FSM2.COMMAND_MEM_CONTROLLER.state,
-        invoke_module.FSM2.get_command.state,
-        invoke_module.FSM2.ram_out_command,
-        instr
+        invoke_module.FSM2.DATA_MEM_CONTROLLER.state,
+        invoke_module.FSM2.stp_command.state,
+		invoke_module.FSM2.stp_command.rd_addr_data_updated,
+        invoke_module.FSM2.ram_out_data
         );    
 		
 
@@ -139,12 +140,12 @@ module tb_PEA();
 			#2
         	command_in <= mem_command[i];
 			#2
-			$fdisplay(descr, "input[%d] = %b", i, command_in);
+			$fdisplay(descr, "input_c[%d] = %b", i, command_in);
 			wr_en_command <= 1;
 			#2
 			wr_en_command <= 0;
 		end
-        if (enable)
+        if (1)
         begin
             $fdisplay(descr, "Enable Passed!");
             invoke <= 1;
@@ -158,14 +159,46 @@ module tb_PEA();
 		#2
 		invoke <= 0;
 		
-		$fdisplay(descr, "Waiting for GC-1 to finish...");
+		$fdisplay(descr, "Waiting for GC to finish...");
 		wait(FC);
        	#2
-		$fdisplay(descr, "GC-1 finished.");
-		$fdisplay(descr, "instr:%d, arg2:%d", instr, arg2);
+		$fdisplay(descr, "GC finished.");
+
+
+		next_instr = INSTR;
+		for(i = 0; i < d_size ; i = i + 1)
+        begin
+            #2
+            command_in <= mem_command[i];
+            data_in <= mem_data[i];
+            #2
+            $fdisplay(descr, "input_d[%d] = %b", i, data_in);
+            wr_en_data <= 1;
+            #2
+            wr_en_data <= 0;
+        end
 		#2
+		if (1)//ENABLE NEEDS TO BE EDIT BEFORE BACK IN IF STATEMENT
+        begin
+            $fdisplay(descr, "Enable Passed!");
+            invoke <= 1;
+        end
+        else
+        begin
+            /* End the simulation here if we don't have enough data to fire */
+            $fdisplay (descr, "Enable Failed.");
+            $finish;
+        end
+        #2
+        invoke <= 0;
+		 $fdisplay(descr, "Waiting for STP to finish...");
+        wait(FC);
+        #2
+        $fdisplay(descr, "STP finished.");
 
 
+
+	
     end
 
     function integer log2;

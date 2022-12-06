@@ -44,7 +44,6 @@ module firing_state_FSM2
 	localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, 
 		STATE_GET_COMMAND_WAIT=4'b0010, STATE_GET_COMMAND_FINISH=4'b0011,STATE_STP_START=4'b0100, STATE_STP_WAIT=4'b0101, STATE_EVP_START=4'b0110, STATE_EVP_WAIT=4'b0111, STATE_EVB_START=4'b1000, STATE_EVB_WAIT=4'b1001, STATE_EVB_OUTPUT=4'b1010, STATE_RST=4'b1011, STATE_OUTPUT=4'b1100;
 
-   parameter s_size = 8*11, n_size = 9;
    
 
    reg [3 : 0] state_module, next_state_module;
@@ -60,7 +59,8 @@ module firing_state_FSM2
    wire done_out_rst;
    wire [2:0] arg1;
 //   wire [4:0] arg2; 
-   wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_command;
+   wire [log2(buffer_size) - 1 : 0] rd_addr_data;
+   wire [log2(buffer_size) - 1 : 0] rd_addr_command;
    wire [7:0] rd_addr_S;
    wire [2:0] rd_addr_N;
    wire [log2(buffer_size) - 1 : 0] wr_addr_data, wr_addr_command;
@@ -113,15 +113,13 @@ get_command_FSM_3 #(.buffer_size(buffer_size))
 STP_FSM_3 #(.word_size(word_size), .buffer_size(buffer_size), .n_size(n_size),
 			.s_size(s_size))
 		stp_command(.clk(clk), .rst(rst), .start_stp(en_stp), 
-					.rd_addr_data(rd_addr_data), .A(arg1), .N(arg2), 
+					/*.rd_addr_data(rd_addr_data),*/ .A(arg1), .N(arg2), 
 					.next_c(ram_out_data), .done_stp(done_out_stp), 
 					.en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), 
 					.en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data),
 					.wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(ram_in_S),
-					.N_out(ram_in_N), .result(result), .status(status),
-					.fifo_wr_en_r(en_wr_output_fifo),
-					.fifo_wr_en_s(en_wr_output_fifo));  
-
+					.N_out(ram_in_N), .result(result), .status(status));
+/*
 EVP_FSM_3 #(.buffer_size(buffer_size))
 		evp_command(.clk(clk), .rst(rst), .start_evp(en_evp), .A(arg1), 
 					.x(ram_out_data), .c_i(ram_out_S),.N(arg2),
@@ -144,7 +142,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 RST_FSM_3
        rst_command(.clk(clk), .start_rst(en_rst), .rst(rst_instr), 
 					.done_rst(done_out_rst));
-
+*/
 
 always @(posedge clk or negedge rst)
 begin

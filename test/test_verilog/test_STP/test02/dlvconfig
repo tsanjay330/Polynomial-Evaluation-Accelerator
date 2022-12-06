@@ -7,4 +7,4 @@ dlvdest="./xsim.dir/work"
 
 # The right hand side of the following assignment statement needs to
 # be filled in with the testbench file name without the filename extension. 
-dlvtestbench="tb_stp"
+dlvtestbench="tb_PEA"

@@ -52,7 +52,7 @@ module STP_FSM_3
 		#(parameter word_size = 16, buffer_size = 1024, n_size = 8, s_size = 88)(
 		input 				     clk, rst,
 		input 				     start_stp,
-		input [log2(buffer_size)-1 : 0]      rd_addr_data,
+//		input [log2(buffer_size)-1 : 0]      rd_addr_data,
 		input [2 : 0] 			     A,
 		input [4 : 0] 			     N,
 		input [15 : 0] 			     next_c,
@@ -66,9 +66,8 @@ module STP_FSM_3
 		output reg [15 : 0] 		     c,
 		output reg [4 : 0] 		     N_out,
 		output reg [31 : 0] 		     result,
-		output reg [31 : 0] 		     status,
-		output reg 			     fifo_wr_en_r, fifo_wr_en_s
-);
+		output reg [31 : 0] 		     status
+		);
 
 		reg [2 : 0] state, next_state;
 		reg [31 : 0] next_result;
@@ -104,7 +103,7 @@ module STP_FSM_3
 			status <= next_status;
 		end
 
-	always @(state, start_stp, N, wr_addr_S, A, rd_addr_data)
+	always @(state, start_stp, N, wr_addr_S, A)
 		case (state)
 			STATE_START:
 				if (start_stp)
@@ -125,7 +124,7 @@ module STP_FSM_3
 					next_state <= STATE_WR_COEFF1;
 
 			STATE_WR_COEFF1:
-				if (wr_addr_S == A * 11 + N)
+				if (wr_addr_S == A * 11 + (N-2))//Minus two becasue one cycle is used to get a value in STATE_WR_COEFF0 and it should already be (N-1) for the if statement.
 					next_state <= STATE_END;
 				else
 					next_state <= STATE_WR_COEFF1;
@@ -138,7 +137,7 @@ module STP_FSM_3
 	
 		endcase
 
-	always @(state, rd_addr_data, wr_addr_S, wr_addr_N, A, N, c, result, status)
+	always @(state, wr_addr_S, wr_addr_N, A, N, c, result, status)
 		case (state)
 			STATE_START:
 			begin
@@ -146,13 +145,11 @@ module STP_FSM_3
 				en_rd_data <= 0;
 				en_wr_S <= 0;
 				en_wr_N <= 0;
-				next_rd_addr_data <= rd_addr_data;
+				next_rd_addr_data <= rd_addr_data_updated;
 				next_wr_addr_S <= wr_addr_S;
 				wr_addr_N <= wr_addr_N;
 				next_result <= 0;
 				next_status <= 32'b11111111111111111111111111111111;
-			   fifo_wr_en_r <= 1'b0;
-			   fifo_wr_en_s <= 1'b0;
 			end
 
 			STATE_WR_COEFF0:
@@ -161,13 +158,11 @@ module STP_FSM_3
 				en_rd_data <= 1;
 				en_wr_S <= 0;
 				en_wr_N <= 1;
-				next_rd_addr_data <= rd_addr_data + 1;
+				next_rd_addr_data <= rd_addr_data_updated + 1;
 				next_wr_addr_S <= A * 11;
 				wr_addr_N <= A;
 				next_result <= result;
 				next_status <= status;
-			   fifo_wr_en_r <= 1'b0;
-			   fifo_wr_en_s <= 1'b0;
 			end
 
 			STATE_WR_COEFF1:
@@ -176,13 +171,11 @@ module STP_FSM_3
 				en_rd_data <= 1;
 				en_wr_S <= 1;
 				en_wr_N <= 0;
-				next_rd_addr_data <= rd_addr_data + 1;
+				next_rd_addr_data <= rd_addr_data_updated + 1;
 				next_wr_addr_S <= wr_addr_S + 1;
 				wr_addr_N <= wr_addr_N;
 				next_result <= 1;
 				next_status <= 0;
-			   fifo_wr_en_r <= 1'b0;
-			   fifo_wr_en_s <= 1'b0;
 			end
 
 			STATE_ERROR:
@@ -191,13 +184,11 @@ module STP_FSM_3
 				en_rd_data <= 0;
 				en_wr_S <= 0;
 				en_wr_N <= 0;
-				next_rd_addr_data <= rd_addr_data;
+				next_rd_addr_data <= rd_addr_data_updated;
 				next_wr_addr_S <= wr_addr_S;
 				wr_addr_N <= wr_addr_N;
 				next_result <= 0;
 				next_status <= 2'b10;
-			   fifo_wr_en_r <= 1'b0;
-			   fifo_wr_en_s <= 1'b0;
 			end
 
 			STATE_END:
@@ -206,12 +197,10 @@ module STP_FSM_3
 				en_rd_data <= 0;
 				en_wr_S <= 0;
 				en_wr_N <= 0;
-				next_rd_addr_data <= rd_addr_data - 1; // Noticed that rd_addr_data was 1 too high at end of STP
+				next_rd_addr_data <= rd_addr_data_updated; // Noticed that rd_addr_data was 1 too high at end of STP
 				next_wr_addr_S <= wr_addr_S;
 				next_result <= result;
 				next_status <= status;
-			   fifo_wr_en_r <= 1'b1;
-			   fifo_wr_en_s <= 1'b1;
 			end  
 		endcase
 
