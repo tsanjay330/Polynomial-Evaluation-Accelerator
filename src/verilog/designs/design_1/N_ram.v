@@ -42,6 +42,8 @@ wr_en: enable signal for activating write operation (active high)
 rd_en: enable signal for activating reading operation (active high)
 
 clk: clock
+ 
+rst_instr: the reset instruction signal (active low)
 
 --- OUTPUT: ---
 
@@ -64,7 +66,7 @@ module N_ram
 /*	Since this module is only for N - the word size is 5 bits and there are 8 coefficient vectors*/
         #(parameter word_size = 5, buffer_size = 8)(  
         input [word_size - 1 : 0] 	  data,
-	input 				  rst, // This rst is from the INSTRUCTION not the general rst signal
+	input 				  rst_instr, // This rst is from the INSTRUCTION not the general rst signal
         input [log2(buffer_size) - 1 : 0] wr_addr,
         input [log2(buffer_size) - 1 : 0] rd_addr,
         input wr_en, rd_en, clk,
@@ -81,7 +83,7 @@ module N_ram
     always @ (posedge clk)
       begin
 	/* Reset functionality */
-        if (!rst) begin // The reset instruction is ACTIVE LOW
+        if (!rst_instr) begin // The reset instruction is ACTIVE LOW
 	   for(i = 0; i < buffer_size; i = i+1) begin
 	      ram[i] <= 5'b11111; // The "reset"/"error" degree value
 	   end
