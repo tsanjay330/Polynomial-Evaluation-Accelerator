@@ -58,7 +58,6 @@ module firing_state_FSM2
    wire done_out_evb;
    wire done_out_rst;
    wire [2:0] arg1;
-//   wire [4:0] arg2; 
    wire [log2(buffer_size) - 1 : 0] rd_addr_data;
    wire [log2(buffer_size) - 1 : 0] rd_addr_command;
    wire [7:0] rd_addr_S;
@@ -68,7 +67,6 @@ module firing_state_FSM2
    wire [log2(n_size) - 1 : 0] wr_addr_N;
    wire [word_size - 1: 0] ram_in_S, ram_in_N, ram_in_data, ram_in_command;
    wire wr_en_ram_command, wr_en_ram_data, wr_en_ram_S, wr_en_ram_N;
-//   wire wr_en_fifo_result, wr_en_fifo_status;
    wire rd_en_ram_command, rd_en_ram_data, rd_en_ram_S, rd_en_ram_N;
    wire [word_size - 1 : 0] ram_out_command, ram_out_data, ram_out_S, ram_out_N;
 /****************************************************************
@@ -88,16 +86,21 @@ single_port_ram #(.word_size(word_size), .buffer_size(s_size))
 	RAM_S(.data(ram_in_S), .addr(wr_addr_S), .rd_addr(rd_addr_S), 
 			.wr_en(wr_en_ram_S), .rd_en(rd_en_ram_S), .clk(clk), .q(ram_out_S));
 
-N_ram RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), .rd_addr(rd_addr_N),
-			.wr_en(wr_en_ram_N), .rd_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
+N_ram RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), 
+			.rd_addr(rd_addr_N), .wr_en(wr_en_ram_N), 
+			.rd_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
     DATA_MEM_CONTROLLER(.clk(clk), .rst(rst), .rst_instr(rst_instr),
-			.FIFO_population(pop_in_fifo_data), .input_token(data_in), .FIFO_rd_en(en_rd_fifo_data), .ram_wr_en(wr_en_ram_data), .ram_wr_addr(wr_addr_data), .output_token(ram_in_data));
+			.FIFO_population(pop_in_fifo_data), .input_token(data_in), 
+			.FIFO_rd_en(en_rd_fifo_data), .ram_wr_en(wr_en_ram_data), 
+			.ram_wr_addr(wr_addr_data), .output_token(ram_in_data));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
     COMMAND_MEM_CONTROLLER(.clk(clk), .rst(rst), .rst_instr(rst_instr), 
-			.FIFO_population(pop_in_fifo_command), .input_token(command_in), .FIFO_rd_en(en_rd_fifo_command), .ram_wr_en(wr_en_ram_command), .ram_wr_addr(wr_addr_command), .output_token(ram_in_command));
+			.FIFO_population(pop_in_fifo_command), .input_token(command_in), 
+			.FIFO_rd_en(en_rd_fifo_command), .ram_wr_en(wr_en_ram_command), 
+			.ram_wr_addr(wr_addr_command), .output_token(ram_in_command));
 
 /***********************************************************************
 Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST

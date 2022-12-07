@@ -107,7 +107,7 @@ module STP_FSM_3
 		case (state)
 			STATE_START:
 				if (start_stp)
-					next_state <= STATE_RD_FIRST_DATA;
+					next_state <= STATE_WR_COEFF0;
 				else
 					next_state <= STATE_START;	
 			

@@ -98,16 +98,29 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
-    $monitor("FSM1:%1d,FSM2:%1d, FSM3_CMEM:%1d, FSM3_DMEM:%1d, FSM3_STP:%1d, rdadd:%1d, ramout:%1d",
+    $monitor("FSM3_DMEM:%1d, ramin:%1d, %1d, %1d, rd_addr:%1d, %d, ram_out_d:%1d",
+        invoke_module.FSM2.stp_command.state,
+		invoke_module.FSM2.ram_in_data,
+		invoke_module.FSM2.wr_addr_data,
+        invoke_module.FSM2.wr_en_ram_data,
+		invoke_module.FSM2.rd_addr_data,
+		invoke_module.FSM2.rd_en_ram_data,
+        invoke_module.FSM2.ram_out_data
+        );    
+
+
+/*	$monitor("FSM1:%1d,FSM2:%1d, FSM3_DMEM:%1d, FSM3_DMEM:%1d, FSM3_STP:%1d, rdaa
+dd:%1d, ramout:%1d",
         invoke_module.state_module,
         invoke_module.FSM2.state_module,
         invoke_module.FSM2.COMMAND_MEM_CONTROLLER.state,
         invoke_module.FSM2.DATA_MEM_CONTROLLER.state,
         invoke_module.FSM2.stp_command.state,
-		invoke_module.FSM2.stp_command.rd_addr_data_updated,
-        invoke_module.FSM2.ram_out_data
-        );    
-		
+        invoke_module.FSM2.stp_command.rd_addr_data_updated,
+        invoke_module.FSM2.ram_in_S
+        );	
+*/
+
 
 		/* Set up a file to store the test output */
         descr = $fopen("out.txt");
@@ -145,7 +158,7 @@ module tb_PEA();
 			#2
 			wr_en_command <= 0;
 		end
-        if (1)
+        if (1)//WILL BE ENABLE AFTER EDIT
         begin
             $fdisplay(descr, "Enable Passed!");
             invoke <= 1;
@@ -178,7 +191,7 @@ module tb_PEA();
             wr_en_data <= 0;
         end
 		#2
-		if (1)//ENABLE NEEDS TO BE EDIT BEFORE BACK IN IF STATEMENT
+		if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
         begin
             $fdisplay(descr, "Enable Passed!");
             invoke <= 1;
