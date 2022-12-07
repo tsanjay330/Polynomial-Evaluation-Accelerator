@@ -98,14 +98,11 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
-    $monitor("FSM3_DMEM:%1d, ramin:%1d, %1d, %1d, rd_addr:%1d, %d, ram_out_d:%1d",
+    $monitor("STP_STATE:%1d, ramS:%1d, %1d, %1d,",
         invoke_module.FSM2.stp_command.state,
-		invoke_module.FSM2.ram_in_data,
-		invoke_module.FSM2.wr_addr_data,
-        invoke_module.FSM2.wr_en_ram_data,
-		invoke_module.FSM2.rd_addr_data,
-		invoke_module.FSM2.rd_en_ram_data,
-        invoke_module.FSM2.ram_out_data
+		invoke_module.FSM2.ram_in_S,
+		invoke_module.FSM2.wr_addr_S,
+        invoke_module.FSM2.wr_en_ram_S
         );    
 
 
@@ -190,6 +187,9 @@ dd:%1d, ramout:%1d",
             #2
             wr_en_data <= 0;
         end
+		
+		#2
+		next_instr = INSTR;
 		#2
 		if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
         begin
@@ -208,7 +208,10 @@ dd:%1d, ramout:%1d",
         wait(FC);
         #2
         $fdisplay(descr, "STP finished.");
-
+		$fdisplay(descr, "Nram[0]=%d", invoke_module.FSM2.RAM_N.ram[0]);
+		$fdisplay(descr, "[0]Sram[0]=%d", invoke_module.FSM2.RAM_S.ram[0]);
+		$fdisplay(descr, "[0]Sram[1]=%d", invoke_module.FSM2.RAM_S.ram[1]);
+		$fdisplay(descr, "[0]Sram[2]=%d", invoke_module.FSM2.RAM_S.ram[2]);
 
 
 	
