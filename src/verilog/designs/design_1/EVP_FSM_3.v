@@ -117,7 +117,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= rd_addr_data;
+				next_rd_addr_data <= 0/*rd_addr_data*/;
 				en_rd_S <= 0;
 				next_S_idx_counter <= 0;
 				en_rd_N <= 0;
@@ -132,7 +132,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= rd_addr_data;
+				next_rd_addr_data <= 0/*rd_addr_data_updated*/;
 				en_rd_S <= 0;
 				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 1;
@@ -147,7 +147,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= rd_addr_data;
+				next_rd_addr_data <= rd_addr_data_updated;
 				en_rd_S <= 0;
 				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 0;
@@ -162,7 +162,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
                 done_evp <= 0;
                 en_rd_data <= 1;
-				next_rd_addr_data <= rd_addr_data + 1;
+				next_rd_addr_data <= rd_addr_data_updated + 1;
                 en_rd_S <= 1;
 				next_S_idx_counter <= S_idx_counter + 1;
                 en_rd_N <= 0;
@@ -237,7 +237,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= rd_addr_data;
+				next_rd_addr_data <= rd_addr_data_updated;
 				en_rd_S <= 0;
 				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 0;
