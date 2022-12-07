@@ -38,8 +38,8 @@ module tb_PEA();
 	wire start_in;
     integer i, j, k;
 
-	wire [1:0] state_GC;
-	wire [15:0] ram_out_c; 
+	wire [log2(buffer_size) - 1 : 0] wr_addr_command,rd_addr_command;
+
     /***************************************************************************
     Instantiate the input and output FIFOs for the actor under test.
     ***************************************************************************/
@@ -68,10 +68,13 @@ module tb_PEA();
     ***************************************************************************/
 
 	PEA_top_module_1 invoke_module(clk,rst,data_in_fifo_command, 
-			data_in_fifo_data, invoke,next_instr, data_pop, command_pop, rd_in_command, rd_in_data, FC, wr_out, data_out_result,data_out_status, instr, arg2);
+			data_in_fifo_data, invoke,next_instr, data_pop, command_pop, 
+			rd_in_command, rd_in_data, FC, wr_out, data_out_result,
+			data_out_status, instr, arg2, wr_addr_command, rd_addr_command);
 		
 	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
-			free_space_out_status, next_instr, instr, arg2, enable);
+			free_space_out_status, next_instr, instr, arg2, wr_addr_command,
+			rd_addr_command, enable);
 
     integer descr;
 
@@ -104,7 +107,7 @@ module tb_PEA();
 		invoke_module.FSM2.state_module,
 		invoke_module.FSM2.COMMAND_MEM_CONTROLLER.state,
 		invoke_module.FSM2.get_command.state,
-		invoke_module.FSM2.ram_out_command,
+		invoke_module.FSM2.wr_addr_command,
 		instr
 		);	
         /* Set up a file to store the test output */
@@ -143,6 +146,7 @@ module tb_PEA();
 			#2
 			wr_en_command <= 0;
 		end
+		#12
         if (enable)
         begin
             $fdisplay(descr, "Enable Passed!");
@@ -156,9 +160,13 @@ module tb_PEA();
         end
 		#2
 		invoke <= 0;
-		
+$fdisplay(descr, "%d - %d = %d",wr_addr_command, rd_addr_command, wr_addr_command-rd_addr_command);
+
+
+	
 		$fdisplay(descr, "Waiting for GC to finish...");
 		wait(FC);
+$fdisplay(descr, "%d - %d = %d",wr_addr_command, rd_addr_command, wr_addr_command-rd_addr_command);		
        	#2
 		$fdisplay(descr, "GC finished.");
 		$fdisplay(descr, "instr:%d, arg2:%d", instr, arg2);

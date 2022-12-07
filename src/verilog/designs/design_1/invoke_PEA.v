@@ -37,7 +37,9 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
     output [2*word_size - 1 : 0] data_out_result,
     output [2*word_size - 1 : 0] data_out_status,
     output [7:0] instr,
-    output [4 : 0] arg2
+    output [4 : 0] arg2,
+	output [log2(buffer_size) - 1 : 0] wr_addr_command,
+    output [log2(buffer_size) - 1 : 0] rd_addr_command
 	); 
             
 
@@ -59,8 +61,9 @@ firing_state_FSM2 #(.word_size(word_size))
                 .rst_instr(rst_instr), .instr(instr),
                 .en_rd_fifo_data(rd_in_data),.en_rd_fifo_command(rd_in_command),
                 .done_fsm2(done_out), .en_wr_output_fifo(wr_out),
-                .result(data_out_result),.status(data_out_status), .arg2(arg2) 
-				);
+                .result(data_out_result),.status(data_out_status), .arg2(arg2), 
+				.wr_addr_command(wr_addr_command),
+				.rd_addr_command(rd_addr_command));
 
    /* Update current state */
     always@(posedge clk, rst_instr)

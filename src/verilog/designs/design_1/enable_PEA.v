@@ -7,7 +7,9 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
         input [log2(buffer_size) - 1 : 0] status_free_space,
         input [1 : 0] next_mode_in,
         input [7 : 0] mode,
-        input [4 : 0] arg2, // Second argument of the command token
+        input [4 : 0] arg2,
+		input [log2(buffer_size) - 1 : 0] wr_addr_command,
+        input [log2(buffer_size) - 1 : 0] rd_addr_command,
         output reg enable
 
     );
@@ -23,7 +25,7 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
     begin
     case(next_mode_in)
         SETUP_INSTR: begin
-                if (command_pop >= 1)
+                if ((wr_addr_command - rd_addr_command) >= 1)
                     enable <= 1;
                 else
                     enable <= 0;
