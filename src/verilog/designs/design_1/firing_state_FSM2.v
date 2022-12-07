@@ -86,7 +86,7 @@ single_port_ram #(.word_size(word_size), .buffer_size(s_size))
 	RAM_S(.data(ram_in_S), .addr(wr_addr_S), .rd_addr(rd_addr_S), 
 			.wr_en(wr_en_ram_S), .rd_en(rd_en_ram_S), .clk(clk), .q(ram_out_S));
 
-N_ram RAM_N(.data(ram_in_N), .rst(rst), .wr_addr(wr_addr_N), 
+N_ram RAM_N(.data(ram_in_N), .rst_instr(rst_instr), .wr_addr(wr_addr_N), 
 			.rd_addr(rd_addr_N), .wr_en(wr_en_ram_N), 
 			.rd_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
 
