@@ -35,7 +35,9 @@ module firing_state_FSM2
         output reg en_wr_output_fifo,
         output [2*word_size - 1 : 0] result,
         output [2*word_size - 1 : 0] status,
-        output [4 : 0] arg2);
+        output [4 : 0] arg2,
+		output [log2(buffer_size) - 1 : 0] wr_addr_command,
+		output [log2(buffer_size) - 1 : 0] rd_addr_command);
    
 	localparam SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
 
@@ -59,10 +61,9 @@ module firing_state_FSM2
    wire done_out_rst;
    wire [2:0] arg1;
    wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_data_STP, rd_addr_data_EVP, rd_addr_data_EVB;
-   wire [log2(buffer_size) - 1 : 0] rd_addr_command;
    wire [7:0] rd_addr_S;
    wire [2:0] rd_addr_N;
-   wire [log2(buffer_size) - 1 : 0] wr_addr_data, wr_addr_command;
+   wire [log2(buffer_size) - 1 : 0] wr_addr_data;
    wire [log2(s_size) - 1 : 0] wr_addr_S;
    wire [log2(n_size) - 1 : 0] wr_addr_N;
    wire [word_size - 1: 0] ram_in_S, ram_in_N, ram_in_data, ram_in_command;
@@ -137,7 +138,7 @@ EVP_FSM_3 #(.buffer_size(buffer_size))
 					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S(rd_addr_S),
 					.rd_addr_N(rd_addr_N), .done_evp(done_out_evp), 
 					.result(result), .status(status));
- 
+/* 
 EVB_FSM_3 #(.buffer_size(buffer_size))
 		evb_command(.clk(clk), .rst(rst), .start_evb(en_evb), .A(arg1), 
 					.b(arg2), .x_b(ram_out_data), .c_i(ram_out_S), 
