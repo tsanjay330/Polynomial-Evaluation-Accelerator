@@ -52,7 +52,7 @@ module STP_FSM_3
 		#(parameter word_size = 16, buffer_size = 1024, n_size = 8, s_size = 88)(
 		input 				     clk, rst,
 		input 				     start_stp,
-//		input [log2(buffer_size)-1 : 0]      rd_addr_data,
+		input [log2(buffer_size)-1 : 0]      rd_addr_data,
 		input [2 : 0] 			     A,
 		input [4 : 0] 			     N,
 		input [15 : 0] 			     next_c,
@@ -78,12 +78,13 @@ module STP_FSM_3
 
 	localparam STATE_START = 3'b000, STATE_RD_FIRST_DATA = 3'b001, 
 				STATE_WR_COEFF0 = 3'b010, STATE_WR_COEFF1 = 3'b011,
-				STATE_ERROR = 3'b100, STATE_END = 3'b101;
+				STATE_ERROR = 3'b100, STATE_END = 3'b101,
+				STATE_IDLE = 3'b110;
 
    /*	Update State and Outputs Block	*/
 	always @(posedge clk, negedge rst)
 		if (! rst) begin
-			state <= STATE_START;
+			state <= STATE_IDLE;
 		   	rd_addr_data_updated <= 0;
 			wr_addr_S <= 0;
 			wr_addr_N <= 0;
@@ -105,12 +106,19 @@ module STP_FSM_3
 
 	always @(state, start_stp, N, wr_addr_S, A)
 		case (state)
+			STATE_IDLE:
+				if(start_stp)
+					next_state <= STATE_START;
+				else
+					next_state <= STATE_IDLE;
 			STATE_START:
-				if (start_stp)
+			/*	if (start_stp)
 					next_state <= STATE_WR_COEFF0;
 				else
 					next_state <= STATE_START;	
-			
+			*/
+				next_state <= STATE_WR_COEFF0;
+
 			STATE_RD_FIRST_DATA:
 				if (N > 10)
 					next_state <= STATE_ERROR;
@@ -133,19 +141,33 @@ module STP_FSM_3
 				next_state <= STATE_END;
 
 			STATE_END:
-				next_state <= STATE_START;
+				next_state <= STATE_IDLE;
 	
 		endcase
 
 	always @(state, wr_addr_S, wr_addr_N, A, N, c, result, status)
 		case (state)
+			STATE_IDLE:
+			begin
+                done_stp <= 0;
+                en_rd_data <= 0;
+                en_wr_S <= 0;
+                en_wr_N <= 0;
+                next_rd_addr_data <= rd_addr_data_updated;
+                next_wr_addr_S <= wr_addr_S;
+                wr_addr_N <= wr_addr_N;
+                next_result <= 0;
+                next_status <= 32'b11111111111111111111111111111111;
+            end
+			
+		
 			STATE_START:
 			begin
 				done_stp <= 0;
 				en_rd_data <= 0;
 				en_wr_S <= 0;
 				en_wr_N <= 0;
-				next_rd_addr_data <= rd_addr_data_updated;
+				next_rd_addr_data <= rd_addr_data;
 				next_wr_addr_S <= wr_addr_S;
 				wr_addr_N <= wr_addr_N;
 				next_result <= 0;

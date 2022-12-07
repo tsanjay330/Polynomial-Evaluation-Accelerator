@@ -98,25 +98,25 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
-    $monitor("STP_STATE:%1d, ramS:%1d, %1d, %1d,",
+/*    $monitor("STP_STATE:%1d, ramS:%1d, %1d, %1d,",
         invoke_module.FSM2.stp_command.state,
 		invoke_module.FSM2.ram_in_S,
 		invoke_module.FSM2.wr_addr_S,
         invoke_module.FSM2.wr_en_ram_S
         );    
+*/
 
-
-/*	$monitor("FSM1:%1d,FSM2:%1d, FSM3_DMEM:%1d, FSM3_DMEM:%1d, FSM3_STP:%1d, rdaa
-dd:%1d, ramout:%1d",
+	$monitor("FSM1:%1d,FSM2:%1d, FSM3_CMEM:%1d, FSM3_DMEM:%1d, FSM3_STP:%1d, rdad:%1d, ramout:%1d %1d",
         invoke_module.state_module,
         invoke_module.FSM2.state_module,
         invoke_module.FSM2.COMMAND_MEM_CONTROLLER.state,
         invoke_module.FSM2.DATA_MEM_CONTROLLER.state,
         invoke_module.FSM2.stp_command.state,
-        invoke_module.FSM2.stp_command.rd_addr_data_updated,
-        invoke_module.FSM2.ram_in_S
+        invoke_module.FSM2.rd_en_STP,
+        invoke_module.FSM2.rd_en_EVP,
+		 invoke_module.FSM2.rd_en_ram_data
         );	
-*/
+
 
 
 		/* Set up a file to store the test output */
@@ -187,10 +187,7 @@ dd:%1d, ramout:%1d",
             #2
             wr_en_data <= 0;
         end
-		
-		#2
-		next_instr = INSTR;
-		#2
+		#12
 		next_instr = INSTR;
 		#2
 
@@ -212,6 +209,7 @@ dd:%1d, ramout:%1d",
         #2
         $fdisplay(descr, "STP finished.");
 		
+		$fdisplay(descr, "Dram[3]=%d", invoke_module.FSM2.RAM_DATA.ram[3]);		
 		$fdisplay(descr, "Nram[0]=%d", invoke_module.FSM2.RAM_N.ram[0]);
 		for(i = 0; i < d_size ; i = i + 1)
         begin

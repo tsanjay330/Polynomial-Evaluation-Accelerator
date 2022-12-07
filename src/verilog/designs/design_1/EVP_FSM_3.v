@@ -34,13 +34,14 @@ module EVP_FSM_3
 				STATE_CHECK_N = 4'b0010, STATE_RD_DATA = 4'b0011, 
 				STATE_COMPUTE_SUM = 4'b0100, STATE_GET_NEXT_COEFF = 4'b0101, 
 				STATE_COMPUTE_EXP = 4'b0110, STATE_OUTPUT = 4'b0111, 
-				STATE_ERROR = 4'b1000, STATE_END = 4'b1001;
+				STATE_ERROR = 4'b1000, STATE_END = 4'b1001,
+				STATE_IDLE = 4'b1010;
 
 assign rd_addr_S = A * 11 + S_idx_counter;
 
 	always @(posedge clk, negedge rst)
 		if (! rst) begin
-			state <= STATE_START;
+			state <= STATE_IDLE;
 			rd_addr_data_updated <= 0;
 			S_idx_counter <= 0;
 			rd_addr_N <= 0;
@@ -62,12 +63,22 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 
 	always @(*) // state, start_evp, S_idx_counter, N)
 		case (state)
+			STATE_IDLE:
+            begin
+                if (start_evp)
+                    next_state <= STATE_START;
+                else
+                    next_state <= STATE_IDLE;
+            end
+
 			STATE_START:
 			begin
-				if (start_evp)
+				next_state <= STATE_RD_N;
+				/*if (start_evp)
 					next_state <= STATE_RD_N;
 				else
 					next_state <= STATE_START;
+				*/
 			end
 
 			STATE_RD_N:
@@ -105,7 +116,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 				next_state <= STATE_END;
 
 			STATE_END:
-				next_state <= STATE_START;
+				next_state <= STATE_IDLE;
 	
 		endcase
 
@@ -113,11 +124,26 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 				// rd_addr_N, S_idx_counter, A, c_i, sum, x,
 				// monomial, result, status)
 		case (state)
+			STATE_IDLE:
+			begin
+				done_evp <= 0;
+				en_rd_data <= 0;
+                next_rd_addr_data <= rd_addr_data_updated;
+                en_rd_S <= 0;
+                next_S_idx_counter <= 0;
+                en_rd_N <= 0;
+                next_rd_addr_N <= A;
+                next_monomial <= 1;
+                next_sum <= 0;
+                next_result <= 0;
+                next_status <= 32'b11111111111111111111111111111111;
+			end
+
 			STATE_START:
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= 0/*rd_addr_data*/;
+				next_rd_addr_data <= rd_addr_data;
 				en_rd_S <= 0;
 				next_S_idx_counter <= 0;
 				en_rd_N <= 0;

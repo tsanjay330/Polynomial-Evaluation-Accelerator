@@ -66,10 +66,17 @@ module firing_state_FSM2
    wire [log2(buffer_size) - 1 : 0] wr_addr_data;
    wire [log2(s_size) - 1 : 0] wr_addr_S;
    wire [log2(n_size) - 1 : 0] wr_addr_N;
+
+	/*RAM in/out */
    wire [word_size - 1: 0] ram_in_S, ram_in_N, ram_in_data, ram_in_command;
+   wire [word_size - 1 : 0] ram_out_command, ram_out_data, ram_out_S, ram_out_N;
+	/*ENABLE signals*/
    wire wr_en_ram_command, wr_en_ram_data, wr_en_ram_S, wr_en_ram_N;
    wire rd_en_ram_command, rd_en_ram_data, rd_en_ram_S, rd_en_ram_N;
-   wire [word_size - 1 : 0] ram_out_command, ram_out_data, ram_out_S, ram_out_N;
+   wire rd_en_STP,rd_en_EVP;	
+
+//This is to set the proper rd_en_ram_data
+ or(rd_en_ram_data,rd_en_STP,rd_en_EVP);
 /****************************************************************
 Instantiation of RAM modules
 ****************************************************************/
@@ -125,15 +132,15 @@ STP_FSM_3 #(.word_size(word_size), .buffer_size(buffer_size), .n_size(n_size),
 		stp_command(.clk(clk), .rst(rst), .start_stp(en_stp), 
 					.rd_addr_data(rd_addr_data), .A(arg1), .N(arg2), 
 					.next_c(ram_out_data), .done_stp(done_out_stp), 
-					.en_rd_data(rd_en_ram_data), .en_wr_S(wr_en_ram_S), 
-					.en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data_STP),
+					.en_rd_data(rd_en_STP), .en_wr_S(wr_en_ram_S), 
+					.en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data_STP),					
 					.wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(ram_in_S),
 					.N_out(ram_in_N), .result(result), .status(status));
 
 EVP_FSM_3 #(.buffer_size(buffer_size))
 		evp_command(.clk(clk), .rst(rst), .start_evp(en_evp), .A(arg1), 
 					.x(ram_out_data), .c_i(ram_out_S),.N(arg2),
-					.rd_addr_data(rd_addr_data), .en_rd_data(rd_en_ram_data),
+					.rd_addr_data(rd_addr_data), .en_rd_data(rd_en_EVP),
 					.en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N),
 					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S(rd_addr_S),
 					.rd_addr_N(rd_addr_N), .done_evp(done_out_evp), 
@@ -148,7 +155,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 					.en_rd_N(ed_en_ram_N), .rd_addr_data_updated(rd_addr_data_EVB),
 					.rd_addr_S(rd_addr_S), .rd_addr_N(rd_addr_N), 
 					.result(result), .status(status));
-  /*
+ 
 RST_FSM_3
        rst_command(.clk(clk), .start_rst(en_rst), .rst(rst_instr), 
 					.done_rst(done_out_rst));
