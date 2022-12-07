@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module tb_PEA();
 	
-    parameter d_size = 3; // This is related to the loop needs to be specified for EACH command you are going to call.
+    parameter d_size = 4; // This is related to the loop needs to be specified for EACH command you are going to call.
 	parameter c_size = 1; //Number of commands to pass in
 
 	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
@@ -191,6 +191,9 @@ dd:%1d, ramout:%1d",
 		#2
 		next_instr = INSTR;
 		#2
+		next_instr = INSTR;
+		#2
+
 		if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
         begin
             $fdisplay(descr, "Enable Passed!");
@@ -208,11 +211,12 @@ dd:%1d, ramout:%1d",
         wait(FC);
         #2
         $fdisplay(descr, "STP finished.");
+		
 		$fdisplay(descr, "Nram[0]=%d", invoke_module.FSM2.RAM_N.ram[0]);
-		$fdisplay(descr, "[0]Sram[0]=%d", invoke_module.FSM2.RAM_S.ram[0]);
-		$fdisplay(descr, "[0]Sram[1]=%d", invoke_module.FSM2.RAM_S.ram[1]);
-		$fdisplay(descr, "[0]Sram[2]=%d", invoke_module.FSM2.RAM_S.ram[2]);
-
+		for(i = 0; i < d_size ; i = i + 1)
+        begin
+			$fdisplay(descr, "Sram[%d]=%d", i, invoke_module.FSM2.RAM_S.ram[i]);
+		end
 
 	
     end
