@@ -118,7 +118,7 @@ module STP_FSM_3
 					next_state <= STATE_WR_COEFF0;
 			
 			STATE_WR_COEFF0:
-				if (wr_addr_S == A * 11 + (N-1))
+				if (wr_addr_S == A * 11 + (N))
 					next_state <= STATE_END;
 				else
 					next_state <= STATE_WR_COEFF1;
@@ -195,7 +195,7 @@ module STP_FSM_3
 			begin
 				done_stp <= 1;
 				en_rd_data <= 0;
-				en_wr_S <= 0;
+				en_wr_S <= 1;
 				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated; // Noticed that rd_addr_data was 1 too high at end of STP
 				next_wr_addr_S <= wr_addr_S;
