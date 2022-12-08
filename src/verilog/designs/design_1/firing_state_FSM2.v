@@ -160,7 +160,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 					.N(ram_out_N), .rd_addr_data(rd_addr_data), 
 					.done_evp(done_out_evp_evb), .done_evb(done_out_evb), 
 					.en_rd_data(rd_en_EVB), .en_rd_S(rd_en_ram_S), 
-					.en_rd_N(ed_en_ram_N), .rd_addr_data_updated(rd_addr_data_EVB),
+					.en_rd_N(rd_en_ram_N), .rd_addr_data_updated(rd_addr_data_EVB),
 					.rd_addr_S(rd_addr_S), .rd_addr_N(rd_addr_N), 
 					.result(result), .status(status));
  
