@@ -102,7 +102,7 @@ single_port_ram #(.word_size(word_size), .buffer_size(s_size))
 
 N_ram RAM_N(.data(ram_in_N), .rst_instr(rst_instr), .wr_addr(wr_addr_N), 
 			.rd_addr(rd_addr_N), .wr_en(wr_en_ram_N), 
-			.rd_en(rd_en_ram_N), .clk(clk), .q(ram_out_N));
+			.rd_en(rd_en_ram_N), .clk(clk), .rst(rst), .q(ram_out_N));
 
 mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
     DATA_MEM_CONTROLLER(.clk(clk), .rst(rst), .rst_instr(rst_instr),
