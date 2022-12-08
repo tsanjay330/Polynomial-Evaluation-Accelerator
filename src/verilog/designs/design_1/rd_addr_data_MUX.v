@@ -33,7 +33,7 @@ module rd_addr_data_MUX #(parameter buffer_size = 1024)(
    //assign rd_addr_data_updated = rst ? (instr[1] ? (instr[0] ? rd_addr_data_cur : rd_addr_data_EVB) : (instr[0] ? rd_addr_data_EVP : rd_addr_data_STP)) : 0;
    // If active reset, set rd addr data to 0, otherwise, set it to the active
    // FSM 3 module's output
-   always@(rd_addr_data_STP, rd_addr_data_EVP, rd_addr_data_EVB, /*rd_addr_data_cur,*/ instr, rst)
+   always@(rd_addr_data_STP, rd_addr_data_EVP, rd_addr_data_EVB, /*rd_addr_data_cur,*/ /*instr,*/ rst)
      begin
 	if(!rst)
 	  rd_addr_data_updated <= 0;

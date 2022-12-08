@@ -219,7 +219,7 @@ module STP_FSM_3
 				en_rd_data <= 0;
 				en_wr_S <= 1;
 				en_wr_N <= 0;
-				next_rd_addr_data <= rd_addr_data_updated; // Noticed that rd_addr_data was 1 too high at end of STP
+				next_rd_addr_data <= rd_addr_data_updated;
 				next_wr_addr_S <= wr_addr_S;
 				next_result <= result;
 				next_status <= status;

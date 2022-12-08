@@ -21,7 +21,8 @@ module tb_PEA();
     reg [width - 1 : 0] mem_command [0 : c_size - 1];
 
     wire [1:0] next_mode_out;
-    wire [width - 1 : 0] data_in_fifo_data, data_in_fifo_command, data_out_result, data_out_fifo1_result, data_out_status, data_out_fifo2_status;
+    wire [width - 1 : 0] data_in_fifo_data, data_in_fifo_command;
+    wire [2*width - 1 : 0] data_out_result, data_out_fifo1_result, data_out_status, data_out_fifo2_status;
 
     wire [log2(buffer_size) - 1:0] data_pop, command_pop;
     wire [log2(buffer_size_out) - 1 : 0] result_pop_out, status_pop_out;
@@ -68,7 +69,7 @@ module tb_PEA();
     ***************************************************************************/
 
 	PEA_top_module_1 invoke_module(clk,rst,data_in_fifo_command, 
-			data_in_fifo_data, invoke,next_instr, data_pop, command_pop, rd_in_command, rd_in_data, FC, wr_out, data_out_result,data_out_status, instr, arg2);
+			data_in_fifo_data, invoke,next_instr, data_pop, command_pop, rd_in_command, rd_in_data, FC, wr_out, data_out_result, data_out_status, instr, arg2);
 		
 	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
 			free_space_out_status, next_instr, instr, arg2, enable);
