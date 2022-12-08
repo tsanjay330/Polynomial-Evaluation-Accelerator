@@ -83,7 +83,7 @@ module tb_PEA();
     initial
     begin
         clk <= 0;
-        for(j = 0; j < 20; j = j + 1)
+        for(j = 0; j < 200; j = j + 1)
         begin
             #1 clk <= 1;
             #1 clk <= 0;
