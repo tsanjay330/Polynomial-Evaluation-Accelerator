@@ -4,5 +4,37 @@ Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb
 Multi-threading is on. Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-ERROR: [VRFC 10-2991] 'x_power' is not declared under prefix 'evp_command' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04/tb_PEA.v:107]
-ERROR: [XSIM 43-3322] Static elaboration of top level Verilog design unit(s) in library work failed.
+WARNING: [VRFC 10-3091] actual bit length 10 differs from formal bit length 16 for port 'data_pop' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04/tb_PEA.v:72]
+WARNING: [VRFC 10-3091] actual bit length 8 differs from formal bit length 7 for port 'rd_addr' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:95]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 5 for port 'data' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:98]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 5 for port 'q' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:100]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:104]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:110]
+WARNING: [VRFC 10-3091] actual bit length 8 differs from formal bit length 2 for port 'instr' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:118]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 5 for port 'N_out' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:139]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 5 for port 'N' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:143]
+WARNING: [VRFC 10-3091] actual bit length 8 differs from formal bit length 7 for port 'rd_addr_S' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:146]
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'result_free_space' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04/tb_PEA.v:74]
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'status_free_space' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04/tb_PEA.v:75]
+WARNING: [VRFC 10-3645] port 'wr_addr_command' remains unconnected for this instance [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04/tb_PEA.v:71]
+WARNING: [VRFC 10-3645] port 'rd_addr_command' remains unconnected for this instance [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04/tb_PEA.v:74]
+WARNING: [VRFC 10-5021] port 'rst_instr' is not connected on this instance [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/designs/design_1/firing_state_FSM2.v:141]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.fifo(buffer_size=1024,width=16)
+Compiling module work.fifo(buffer_size=32,width=32)
+Compiling module work.single_port_ram
+Compiling module work.single_port_ram(buffer_size=88)
+Compiling module work.N_ram
+Compiling module work.mem_controller
+Compiling module work.rd_addr_data_MUX
+Compiling module work.get_command_FSM_3
+Compiling module work.STP_FSM_3
+Compiling module work.EVP_FSM_3
+Compiling module work.firing_state_FSM2
+Compiling module work.PEA_top_module_1
+Compiling module work.PEA_enable
+Compiling module work.tb_PEA
+Built simulation snapshot top

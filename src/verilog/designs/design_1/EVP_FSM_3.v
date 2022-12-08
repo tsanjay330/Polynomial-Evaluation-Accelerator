@@ -313,4 +313,4 @@ assign rd_addr_S = A * 11 + S_idx_counter;
     end
     endfunction
 
-endmodule	
+endmodule

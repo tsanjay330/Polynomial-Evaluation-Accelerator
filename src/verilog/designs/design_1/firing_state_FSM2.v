@@ -66,6 +66,8 @@ module firing_state_FSM2
    wire [log2(buffer_size) - 1 : 0] wr_addr_data;
    wire [log2(s_size) - 1 : 0] wr_addr_S;
    wire [log2(n_size) - 1 : 0] wr_addr_N;
+   wire [2*word_size - 1 : 0]  result_STP, result_EVP, result_EVB, status_STP, status_EVP, status_EVB;
+   
 
 	/*RAM in/out */
    wire [word_size - 1: 0] ram_in_S, ram_in_N, ram_in_data, ram_in_command;
@@ -112,10 +114,12 @@ mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
 			.ram_wr_addr(wr_addr_command), .output_token(ram_in_command));
 
 /***********************************************
- Instantiation of read address data multiplexer
+ Instantiation of multiplexers
 ************************************************/
-   rd_addr_data_MUX MUX(.rd_addr_data_STP(rd_addr_data_STP), .rd_addr_data_EVP(rd_addr_data_EVP),
+   rd_addr_data_MUX MUX_rd_addr_data(.rd_addr_data_STP(rd_addr_data_STP), .rd_addr_data_EVP(rd_addr_data_EVP),
    .rd_addr_data_EVB(rd_addr_data_EVB), /*.rd_addr_data_cur(16'h0000),*/ .instr(instr), .rst(rst), .rd_addr_data_updated(rd_addr_data));
+   output_MUX MUX_result(.output_STP(result_STP), .output_EVP(result_EVP), .output_EVB(result_EVB), .instr(instr), .output_token(result));
+   output_MUX MUX_status(.output_STP(status_STP), .output_EVP(status_EVP), .output_EVB(status_EVB), .instr(instr), .output_token(status));
    
 /***********************************************************************
 Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST
@@ -136,7 +140,7 @@ STP_FSM_3 #(.word_size(word_size), .buffer_size(buffer_size), .n_size(n_size),
 					.en_rd_data(rd_en_STP), .en_wr_S(wr_en_ram_S), 
 					.en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data_STP),					
 					.wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(ram_in_S),
-					.N_out(ram_in_N), .result(result), .status(status));
+					.N_out(ram_in_N), .result(result_STP), .status(status_STP));
 
 EVP_FSM_3 #(.buffer_size(buffer_size))
 		evp_command(.clk(clk), .rst(rst), .start_evp(en_evp), .A(arg1), 
@@ -145,7 +149,7 @@ EVP_FSM_3 #(.buffer_size(buffer_size))
 					.en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N),
 					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S(rd_addr_S),
 					.rd_addr_N(rd_addr_N), .done_evp(done_out_evp), 
-					.result(result), .status(status));
+					.result(result_EVP), .status(status_EVP));
 /* 
 EVB_FSM_3 #(.buffer_size(buffer_size))
 		evb_command(.clk(clk), .rst(rst), .start_evb(en_evb), .A(arg1), 

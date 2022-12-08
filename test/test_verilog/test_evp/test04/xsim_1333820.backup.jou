@@ -2,8 +2,8 @@
 # xsim v2022.1 (64-bit)
 # SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
 # IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
-# Start of session at: Wed Dec  7 23:22:36 2022
-# Process ID: 1365223
+# Start of session at: Wed Dec  7 20:59:51 2022
+# Process ID: 1333820
 # Current directory: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04
 # Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
 # Log file: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04/xsim.log

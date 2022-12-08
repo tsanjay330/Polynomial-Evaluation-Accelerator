@@ -156,8 +156,8 @@ module STP_FSM_3
                 next_rd_addr_data <= rd_addr_data_updated;
                 next_wr_addr_S <= wr_addr_S;
                 wr_addr_N <= wr_addr_N;
-                next_result <= 0;
-                next_status <= 32'b11111111111111111111111111111111;
+                //next_result <= 0;
+                //next_status <= 32'b11111111111111111111111111111111;
             end
 			
 		
