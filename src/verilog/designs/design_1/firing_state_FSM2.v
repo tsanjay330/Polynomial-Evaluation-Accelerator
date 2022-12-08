@@ -157,7 +157,7 @@ EVP_FSM_3 #(.buffer_size(buffer_size))
 					.ram_out_data(ram_out_data), .ram_out_S(ram_out_S),.N(ram_out_N),
 					.rd_addr_data(rd_addr_data), .en_rd_data(rd_en_EVP),
 					.en_rd_S(rd_en_S_EVP), .en_rd_N(rd_en_N_EVP),
-					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S(rd_addr_S),
+					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S(rd_addr_S_EVP),
 					.rd_addr_N(rd_addr_N), .done_evp(done_out_evp), 
 					.result(result_EVP), .status(status_EVP));
  
@@ -168,7 +168,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 					.done_evp(done_out_evp_evb), .done_evb(done_out_evb), 
 					.en_rd_data(rd_en_EVB), .en_rd_S(rd_en_S_EVB), 
 					.en_rd_N(rd_en_N_EVB), .rd_addr_data_updated(rd_addr_data_EVB),
-					.rd_addr_S(rd_addr_S), .rd_addr_N(rd_addr_N), 
+					.rd_addr_S(rd_addr_S_EVB), .rd_addr_N(rd_addr_N), 
 					.result(result_EVB), .status(status_EVB));
  
 RST_FSM_3
