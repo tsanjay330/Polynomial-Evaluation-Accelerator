@@ -85,7 +85,7 @@ module EVB_FSM_3
 
             STATE_CHECK_B:
             begin
-                if (b_counter == b)
+                if (b_counter == (b-1))
                     next_state <= STATE_END;
                 else
                     next_state <= STATE_EVP_EN_EVP;

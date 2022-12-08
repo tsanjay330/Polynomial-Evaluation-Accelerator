@@ -44,7 +44,7 @@ module firing_state_FSM2
 	localparam STP=8'd0, EVP=8'd1, EVB=8'd2, RST=8'd3;
 
 	localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, 
-		STATE_GET_COMMAND_WAIT=4'b0010, STATE_GET_COMMAND_FINISH=4'b0011,STATE_STP_START=4'b0100, STATE_STP_WAIT=4'b0101, STATE_EVP_START=4'b0110, STATE_EVP_WAIT=4'b0111, STATE_EVB_START=4'b1000, STATE_EVB_WAIT=4'b1001, STATE_EVB_OUTPUT=4'b1010, STATE_RST=4'b1011, STATE_OUTPUT=4'b1100;
+		STATE_GET_COMMAND_WAIT=4'b0010, STATE_GET_COMMAND_FINISH=4'b0011,STATE_STP_START=4'b0100, STATE_STP_WAIT=4'b0101, STATE_EVP_START=4'b0110, STATE_EVP_WAIT=4'b0111, STATE_EVB_START=4'b1000, STATE_EVB_WAIT=4'b1001, STATE_EVB_OUTPUT=4'b1010, STATE_RST=4'b1011, STATE_OUTPUT=4'b1100, STATE_EVB_END = 4'b1101;
 
    
 
@@ -335,7 +335,7 @@ CFDF: firing mode EVB
     STATE_EVB_WAIT:
     begin
         if(done_out_evb)
-            next_state_module <= STATE_OUTPUT;
+            next_state_module <= STATE_EVB_END;
         else if (done_int_evp)
 			next_state_module <= STATE_EVB_OUTPUT;
 		else
@@ -345,7 +345,7 @@ CFDF: firing mode EVB
 	STATE_EVB_OUTPUT:
 	begin
 		if (done_out_evb)
-			next_state_module <= STATE_OUTPUT;
+			next_state_module <= STATE_EVB_END;
 		else if (done_int_evp)
 			next_state_module <= STATE_EVB_OUTPUT;
 		else
@@ -366,6 +366,10 @@ CFDF: firing mode OUTPUT
     begin
         next_state_module <= STATE_START;
     end
+
+  STATE_EVB_END:
+    next_state_module <= STATE_START;
+  
 
     default:
     begin
@@ -516,6 +520,17 @@ begin
         en_rst <= 0;
         done_fsm2 <= 1;
     end
+      STATE_EVB_END:
+	begin
+	   en_wr_output_fifo <= 0;
+	   en_get_command <= 0;
+	   en_stp <= 0;
+	   en_evp <= 0;
+	   en_evb <= 0;
+	   en_rst <= 0;
+	   done_fsm2 <= 1;
+	end
+      
 
     default:
     begin
