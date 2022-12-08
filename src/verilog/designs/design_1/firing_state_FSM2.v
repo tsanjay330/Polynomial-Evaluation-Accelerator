@@ -58,6 +58,8 @@ module firing_state_FSM2
    wire done_out_stp;
    wire done_out_evp;
    wire done_out_evb;
+   wire done_int_evp;
+   wire done_out_evp_evb;
    wire done_out_rst;
    wire [2:0] arg1;
    wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_data_STP, rd_addr_data_EVP, rd_addr_data_EVB;
@@ -78,6 +80,7 @@ module firing_state_FSM2
    wire rd_en_STP,rd_en_EVP, rd_en_EVB;	
    wire STPorEVP;
 //This is to set the proper rd_en_ram_data
+ or(done_int_evp, done_out_evp, done_out_evp_evb);
  or(STPorEVP,rd_en_STP,rd_en_EVP);
  or(rd_en_ram_data,rd_en_EVB,STPorEVP);
 /****************************************************************
@@ -150,12 +153,12 @@ EVP_FSM_3 #(.buffer_size(buffer_size))
 					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S(rd_addr_S),
 					.rd_addr_N(rd_addr_N), .done_evp(done_out_evp), 
 					.result(result_EVP), .status(status_EVP));
-/* 
+ 
 EVB_FSM_3 #(.buffer_size(buffer_size))
 		evb_command(.clk(clk), .rst(rst), .start_evb(en_evb), .A(arg1), 
 					.b(arg2), .x_b(ram_out_data), .c_i(ram_out_S), 
 					.N(ram_out_N), .rd_addr_data(rd_addr_data), 
-					.done_evp(done_out_evp), .done_evb(done_out_evb), 
+					.done_evp(done_out_evp_evb), .done_evb(done_out_evb), 
 					.en_rd_data(rd_en_EVB), .en_rd_S(rd_en_ram_S), 
 					.en_rd_N(ed_en_ram_N), .rd_addr_data_updated(rd_addr_data_EVB),
 					.rd_addr_S(rd_addr_S), .rd_addr_N(rd_addr_N), 
@@ -164,7 +167,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 RST_FSM_3
        rst_command(.clk(clk), .start_rst(en_rst), .rst(rst_instr), 
 					.done_rst(done_out_rst));
-*/
+
 always @(posedge clk or negedge rst)
 begin
     if(!rst || !rst_instr)
@@ -307,7 +310,7 @@ CFDF: firing mode EVB
     begin
         if(done_out_evb)
             next_state_module <= STATE_OUTPUT;
-        else if (done_out_evp)
+        else if (done_int_evp)
 			next_state_module <= STATE_EVB_OUTPUT;
 		else
             next_state_module <= STATE_EVB_WAIT;
@@ -317,7 +320,7 @@ CFDF: firing mode EVB
 	begin
 		if (done_out_evb)
 			next_state_module <= STATE_OUTPUT;
-		else if (done_out_evp)
+		else if (done_int_evp)
 			next_state_module <= STATE_EVB_OUTPUT;
 		else
 			next_state_module <= STATE_EVB_WAIT;
