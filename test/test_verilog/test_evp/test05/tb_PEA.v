@@ -2,7 +2,7 @@
 module tb_PEA();
 	
     parameter d_size = 4; // This is related to the loop needs to be specified for EACH command you are going to call.
-	parameter c_size = 2; //Number of commands to pass in
+	parameter c_size = 3; //Number of commands to pass in
 
 	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
     parameter buffer_size = 1024, width = 16, buffer_size_out = 32;
@@ -257,6 +257,48 @@ module tb_PEA();
         wait(FC);
 		$fdisplay(descr, "EVP finished.");
   
+// NOW ONTO SETUP EVP
+        #2
+        next_instr = SETUP_INSTR;
+        #2
+        if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
+        begin
+            $fdisplay(descr, "Enable Passed!");
+            invoke <= 1;
+        end
+        else
+        begin
+            /* End the simulation here if we don't have enough data to fire */
+            $fdisplay (descr, "Enable Failed.");
+            $finish;
+        end
+        #2
+        invoke <= 0;
+         $fdisplay(descr, "Waiting for GC to finish...");
+        wait(FC);
+        $fdisplay(descr, "GC finished.");
+        #2
+
+//NOW DO EVP
+        next_instr = INSTR;
+        #2
+        if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
+        begin
+            $fdisplay(descr, "Enable Passed!");
+            invoke <= 1;
+        end
+        else
+        begin
+            /* End the simulation here if we don't have enough data to fire */
+            $fdisplay (descr, "Enable Failed.");
+            $finish;
+        end
+        #2
+        invoke <= 0;
+         $fdisplay(descr, "Waiting for EVP to finish...");
+        wait(FC);
+        $fdisplay(descr, "EVP finished.");
+
     end
 
     function integer log2;
