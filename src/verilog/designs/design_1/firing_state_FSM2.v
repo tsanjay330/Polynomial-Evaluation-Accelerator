@@ -73,10 +73,11 @@ module firing_state_FSM2
 	/*ENABLE signals*/
    wire wr_en_ram_command, wr_en_ram_data, wr_en_ram_S, wr_en_ram_N;
    wire rd_en_ram_command, rd_en_ram_data, rd_en_ram_S, rd_en_ram_N;
-   wire rd_en_STP,rd_en_EVP;	
-
+   wire rd_en_STP,rd_en_EVP, rd_en_EVB;	
+   wire STPorEVP;
 //This is to set the proper rd_en_ram_data
- or(rd_en_ram_data,rd_en_STP,rd_en_EVP);
+ or(STPorEVP,rd_en_STP,rd_en_EVP);
+ or(rd_en_ram_data,rd_en_EVB,STPorEVP);
 /****************************************************************
 Instantiation of RAM modules
 ****************************************************************/
@@ -139,7 +140,7 @@ STP_FSM_3 #(.word_size(word_size), .buffer_size(buffer_size), .n_size(n_size),
 
 EVP_FSM_3 #(.buffer_size(buffer_size))
 		evp_command(.clk(clk), .rst(rst), .start_evp(en_evp), .A(arg1), 
-					.x(ram_out_data), .c_i(ram_out_S),.N(arg2),
+					.x(ram_out_data), .c_i(ram_out_S),.N(ram_out_N),
 					.rd_addr_data(rd_addr_data), .en_rd_data(rd_en_EVP),
 					.en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N),
 					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S(rd_addr_S),
@@ -151,7 +152,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 					.b(arg2), .x_b(ram_out_data), .c_i(ram_out_S), 
 					.N(ram_out_N), .rd_addr_data(rd_addr_data), 
 					.done_evp(done_out_evp), .done_evb(done_out_evb), 
-					.en_rd_data(rd_en_ram_data), .en_rd_S(rd_en_ram_S), 
+					.en_rd_data(rd_en_EVB), .en_rd_S(rd_en_ram_S), 
 					.en_rd_N(ed_en_ram_N), .rd_addr_data_updated(rd_addr_data_EVB),
 					.rd_addr_S(rd_addr_S), .rd_addr_N(rd_addr_N), 
 					.result(result), .status(status));
