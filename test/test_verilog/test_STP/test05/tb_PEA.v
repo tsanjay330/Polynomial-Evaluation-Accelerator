@@ -83,7 +83,7 @@ module tb_PEA();
     initial
     begin
         clk <= 0;
-        for(j = 0; j < 200; j = j + 1)
+        for(j = 0; j < 100; j = j + 1)
         begin
             #1 clk <= 1;
             #1 clk <= 0;
@@ -104,7 +104,7 @@ module tb_PEA();
         invoke_module.FSM2.evb_command.result,
 		invoke_module.FSM2.evb_command.status
         // x_power is not a signal within the EVP module
-		 //invoke_module.FSM2.evp_command.x_power        
+		//invoke_module.FSM2.evp_command.x_power        
 		);    
 
 /*
@@ -209,55 +209,7 @@ module tb_PEA();
 		
         wait(FC);
 		$fdisplay(descr, "STP finished.");
-        #2
 
-
-// NOW ONTO SETUP EVB
-		#2
-        next_instr = SETUP_INSTR;
-        #2
-        if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
-        begin
-            $fdisplay(descr, "Enable Passed!");
-            invoke <= 1;
-        end
-        else
-        begin
-            /* End the simulation here if we don't have enough data to fire */
-            $fdisplay (descr, "Enable Failed.");
-            $finish;
-        end
-        #2
-        invoke <= 0;
-         $fdisplay(descr, "Waiting for GC to finish...");
-        wait(FC);
-		$fdisplay(descr, "GC finished.");
-        #2
-
-
-//NOW DO EVB
-        next_instr = INSTR;
-        #2
-        if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
-        begin
-            $fdisplay(descr, "Enable Passed!");
-            invoke <= 1;
-        end
-        else
-        begin
-            /* End the simulation here if we don't have enough data to fire */
-            $fdisplay (descr, "Enable Failed.");
-            $finish;
-        end
-        #2
-        invoke <= 0;
-         $fdisplay(descr, "Waiting for EVB to finish...");
-        wait(FC);
-		$fdisplay(descr, "EVB finished.");
-
-		#2
-		$finish;
-  
     end
 
     function integer log2;

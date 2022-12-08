@@ -76,10 +76,10 @@ module STP_FSM_3
 		reg [log2(s_size) - 1 : 0] next_wr_addr_S;
    		//reg [log2(n_size) - 1] 		      next_wr_addr_N;
 
-	localparam STATE_START = 3'b000, STATE_RD_FIRST_DATA = 3'b001, 
-				STATE_WR_COEFF0 = 3'b010, STATE_WR_COEFF1 = 3'b011,
-				STATE_ERROR = 3'b100, STATE_END = 3'b101,
-				STATE_IDLE = 3'b110;
+	localparam STATE_IDLE = 3'b000, STATE_START = 3'b001, 
+				STATE_RD_FIRST_DATA = 3'b010, STATE_WR_COEFF0 = 3'b011, 
+				STATE_WR_COEFF1 = 3'b100, STATE_ERROR = 3'b101, 
+				STATE_END = 3'b110;
 
    /*	Update State and Outputs Block	*/
 	always @(posedge clk, negedge rst)

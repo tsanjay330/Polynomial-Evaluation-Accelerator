@@ -2,17 +2,20 @@
 
 module RST_FSM_3
 		(
-		input clk,
+		input clk, rst,
 		input start_rst,
-		output reg rst,
-		output reg done_rst);
+		output reg rst_instr);
+		//output reg done_rst);
 
 		reg [1 : 0] state, next_state;
 
-	localparam STATE_START = 2'b00, STATE_RESET = 2'b01, STATE_END = 2'b10;
+	localparam STATE_START = 2'b00, STATE_RESET = 2'b01; //, STATE_END = 2'b10;
 
-	always @(posedge clk) begin
-		state <= next_state;
+	always @(posedge clk, negedge rst) begin
+		if (! rst)
+			state <= STATE_START;
+		else
+			state <= next_state;
 	end
 
 	always @(state, start_rst)
@@ -26,10 +29,10 @@ module RST_FSM_3
 			end
 
 			STATE_RESET:
-				next_state <= STATE_END;
-
-			STATE_END:
 				next_state <= STATE_START;
+
+			/*STATE_END:
+				next_state <= STATE_START;*/
 	
 		endcase
 
@@ -37,21 +40,21 @@ module RST_FSM_3
 		case (state)
 			STATE_START:
 			begin
-				rst <= 1;
-				done_rst <= 0;
+				rst_instr <= 1;
+				//done_rst <= 0;
 			end
 
 			STATE_RESET:
 			begin
-				rst <= 0;
-				done_rst <= 0;
+				rst_instr <= 0;
+				//done_rst <= 0;
 			end
 
-			STATE_END:
+			/*STATE_END:
 			begin
 				rst <= 1;
 				done_rst <= 1;
-			end
+			end*/
 		
 		endcase
 endmodule

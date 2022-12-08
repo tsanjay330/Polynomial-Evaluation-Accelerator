@@ -83,7 +83,7 @@ module tb_PEA();
     initial
     begin
         clk <= 0;
-        for(j = 0; j < 200; j = j + 1)
+        for(j = 0; j < 100; j = j + 1)
         begin
             #1 clk <= 1;
             #1 clk <= 0;
@@ -100,11 +100,11 @@ module tb_PEA();
     initial
     begin
     $monitor("STATE:%1d, result:%1d, status:%1d",
-		invoke_module.FSM2.evb_command.state,
-        invoke_module.FSM2.evb_command.result,
-		invoke_module.FSM2.evb_command.status
+		invoke_module.FSM2.stp_command.state,
+        invoke_module.FSM2.stp_command.result,
+		invoke_module.FSM2.stp_command.status
         // x_power is not a signal within the EVP module
-		 //invoke_module.FSM2.evp_command.x_power        
+		//invoke_module.FSM2.evp_command.x_power        
 		);    
 
 /*
@@ -209,11 +209,9 @@ module tb_PEA();
 		
         wait(FC);
 		$fdisplay(descr, "STP finished.");
+
+// NOW ONTO SETUP STP
         #2
-
-
-// NOW ONTO SETUP EVB
-		#2
         next_instr = SETUP_INSTR;
         #2
         if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
@@ -231,11 +229,10 @@ module tb_PEA();
         invoke <= 0;
          $fdisplay(descr, "Waiting for GC to finish...");
         wait(FC);
-		$fdisplay(descr, "GC finished.");
+        $fdisplay(descr, "GC finished.");
         #2
 
-
-//NOW DO EVB
+//NOW DO STP
         next_instr = INSTR;
         #2
         if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
@@ -251,13 +248,10 @@ module tb_PEA();
         end
         #2
         invoke <= 0;
-         $fdisplay(descr, "Waiting for EVB to finish...");
+         $fdisplay(descr, "Waiting for STP2 to finish...");
         wait(FC);
-		$fdisplay(descr, "EVB finished.");
+        $fdisplay(descr, "STP2 finished.");
 
-		#2
-		$finish;
-  
     end
 
     function integer log2;

@@ -44,7 +44,12 @@ module firing_state_FSM2
 	localparam STP=8'd0, EVP=8'd1, EVB=8'd2, RST=8'd3;
 
 	localparam STATE_START=4'b0000, STATE_GET_COMMAND_START=4'b0001, 
-		STATE_GET_COMMAND_WAIT=4'b0010, STATE_GET_COMMAND_FINISH=4'b0011,STATE_STP_START=4'b0100, STATE_STP_WAIT=4'b0101, STATE_EVP_START=4'b0110, STATE_EVP_WAIT=4'b0111, STATE_EVB_START=4'b1000, STATE_EVB_WAIT=4'b1001, STATE_EVB_OUTPUT=4'b1010, STATE_RST=4'b1011, STATE_OUTPUT=4'b1100, STATE_EVB_END = 4'b1101;
+		STATE_GET_COMMAND_WAIT=4'b0010, STATE_GET_COMMAND_FINISH=4'b0011,
+		STATE_STP_START=4'b0100, STATE_STP_WAIT=4'b0101, 
+		STATE_EVP_START=4'b0110, STATE_EVP_WAIT=4'b0111, 
+		STATE_EVB_START=4'b1000, STATE_EVB_WAIT=4'b1001, 
+		STATE_EVB_OUTPUT=4'b1010, STATE_EVB_END = 4'b1011, STATE_RST=4'b1100, 
+		STATE_OUTPUT=4'b1101;
 
    
 
@@ -191,8 +196,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 					.result(result_EVB), .status(status_EVB));
  
 RST_FSM_3
-       rst_command(.clk(clk), .start_rst(en_rst), .rst(rst_instr), 
-					.done_rst(done_out_rst));
+       rst_command(.clk(clk), .start_rst(en_rst), .rst_instr(rst_instr));
 
 always @(posedge clk or negedge rst)
 begin
@@ -206,7 +210,7 @@ begin
     end
 end
 
-always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_evp_evb, done_out_rst, next_instr, instr)
+always @(*) //state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_evp_evb, done_out_rst, next_instr, instr)
 begin
 case(state_module)
     STATE_START:
