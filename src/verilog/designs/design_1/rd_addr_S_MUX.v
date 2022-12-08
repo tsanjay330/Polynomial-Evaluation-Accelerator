@@ -4,12 +4,12 @@ module rd_addr_S_MUX #(parameter s_size = 88)(
 
  input [log2(s_size) - 1 : 0]  rd_addr_S_EVP,
  input [log2(s_size) - 1 : 0]  rd_addr_S_EVB,
- input [1 : 0] 		       instr,
+ input [7 : 0] 		       instr,
  output [log2(s_size) - 1 : 0] rd_addr_S
 						);
    localparam STP = 2'b00, EVP = 2'b01, EVB = 2'b10, RST = 2'b11;
 
-   assign rd_addr_s = instr[0] ? rd_addr_S_EVP : rd_addr_S_EVB;
+   assign rd_addr_S = (instr - 1) ? rd_addr_S_EVP : rd_addr_S_EVB;
    
    
    /*always@(rd_addr_S_EVP, rd_addr_S_EVB)

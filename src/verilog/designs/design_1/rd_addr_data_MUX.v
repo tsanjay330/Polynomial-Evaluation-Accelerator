@@ -21,7 +21,7 @@ module rd_addr_data_MUX #(parameter buffer_size = 1024)(
  input [log2(buffer_size) - 1 : 0]  rd_addr_data_EVP,
  input [log2(buffer_size) - 1 : 0]  rd_addr_data_EVB,
 // input [log2(buffer_size) - 1 : 0]  rd_addr_data_cur,
- input [1 : 0] 		    instr,
+ input [7 : 0] 		    instr,
  input 			    rst,
 						      
  output reg [log2(buffer_size) - 1 : 0] rd_addr_data_updated

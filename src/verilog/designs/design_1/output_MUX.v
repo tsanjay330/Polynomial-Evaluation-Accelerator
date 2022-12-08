@@ -4,7 +4,7 @@ module output_MUX #(parameter word_size = 16)(
  input [2*word_size - 1 : 0] 	  output_STP,
  input [2*word_size - 1 : 0] 	  output_EVP,
  input [2*word_size - 1 : 0] 	  output_EVB,
- input [1 : 0] 			  instr,
+ input [7 : 0] 			  instr,
  output reg [2*word_size - 1 : 0] output_token
 						  );
    localparam STP = 2'b00, EVP = 2'b01, EVB = 2'b10, RST = 2'b11;

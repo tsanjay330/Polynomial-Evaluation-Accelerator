@@ -99,12 +99,12 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
-    $monitor("STATE:%1d, N:%1d, x:%1d, stat:%1d, result:%1d",
+    $monitor("STATE:%1d, N:%1d, x:%1d, result:%1d, status:%1d",
 		invoke_module.FSM2.evp_command.state,
         invoke_module.FSM2.evp_command.N,
 		invoke_module.FSM2.evp_command.x,
-        invoke_module.FSM2.evp_command.status,
-        invoke_module.FSM2.evp_command.result
+        invoke_module.FSM2.evp_command.result,
+		invoke_module.FSM2.evp_command.status
         // x_power is not a signal within the EVP module
 		//invoke_module.FSM2.evp_command.x_power        
 		);    

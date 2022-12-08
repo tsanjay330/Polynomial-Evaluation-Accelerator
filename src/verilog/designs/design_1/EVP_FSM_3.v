@@ -3,7 +3,6 @@
 module EVP_FSM_3 
 		#(parameter buffer_size = 1024)(
 		input clk, rst,
-		input rst_instr,
 		input start_evp,
 		input [2 : 0] A,
 		input [15 : 0] ram_out_data,

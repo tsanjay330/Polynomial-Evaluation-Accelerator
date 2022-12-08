@@ -117,13 +117,13 @@ module STP_FSM_3
 				else
 					next_state <= STATE_START;	
 			*/
-				next_state <= STATE_WR_COEFF0;
-
-			STATE_RD_FIRST_DATA:
 				if (N > 10)
 					next_state <= STATE_ERROR;
 				else
 					next_state <= STATE_WR_COEFF0;
+
+			STATE_RD_FIRST_DATA:
+				next_state <= STATE_WR_COEFF0;
 			
 			STATE_WR_COEFF0:
 				if (wr_addr_S == A * 11 + (N))
@@ -210,7 +210,7 @@ module STP_FSM_3
 				next_wr_addr_S <= wr_addr_S;
 				wr_addr_N <= wr_addr_N;
 				next_result <= 0;
-				next_status <= 2'b10;
+				next_status <= 2'b01;
 			end
 
 			STATE_END:

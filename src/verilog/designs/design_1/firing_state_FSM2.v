@@ -25,8 +25,8 @@ module firing_state_FSM2
         input [word_size - 1 : 0] command_in,
         input start_fsm2,
         input [1 : 0] next_instr,
-        input [word_size - 1 : 0] pop_in_fifo_data,
-        input [word_size - 1 : 0] pop_in_fifo_command,
+        input [log2(buffer_size) - 1 : 0] pop_in_fifo_data,
+        input [log2(buffer_size) - 1 : 0] pop_in_fifo_command,
 		output rst_instr,
 		output [7:0] instr,
         output en_rd_fifo_data,
@@ -63,7 +63,7 @@ module firing_state_FSM2
    wire done_out_rst;
    wire [2:0] arg1;
    wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_data_STP, rd_addr_data_EVP, rd_addr_data_EVB;
-   wire [7:0] 			    rd_addr_S, rd_addr_S_EVP, rd_addr_S_EVB;
+   wire [6:0] 			    rd_addr_S, rd_addr_S_EVP, rd_addr_S_EVB;
    wire [2:0] rd_addr_N;
    wire [log2(buffer_size) - 1 : 0] wr_addr_data;
    wire [log2(s_size) - 1 : 0] wr_addr_S;
@@ -72,8 +72,10 @@ module firing_state_FSM2
    
 
 	/*RAM in/out */
-   wire [word_size - 1: 0] ram_in_S, ram_in_N, ram_in_data, ram_in_command;
-   wire [word_size - 1 : 0] ram_out_command, ram_out_data, ram_out_S, ram_out_N;
+   wire [word_size - 1: 0] ram_in_S, ram_in_data, ram_in_command;
+   wire [4 : 0] ram_in_N;
+   wire [word_size - 1 : 0] ram_out_command, ram_out_data, ram_out_S;
+   wire [4 : 0] ram_out_N;
 	/*ENABLE signals*/
    wire wr_en_ram_command, wr_en_ram_data, wr_en_ram_S, wr_en_ram_N;
    wire rd_en_ram_command, rd_en_ram_data, rd_en_ram_S, rd_en_ram_N;
@@ -125,11 +127,27 @@ mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
 /***********************************************
  Instantiation of multiplexers
 ************************************************/
-   rd_addr_data_MUX MUX_rd_addr_data(.rd_addr_data_STP(rd_addr_data_STP), .rd_addr_data_EVP(rd_addr_data_EVP),
-   .rd_addr_data_EVB(rd_addr_data_EVB), /*.rd_addr_data_cur(16'h0000),*/ .instr(instr), .rst(rst), .rd_addr_data_updated(rd_addr_data));
-   output_MUX MUX_result(.output_STP(result_STP), .output_EVP(result_EVP), .output_EVB(result_EVB), .instr(instr), .output_token(result));
-   output_MUX MUX_status(.output_STP(status_STP), .output_EVP(status_EVP), .output_EVB(status_EVB), .instr(instr), .output_token(status));
-   rd_addr_S_MUX #(s_size) MUX_rd_addr_S (.rd_addr_S_EVP(rd_addr_S_EVP), .rd_addr_S_EVB(rd_addr_S_EVB), .instr(instr), .rd_addr_S(rd_addr_s));
+rd_addr_data_MUX 
+	MUX_rd_addr_data(.rd_addr_data_STP(rd_addr_data_STP), 
+					.rd_addr_data_EVP(rd_addr_data_EVP), 
+					.rd_addr_data_EVB(rd_addr_data_EVB), 
+					/*.rd_addr_data_cur(16'h0000),*/ 
+					.instr(instr), .rst(rst), 
+					.rd_addr_data_updated(rd_addr_data));
+
+output_MUX 
+	MUX_result(.output_STP(result_STP), .output_EVP(result_EVP), 
+					.output_EVB(result_EVB), .instr(instr), 
+					.output_token(result));
+
+output_MUX 
+	MUX_status(.output_STP(status_STP), .output_EVP(status_EVP), 
+					.output_EVB(status_EVB), .instr(instr), 
+					.output_token(status));
+
+rd_addr_S_MUX #(s_size) 
+	MUX_rd_addr_S (.rd_addr_S_EVP(rd_addr_S_EVP), .rd_addr_S_EVB(rd_addr_S_EVB),
+					.instr(instr), .rd_addr_S(rd_addr_S));
    
 /***********************************************************************
 Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST
