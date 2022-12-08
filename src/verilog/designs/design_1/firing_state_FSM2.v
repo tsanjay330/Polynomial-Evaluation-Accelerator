@@ -89,6 +89,7 @@ module firing_state_FSM2
  or(rd_en_ram_S,rd_en_S_EVP,rd_en_S_EVB);
  or(rd_en_ram_N,rd_en_N_EVP,rd_en_N_EVB);
  or(done_int_evp, done_out_evp, done_out_evp_evb);
+//   or(done_out_evp_evb, done_int_evp, done_out_evp);
  or(STPorEVP,rd_en_STP,rd_en_EVP);
  or(rd_en_ram_data,rd_en_EVB,STPorEVP);
 /****************************************************************
@@ -205,7 +206,7 @@ begin
     end
 end
 
-always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_rst, next_instr, instr)
+always @(state_module, start_fsm2, done_out_get_command, done_out_stp, done_out_evp, done_out_evb, done_out_evp_evb, done_out_rst, next_instr, instr)
 begin
 case(state_module)
     STATE_START:
