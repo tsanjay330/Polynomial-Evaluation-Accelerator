@@ -63,7 +63,7 @@ module firing_state_FSM2
    wire done_out_rst;
    wire [2:0] arg1;
    wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_data_STP, rd_addr_data_EVP, rd_addr_data_EVB;
-   wire [7:0] rd_addr_S;
+   wire [7:0] 			    rd_addr_S, rd_addr_S_EVP, rd_addr_S_EVB;
    wire [2:0] rd_addr_N;
    wire [log2(buffer_size) - 1 : 0] wr_addr_data;
    wire [log2(s_size) - 1 : 0] wr_addr_S;
@@ -123,6 +123,7 @@ mem_controller #(.word_size(word_size), .buffer_size(buffer_size))
    .rd_addr_data_EVB(rd_addr_data_EVB), /*.rd_addr_data_cur(16'h0000),*/ .instr(instr), .rst(rst), .rd_addr_data_updated(rd_addr_data));
    output_MUX MUX_result(.output_STP(result_STP), .output_EVP(result_EVP), .output_EVB(result_EVB), .instr(instr), .output_token(result));
    output_MUX MUX_status(.output_STP(status_STP), .output_EVP(status_EVP), .output_EVB(status_EVB), .instr(instr), .output_token(status));
+   rd_addr_S_MUX #(s_size) MUX_rd_addr_S (.rd_addr_S_EVP(rd_addr_S_EVP), .rd_addr_S_EVB(rd_addr_S_EVB), .instr(instr), .rd_addr_S(rd_addr_s));
    
 /***********************************************************************
 Instantiation of the nested FSM for get_command_FSM3, STP, EVP, EVB, RST

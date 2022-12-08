@@ -34,7 +34,7 @@ module EVB_FSM_3
 				STATE_END = 4'b1000;
 
 	EVP_FSM_3 evp
-		(.clk(clk), .rst(rst), .start_evp(en_evp), .A(A), .x(x_b), .c_i(c_i), 
+		(.clk(clk), .rst(rst), .start_evp(en_evp), .A(A), .ram_out_data(x_b), .ram_out_S(c_i), 
 			.N(N), .rd_addr_data(rd_addr_data), .en_rd_data(en_rd_data), 
 			.en_rd_S(en_rd_S), .en_rd_N(en_rd_N), 
 			.rd_addr_data_updated(rd_addr_data_updated), .rd_addr_S(rd_addr_S), 
