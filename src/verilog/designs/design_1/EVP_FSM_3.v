@@ -7,7 +7,7 @@ module EVP_FSM_3
 		input start_evp,
 		input [2 : 0] A,
 		input [15 : 0] ram_out_data,
-		input [15 : 0] c_i,
+		input [15 : 0] ram_out_S,
 		input [4 : 0] N,
 		input [log2(buffer_size)-1 : 0] rd_addr_data, 
 		output reg en_rd_data,
@@ -30,6 +30,8 @@ module EVP_FSM_3
 		reg [6 : 0] next_rd_addr_S;
 		reg [2 : 0] next_rd_addr_N;
    		reg [15 : 0] 	    x;
+  		reg [15 : 0] 		    c_i;
+   
    
 
 	localparam STATE_START = 4'b0000, STATE_RD_N = 4'b0001, 
@@ -160,7 +162,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			begin
 				done_evp <= 0;
 				en_rd_data <= 0;
-				next_rd_addr_data <= 0/*rd_addr_data_updated*/;
+				next_rd_addr_data <= /*0*/rd_addr_data_updated;
 				en_rd_S <= 0;
 				next_S_idx_counter <= S_idx_counter;
 				en_rd_N <= 1;
@@ -193,7 +195,8 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 			   x <= ram_out_data; // Capture x value from data token
 				next_rd_addr_data <= rd_addr_data_updated + 1;
                 en_rd_S <= 1;
-				next_S_idx_counter <= S_idx_counter + 1;
+			   c_i <= ram_out_S;
+		next_S_idx_counter <= S_idx_counter + 1;
                 en_rd_N <= 0;
 				next_rd_addr_N <= rd_addr_N;
                 next_monomial <= monomial;
@@ -212,7 +215,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 				en_rd_N <= 0;
 				next_rd_addr_N <= rd_addr_N;
 				next_monomial <= monomial;
-				next_sum <= sum + monomial * x;
+				next_sum <= sum + monomial * c_i;
 				next_result <= result;
 				next_status <= status;
 			end
@@ -223,6 +226,7 @@ assign rd_addr_S = A * 11 + S_idx_counter;
 				en_rd_data <= 0;
 				next_rd_addr_data <= rd_addr_data_updated;
 				en_rd_S <= 1;
+			   	c_i <= ram_out_S;
 				next_S_idx_counter <= S_idx_counter + 1;
 				en_rd_N <= 0;
 				next_rd_addr_N <= rd_addr_N;
