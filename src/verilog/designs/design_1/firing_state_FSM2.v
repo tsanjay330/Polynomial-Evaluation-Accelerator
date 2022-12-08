@@ -140,7 +140,7 @@ STP_FSM_3 #(.word_size(word_size), .buffer_size(buffer_size), .n_size(n_size),
 
 EVP_FSM_3 #(.buffer_size(buffer_size))
 		evp_command(.clk(clk), .rst(rst), .start_evp(en_evp), .A(arg1), 
-					.x(ram_out_data), .c_i(ram_out_S),.N(ram_out_N),
+					.ram_out_data(ram_out_data), .c_i(ram_out_S),.N(ram_out_N),
 					.rd_addr_data(rd_addr_data), .en_rd_data(rd_en_EVP),
 					.en_rd_S(rd_en_ram_S), .en_rd_N(rd_en_ram_N),
 					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S(rd_addr_S),
