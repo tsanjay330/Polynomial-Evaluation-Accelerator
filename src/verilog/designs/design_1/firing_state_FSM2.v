@@ -37,7 +37,9 @@ module firing_state_FSM2
         output [2*word_size - 1 : 0] status,
         output [4 : 0] arg2,
 		output [log2(buffer_size) - 1 : 0] wr_addr_command,
-		output [log2(buffer_size) - 1 : 0] rd_addr_command);
+		output [log2(buffer_size) - 1 : 0] rd_addr_command,
+		output [log2(buffer_size) - 1 : 0] wr_addr_data,
+        output [log2(buffer_size) - 1 : 0] rd_addr_data);
    
 	localparam SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
 
@@ -67,10 +69,9 @@ module firing_state_FSM2
    wire done_out_evp_evb;
    wire done_out_rst;
    wire [2:0] arg1;
-   wire [log2(buffer_size) - 1 : 0] rd_addr_data, rd_addr_data_STP, rd_addr_data_EVP, rd_addr_data_EVB;
+   wire [log2(buffer_size) - 1 : 0] rd_addr_data_STP, rd_addr_data_EVP, rd_addr_data_EVB;
    wire [6:0] 			    rd_addr_S, rd_addr_S_EVP, rd_addr_S_EVB;
    wire [2:0] rd_addr_N;
-   wire [log2(buffer_size) - 1 : 0] wr_addr_data;
    wire [log2(s_size) - 1 : 0] wr_addr_S;
    wire [log2(n_size) - 1 : 0] wr_addr_N;
    wire [2*word_size - 1 : 0]  result_STP, result_EVP, result_EVB, status_STP, status_EVP, status_EVB;

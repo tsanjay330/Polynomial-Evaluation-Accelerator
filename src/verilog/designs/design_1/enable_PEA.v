@@ -1,8 +1,6 @@
 `timescale 1ns / 1ps
 module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
    (
-        input [log2(buffer_size) - 1 : 0] command_pop,
-        input [log2(buffer_size) - 1 : 0] data_pop,
         input [log2(buffer_size) - 1 : 0] result_free_space,
         input [log2(buffer_size) - 1 : 0] status_free_space,
         input [1 : 0] next_mode_in,
@@ -10,9 +8,10 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
         input [4 : 0] arg2,
 		input [log2(buffer_size) - 1 : 0] wr_addr_command,
         input [log2(buffer_size) - 1 : 0] rd_addr_command,
+		input [log2(buffer_size) - 1 : 0] wr_addr_data,
+        input [log2(buffer_size) - 1 : 0] rd_addr_data,
         output reg enable
-
-    );
+		);
 
     localparam SETUP_INSTR = 2'b00, INSTR = 2'b01;
 
@@ -20,8 +19,8 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
     localparam STP = 8'd0, EVP = 8'd1,
                EVB = 8'd2, RST = 8'd3;
 
-    always @(next_mode_in,mode, command_pop, data_pop, result_free_space,
-            status_free_space, arg2)
+
+    always @(next_mode_in,mode, result_free_space, status_free_space, arg2)
     begin
     case(next_mode_in)
         SETUP_INSTR: begin
@@ -34,24 +33,23 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
         INSTR: begin
             case(mode)
                 STP: begin
-                    if(data_pop >= arg2 + 1 && result_free_space >= 1
-                        && status_free_space >= 1)
+                    if((wr_addr_data - rd_addr_data) >= arg2)  //&& result_free_space >= 1
                         enable <= 1;
                     else
                         enable <= 0;
                 end
 
                 EVP: begin
-                    if(data_pop >= 1 && result_free_space >= arg2
-                        && status_free_space >= arg2)
+                    if((wr_addr_data - rd_addr_data) >= 1) //&& result_free_space >= 1
+                        //&& status_free_space >= 1)
                         enable <= 1;
                     else
                         enable <= 0;
                 end
 
                 EVB: begin
-                    if(data_pop >= arg2 && result_free_space >= arg2
-                        && status_free_space >= arg2)
+                    if( (wr_addr_data - rd_addr_data) >= arg2) //&& result_free_space >= arg2
+                       //&& status_free_space >= arg2)
                         enable <= 1;
                     else
                         enable <= 0;

@@ -39,8 +39,9 @@ module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
     output [7:0] instr,
     output [4 : 0] arg2,
 	output [log2(buffer_size) - 1 : 0] wr_addr_command,
-    output [log2(buffer_size) - 1 : 0] rd_addr_command
-	); 
+    output [log2(buffer_size) - 1 : 0] rd_addr_command,
+    output [log2(buffer_size) - 1 : 0] wr_addr_data,
+    output [log2(buffer_size) - 1 : 0] rd_addr_data); 
             
 
     localparam STATE_IDLE = 2'b00, STATE_FIRING_START = 2'b01, STATE_FIRING_WAIT = 2'b10;
@@ -63,7 +64,9 @@ firing_state_FSM2 #(.word_size(word_size))
                 .done_fsm2(done_out), .en_wr_output_fifo(wr_out),
                 .result(data_out_result),.status(data_out_status), .arg2(arg2), 
 				.wr_addr_command(wr_addr_command),
-				.rd_addr_command(rd_addr_command));
+				.rd_addr_command(rd_addr_command),
+				.wr_addr_data(wr_addr_data),
+                .rd_addr_data(rd_addr_data));
 
    /* Update current state */
     always@(posedge clk, rst_instr)

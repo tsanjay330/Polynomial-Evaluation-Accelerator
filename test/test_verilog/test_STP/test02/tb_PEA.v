@@ -35,11 +35,13 @@ module tb_PEA();
 	//These signals come from the FSM2/3 level
 	wire wr_out, rd_in_command, rd_in_data;
 	wire [7:0] instr;
-	wire start_in;
+	wire enable;
     integer i, j, k;
+	wire [log2(buffer_size) - 1 : 0] wr_addr_command;
+    wire [log2(buffer_size) - 1 : 0] rd_addr_command;
+    wire [log2(buffer_size) - 1 : 0] wr_addr_data;
+    wire [log2(buffer_size) - 1 : 0] rd_addr_data;
 
-	wire [1:0] state_GC;
-	wire [15:0] ram_out_c; 
     /***************************************************************************
     Instantiate the input and output FIFOs for the actor under test.
     ***************************************************************************/
@@ -68,10 +70,12 @@ module tb_PEA();
     ***************************************************************************/
 
 	PEA_top_module_1 invoke_module(clk,rst,data_in_fifo_command, 
-			data_in_fifo_data, invoke,next_instr, data_pop, command_pop, rd_in_command, rd_in_data, FC, wr_out, data_out_result,data_out_status, instr, arg2);
+		data_in_fifo_data, invoke,next_instr, data_pop, command_pop, 
+		rd_in_command, rd_in_data, FC, wr_out, data_out_result,
+		data_out_status, instr, arg2,
+		wr_addr_command, rd_addr_command, wr_addr_data, rd_addr_data);
 		
-	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
-			free_space_out_status, next_instr, instr, arg2, enable);
+	PEA_enable enable_module(free_space_out_result, free_space_out_status, next_instr, instr, arg2, wr_addr_command, rd_addr_command, wr_addr_data, rd_addr_data, enable);
 
     integer descr;
 
@@ -98,14 +102,12 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
-/*    $monitor("STP_STATE:%1d, ramS:%1d, %1d, %1d,",
-        invoke_module.FSM2.stp_command.state,
-		invoke_module.FSM2.ram_in_S,
-		invoke_module.FSM2.wr_addr_S,
-        invoke_module.FSM2.wr_en_ram_S
+    $monitor("pop:%1d, %1d,",
+        out_fifo_result.population,
+		enable_module.check_instr
         );    
-*/
 
+/*
 	$monitor("FSM1:%1d,FSM2:%1d, FSM3_CMEM:%1d, FSM3_DMEM:%1d, FSM3_STP:%1d, rdad:%1d, ramout:%1d %1d",
         invoke_module.state_module,
         invoke_module.FSM2.state_module,
@@ -116,7 +118,7 @@ module tb_PEA();
         invoke_module.FSM2.rd_en_EVP,
 		 invoke_module.FSM2.rd_en_ram_data
         );	
-
+*/
 
 
 		/* Set up a file to store the test output */
@@ -155,9 +157,12 @@ module tb_PEA();
 			#2
 			wr_en_command <= 0;
 		end
-        if (1)//WILL BE ENABLE AFTER EDIT
+		#12
+		next_instr = SETUP_INSTR;	
+        #2
+		if (enable)
         begin
-            $fdisplay(descr, "Enable Passed!");
+            $fdisplay(descr, "Enable Passed - SETUP_INSTR");
             invoke <= 1;
         end
         else
@@ -190,10 +195,9 @@ module tb_PEA();
 		#12
 		next_instr = INSTR;
 		#2
-
-		if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
-        begin
-            $fdisplay(descr, "Enable Passed!");
+        if(enable)
+		begin
+            $fdisplay(descr, "Enable Passed INSTR");
             invoke <= 1;
         end
         else
