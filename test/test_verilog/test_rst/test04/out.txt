@@ -1,0 +1,19 @@
+input_c[          0] = 0000000010001000
+input_c[          1] = 0000001100000000
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+input_d[          0] = 0000000000000001
+input_d[          1] = 0000000000000010
+input_d[          2] = 0000000000000011
+input_d[          3] = 0000000000000100
+input_d[          4] = 0000000000000101
+input_d[          5] = 0000000000000110
+input_d[          6] = 0000000000000111
+input_d[          7] = 0000000000001000
+Enable Passed!
+Waiting for STP to finish...
+STP finished.
+Enable Passed!
+Waiting for RST to finish...
+RST finished.

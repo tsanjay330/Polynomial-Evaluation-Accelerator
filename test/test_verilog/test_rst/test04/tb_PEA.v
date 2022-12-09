@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
 module tb_PEA();
 	
-    parameter d_size = 1; // This is related to the loop needs to be specified for EACH command you are going to call.
-	parameter c_size = 1; //Number of commands to pass in
+    parameter d_size = 8; // This is related to the loop needs to be specified for EACH command you are going to call.
+	parameter c_size = 2; //Number of commands to pass in
 
 	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
     parameter buffer_size = 1024, width = 16, buffer_size_out = 32;
@@ -101,7 +101,7 @@ module tb_PEA();
     begin
     $monitor("STATE:%1d, rst:%1d, start_rst:%1d, rst_instr:%1d",
 		invoke_module.FSM2.rst_command.state,
-        invoke_module.FSM2.rst_command.rst,
+        	invoke_module.FSM2.rst_command.rst,
 		invoke_module.FSM2.rst_command.start_rst,
 		invoke_module.FSM2.rst_instr
         // x_power is not a signal within the EVP module
@@ -214,11 +214,33 @@ module tb_PEA();
         end
         #2
         invoke <= 0;
-		 $fdisplay(descr, "Waiting for RST to finish...");
+		 $fdisplay(descr, "Waiting for STP to finish...");
 		
         wait(FC);
-		$fdisplay(descr, "RST finished.");
+		$fdisplay(descr, "STP finished.");
+        #12
+	  next_instr = INSTR;
+       #2
+	   if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
+        begin
+            $fdisplay(descr, "Enable Passed!");
+            invoke <= 1;
+        end
+        else
+        begin
+            /* End the simulation here if we don't have enough data to fire */
+            $fdisplay (descr, "Enable Failed.");
+            $finish;
+        end
         #2
+        invoke <= 0;
+                 $fdisplay(descr, "Waiting for RST to finish...");
+
+        wait(FC);
+                $fdisplay(descr, "RST finished.");
+        #2
+
+                $finish;
 
 		$finish;
   

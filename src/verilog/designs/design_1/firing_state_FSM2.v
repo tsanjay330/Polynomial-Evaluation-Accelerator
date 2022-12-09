@@ -196,7 +196,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 					.result(result_EVB), .status(status_EVB));
  
 RST_FSM_3
-       rst_command(.clk(clk), .start_rst(en_rst), .rst_instr(rst_instr));
+       rst_command(.clk(clk), .rst(rst), .start_rst(en_rst), .rst_instr(rst_instr));
 
 always @(posedge clk or negedge rst)
 begin
@@ -511,7 +511,7 @@ begin
         en_evp <= 0;
         en_evb <= 0;
         en_rst <= 1;
-        done_fsm2 <= 0;
+        done_fsm2 <= 1;
     end
 
     STATE_OUTPUT:
