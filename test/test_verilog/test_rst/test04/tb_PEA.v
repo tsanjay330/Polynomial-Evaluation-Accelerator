@@ -218,29 +218,53 @@ module tb_PEA();
 		
         wait(FC);
 		$fdisplay(descr, "STP finished.");
-        #12
-	  next_instr = INSTR;
-       #2
-	   if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
+
+	// NOW ONTO SETUP RST
+        #2
+        next_instr = SETUP_INSTR;
+        #2
+        if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
         begin
             $fdisplay(descr, "Enable Passed!");
             invoke <= 1;
         end
         else
         begin
-            /* End the simulation here if we don't have enough data to fire */
+            /* End the simulation here if we don't have enough data to fire\
+ */
             $fdisplay (descr, "Enable Failed.");
             $finish;
         end
         #2
         invoke <= 0;
-                 $fdisplay(descr, "Waiting for RST to finish...");
-
+         $fdisplay(descr, "Waiting for GC to finish...");
         wait(FC);
-                $fdisplay(descr, "RST finished.");
+        $fdisplay(descr, "GC finished.");
         #2
+	  
+	//NOW DO RST
+        next_instr = INSTR;
+        #2
+        if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
+        begin
+            $fdisplay(descr, "Enable Passed!");
+            invoke <= 1;
+        end
+        else
+        begin
+            /* End the simulation here if we don't have enough data to fire\
+ */
+            $fdisplay (descr, "Enable Failed.");
+            $finish;
+        end
+        #2
+        invoke <= 0;
+         $fdisplay(descr, "Waiting for RST to finish...");
+        #4
+                $fdisplay(descr, "RST finished.");
 
-                $finish;
+       #30;
+       
 
 		$finish;
   

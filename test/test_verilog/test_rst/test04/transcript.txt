@@ -61,7 +61,11 @@ N[          5] = 31
 N[          6] = 31
 N[          7] = 31
 STATE:0, rst:1, start_rst:0, rst_instr:1
-N[          4] =  8
-$finish called at time : 159 ns : File "/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v" Line 243
+N[          4] =  7
+STATE:0, rst:1, start_rst:1, rst_instr:1
+STATE:1, rst:1, start_rst:0, rst_instr:0
+N[          4] = 31
+STATE:0, rst:1, start_rst:0, rst_instr:1
+$finish called at time : 183 ns : File "/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v" Line 269
 ## quit
-INFO: [Common 17-206] Exiting xsim at Fri Dec  9 15:55:43 2022...
+INFO: [Common 17-206] Exiting xsim at Fri Dec  9 16:44:42 2022...

@@ -1,4 +1,4 @@
-input_c[          0] = 0000000010001000
+input_c[          0] = 0000000010000111
 input_c[          1] = 0000001100000000
 Enable Passed!
 Waiting for GC to finish...
@@ -14,6 +14,9 @@ input_d[          7] = 0000000000001000
 Enable Passed!
 Waiting for STP to finish...
 STP finished.
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
 Enable Passed!
 Waiting for RST to finish...
 RST finished.
