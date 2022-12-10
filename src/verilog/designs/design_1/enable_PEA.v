@@ -1,8 +1,9 @@
 `timescale 1ns / 1ps
-module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
+module PEA_enable #(parameter word_size = 16,  buffer_size = 1024, 
+					buffer_size_out = 32)
    (
-        input [log2(buffer_size) - 1 : 0] result_free_space,
-        input [log2(buffer_size) - 1 : 0] status_free_space,
+        input [log2(buffer_size_out) - 1 : 0] result_free_space,
+        input [log2(buffer_size_out) - 1 : 0] status_free_space,
         input [1 : 0] next_mode_in,
         input [7 : 0] mode,
         input [4 : 0] arg2,
