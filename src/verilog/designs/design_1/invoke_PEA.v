@@ -1,25 +1,34 @@
-/*
+/*******************************************************************
 Name: PEA top level module
 Description: The top level module for the PEA
-Sub modules: PEA_enable,
-Input Ports:    control_in: control token from the Control Input FIFO
+Sub modules: firing_state_FSM2.v
+Input Ports:
+        clk: clock
+        rst: reset    
+        control_in: control token from the Command Input FIFO
+        data_in: control token from the Data Input FIFO
+        invoke: wire to activate invoke signal
+        next_instr: next instruction mode 
         control_pop: population of the Control Input FIFO
         data_in: data token from the Data Input FIFO
         data_pop: population of the Data Input FIFO
-        result_free_space: remaining empty words of the Result Output FIFO
-        status_free_space: remaining empty words of the Status Output FIFO
-Output Ports:   control_rd_en: read enable signal to read a control token
-        data_rd_en: read enable signal to read a data token
-        result_wr_en: write enable signal for Result Output FIFO
-        status_wr_en: write enable signal for Status Output FIFO
-        result_out: result token to be written to Result Output FIFO
-        status_out: status token to be written to Status Output FIFO
+Output Ports:   rd_in_command: read signal to read a command token
+        rd_in_data: read signal to read a data token
+        FC: output wire leading to testbench
+        wr_out: write output signal
+        data_out_result: result token to be written to Result Output FIFO
+        data_out_status: status token to be written to Status Output FIFO
+        instr: mode to store instruction
+        arg2: value of b
+        wr_addr_command: write address of input command
+        rd_addr_command: read address of input command
+        wr_addr_data: write address of input data
+        rd_addr_data: read address of input data
 Parameters: control_size: bit width of each control token (16 bits, 8 for command, 3 for arg1, 5 for arg2)
-        data_size: bit width of each data token (16 bits signed 2's comp)
-        result_size: bit width of each result token (32 bits signed 2's comp)
-        status_size: bit width of each status token (??? - need to determine how many status cases/errors there should be)
-        buffer_size: Total # of words in each FIFO (assumed to be equal for all FIFOs)
-        
+States: 
+IDLE: mode to start the FSM with the idle state
+STATE_FIRING_START: mode where the token is starting firing
+STATE_FIRING_WAIT: mode where the token waits after firing        
  ********************************************************************/
 `timescale 1ns / 1ns
 module PEA_top_module_1 #(parameter word_size = 16, buffer_size = 1024)(
