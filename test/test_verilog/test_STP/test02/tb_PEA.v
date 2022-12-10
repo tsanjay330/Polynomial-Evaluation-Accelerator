@@ -72,8 +72,7 @@ module tb_PEA();
 	PEA_top_module_1 invoke_module(clk,rst,data_in_fifo_command, 
 		data_in_fifo_data, invoke,next_instr, data_pop, command_pop, 
 		rd_in_command, rd_in_data, FC, wr_out, data_out_result,
-		data_out_status, instr, arg2,
-		wr_addr_command, rd_addr_command, wr_addr_data, rd_addr_data);
+		data_out_status, instr, arg2, wr_addr_command, rd_addr_command, wr_addr_data, rd_addr_data);
 		
 	PEA_enable enable_module(free_space_out_result, free_space_out_status, next_instr, instr, arg2, wr_addr_command, rd_addr_command, wr_addr_data, rd_addr_data, enable);
 
@@ -102,10 +101,6 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
-    $monitor("pop:%1d, %1d,",
-        out_fifo_result.population,
-		enable_module.check_instr
-        );    
 
 /*
 	$monitor("FSM1:%1d,FSM2:%1d, FSM3_CMEM:%1d, FSM3_DMEM:%1d, FSM3_STP:%1d, rdad:%1d, ramout:%1d %1d",
@@ -158,8 +153,8 @@ module tb_PEA();
 			wr_en_command <= 0;
 		end
 		#12
-		next_instr = SETUP_INSTR;	
-        #2
+		next_instr = SETUP_INSTR;
+		#2
 		if (enable)
         begin
             $fdisplay(descr, "Enable Passed - SETUP_INSTR");

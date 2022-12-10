@@ -20,7 +20,8 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024)
                EVB = 8'd2, RST = 8'd3;
 
 
-    always @(next_mode_in,mode, result_free_space, status_free_space, arg2)
+    always @(*)
+//wr_addr_command,rd_addr_command,wr_addr_data,rd_addr_data, next_mode_in,mode, result_free_space, status_free_space, arg2)
     begin
     case(next_mode_in)
         SETUP_INSTR: begin

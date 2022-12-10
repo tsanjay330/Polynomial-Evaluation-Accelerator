@@ -35,10 +35,9 @@ module tb_PEA();
 	//These signals come from the FSM2/3 level
 	wire wr_out, rd_in_command, rd_in_data;
 	wire [7:0] instr;
-	wire start_in;
     integer i, j, k;
-
-	wire [log2(buffer_size) - 1 : 0] wr_addr_command,rd_addr_command;
+	wire enable;
+	wire [log2(buffer_size) - 1 : 0] wr_addr_command,rd_addr_command,wr_addr_data,rd_addr_data;
 
     /***************************************************************************
     Instantiate the input and output FIFOs for the actor under test.
@@ -74,7 +73,7 @@ module tb_PEA();
 		
 	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
 			free_space_out_status, next_instr, instr, arg2, wr_addr_command,
-			rd_addr_command, enable);
+			rd_addr_command, wr_addr_data, rd_addr_data, enable);
 
     integer descr;
 
