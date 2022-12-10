@@ -1,3 +1,29 @@
+/**************************************************
+Port List Description
+
+Input Ports
+result_free_space - free space output FIFO(result)
+status_free_space - free space output FIFO(status)
+next_mode_in - next state mode for instruction
+mode - next state mode for all instructions
+arg2 - value of b
+
+Output Ports 
+wr_addr_command - write address signal for input command
+rd_addr_command - read address signal for input command
+wr_addr_data - write address signal for input data
+rd_addr_data - read address signal for input data
+enable - output wire set to stream tokens
+
+STATES
+SETUP_INSTR - mode activated which includes difference of wr_addr - rd_addr
+INSTR - mode which activates when independent instructions are enabled
+
+STP - mode enabled to store command
+EVP - mode enabled to evaluate monomial
+EVB - mode enabled to evaluate polynomial
+RST - mode enabled to reset the FIFO
+**************************************************/
 `timescale 1ns / 1ps
 module PEA_enable #(parameter word_size = 16,  buffer_size = 1024, 
 					buffer_size_out = 32)
