@@ -37,9 +37,12 @@ module tb_PEA();
 	wire [7:0] instr;
 	wire start_in;
     integer i, j, k;
+	wire enable;
+	wire [log2(buffer_size) - 1 : 0] wr_addr_command;
+    wire [log2(buffer_size) - 1 : 0] rd_addr_command;
+    wire [log2(buffer_size) - 1 : 0] wr_addr_data;
+    wire [log2(buffer_size) - 1 : 0] rd_addr_data;
 
-	wire [1:0] state_GC;
-	wire [15:0] ram_out_c; 
     /***************************************************************************
     Instantiate the input and output FIFOs for the actor under test.
     ***************************************************************************/
@@ -66,12 +69,15 @@ module tb_PEA();
     /***************************************************************************
     Instantiate the enable and invoke modules for the actor under test.
     ***************************************************************************/
+	PEA_top_module_1 invoke_module(clk,rst,data_in_fifo_command,
+        data_in_fifo_data, invoke,next_instr, data_pop, command_pop,
+        rd_in_command, rd_in_data, FC, wr_out, data_out_result,
+        data_out_status, instr, arg2, 
+        wr_addr_command, rd_addr_command, wr_addr_data, rd_addr_data);
 
-	PEA_top_module_1 invoke_module(clk,rst,data_in_fifo_command, 
-			data_in_fifo_data, invoke,next_instr, data_pop, command_pop, rd_in_command, rd_in_data, FC, wr_out, data_out_result,data_out_status, instr, arg2);
-		
-	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
-			free_space_out_status, next_instr, instr, arg2, enable);
+    PEA_enable enable_module(free_space_out_result, free_space_out_status, 
+    next_instr, instr, arg2, wr_addr_command, 
+    rd_addr_command, wr_addr_data, rd_addr_data, enable);
 
     integer descr;
 
