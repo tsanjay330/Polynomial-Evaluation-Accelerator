@@ -1,0 +1,7 @@
+Tests the following instructions:
+STP 0 10
+EVP 0
+STP 1 15
+EVP 1
+RST
+EVP 0

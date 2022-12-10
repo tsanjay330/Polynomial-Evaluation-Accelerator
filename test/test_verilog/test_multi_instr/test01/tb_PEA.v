@@ -105,7 +105,7 @@ module tb_PEA();
 	/***************************************************************************
     Print out result and status every time done is received
     ***************************************************************************/
-    always @(*)
+    always @(posedge clk, negedge rst)
     begin
         if (invoke_module.FSM2.done_out_stp) begin
             $fdisplay(descr, "STP result: %1d and status: %1d",

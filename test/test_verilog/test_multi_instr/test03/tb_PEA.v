@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module tb_PEA();
 	
-    parameter d_size = 28; // This is related to the loop needs to be specified for EACH command you are going to call.
+    parameter d_size = 38; // This is related to the loop needs to be specified for EACH command you are going to call.
 	parameter c_size = 6; //Number of commands to pass in
 
 	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
@@ -321,7 +321,7 @@ module tb_PEA();
         wait(FC);
 		$fdisplay(descr, "EVP finished.");
 
-// NOW ONTO SETUP STP
+// NOW ONTO SETUP EVB
         #2
         next_instr = SETUP_INSTR;
         #2
@@ -344,7 +344,7 @@ module tb_PEA();
         #2
 
 
-//NOW DO STP
+//NOW DO EVB
         next_instr = INSTR;
         #2
         if (enable)
@@ -360,53 +360,10 @@ module tb_PEA();
         end
         #2
         invoke <= 0;
-         $fdisplay(descr, "Waiting for STP to finish...");
+         $fdisplay(descr, "Waiting for EVB to finish...");
         wait(FC);
-        $fdisplay(descr, "STP finished.");
+        $fdisplay(descr, "EVB finished.");
   
-// NOW ONTO SETUP EVP
-        #2
-        next_instr = SETUP_INSTR;
-        #2
-        if (enable)
-        begin
-            $fdisplay(descr, "Enable Passed!");
-            invoke <= 1;
-        end
-        else
-        begin
-            /* End the simulation here if we don't have enough data to fire */
-            $fdisplay (descr, "Enable Failed.");
-            $finish;
-        end
-        #2
-        invoke <= 0;
-         $fdisplay(descr, "Waiting for GC to finish...");
-        wait(FC);
-        $fdisplay(descr, "GC finished.");
-        #2
-
-
-//NOW DO EVP
-        next_instr = INSTR;
-        #2
-        if (enable)
-        begin
-            $fdisplay(descr, "Enable Passed!");
-            invoke <= 1;
-        end
-        else
-        begin
-            /* End the simulation here if we don't have enough data to fire */
-            $fdisplay (descr, "Enable Failed.");
-            $finish;
-        end
-        #2
-        invoke <= 0;
-         $fdisplay(descr, "Waiting for EVP to finish...");
-        wait(FC);
-        $fdisplay(descr, "EVP finished.");
-
 // NOW ONTO SETUP RST
         #2
         next_instr = SETUP_INSTR;
@@ -449,6 +406,49 @@ module tb_PEA();
          $fdisplay(descr, "Waiting for RST to finish...");
         wait(FC);
         $fdisplay(descr, "RST finished.");
+
+// NOW ONTO SETUP STP
+        #2
+        next_instr = SETUP_INSTR;
+        #2
+        if (enable)
+        begin
+            $fdisplay(descr, "Enable Passed!");
+            invoke <= 1;
+        end
+        else
+        begin
+            /* End the simulation here if we don't have enough data to fire */
+            $fdisplay (descr, "Enable Failed.");
+            $finish;
+        end
+        #2
+        invoke <= 0;
+         $fdisplay(descr, "Waiting for GC to finish...");
+        wait(FC);
+        $fdisplay(descr, "GC finished.");
+        #2
+
+
+//NOW DO STP
+        next_instr = INSTR;
+        #2
+        if (enable)
+        begin
+            $fdisplay(descr, "Enable Passed!");
+            invoke <= 1;
+        end
+        else
+        begin
+            /* End the simulation here if we don't have enough data to fire */
+            $fdisplay (descr, "Enable Failed.");
+            $finish;
+        end
+        #2
+        invoke <= 0;
+         $fdisplay(descr, "Waiting for STP to finish...");
+        wait(FC);
+        $fdisplay(descr, "STP finished.");
 
 // NOW ONTO SETUP EVP
         #2
@@ -496,18 +496,75 @@ module tb_PEA();
 // PRINT CONTENTS OF OUTPUT FIFOS
         #2
         $fdisplay(descr, "Output FIFO contents:");
-        $fdisplay(descr, "0:%1d 1:%1d 2:%1d 3:%1d",
+        $fdisplay(descr, "0:%1d 1:%1d 2:%1d 3:%1d 4:%1d 5:%1d 6:%1d 7:%1d 8:%1d 9:%1d 10:%1d 11:%1d 12:%1d 13:%1d 14:%1d 15:%1d 16:%1d 17:%1d 18:%1d 19:%1d 20:%1d 21:%1d 22:%1d 23:%1d 24:%1d 25:%1d 26:%1d 27:%1d 28:%1d 29:%1d 30:%1d 31:%1d",
                     out_fifo_result.FIFO_RAM[0],
                     out_fifo_result.FIFO_RAM[1],
                     out_fifo_result.FIFO_RAM[2],
-                    out_fifo_result.FIFO_RAM[3]);
+                    out_fifo_result.FIFO_RAM[3],
+					out_fifo_result.FIFO_RAM[4],
+					out_fifo_result.FIFO_RAM[5],
+					out_fifo_result.FIFO_RAM[6],
+					out_fifo_result.FIFO_RAM[7],
+					out_fifo_result.FIFO_RAM[8],
+					out_fifo_result.FIFO_RAM[9],
+					out_fifo_result.FIFO_RAM[10],
+					out_fifo_result.FIFO_RAM[11],
+					out_fifo_result.FIFO_RAM[12],
+					out_fifo_result.FIFO_RAM[13],
+					out_fifo_result.FIFO_RAM[14],
+					out_fifo_result.FIFO_RAM[15],
+					out_fifo_result.FIFO_RAM[16],
+					out_fifo_result.FIFO_RAM[17],
+					out_fifo_result.FIFO_RAM[18],
+					out_fifo_result.FIFO_RAM[19],
+					out_fifo_result.FIFO_RAM[20],
+					out_fifo_result.FIFO_RAM[21],
+					out_fifo_result.FIFO_RAM[22],
+					out_fifo_result.FIFO_RAM[23],
+					out_fifo_result.FIFO_RAM[24],
+					out_fifo_result.FIFO_RAM[25],
+					out_fifo_result.FIFO_RAM[26],
+					out_fifo_result.FIFO_RAM[27],
+					out_fifo_result.FIFO_RAM[28],
+					out_fifo_result.FIFO_RAM[29],
+					out_fifo_result.FIFO_RAM[30],
+					out_fifo_result.FIFO_RAM[31]);
 
         $fdisplay(descr, "Status FIFO contents:");
-        $fdisplay(descr, "0:%1d 1:%1d 2:%1d 3:%1d",
+        $fdisplay(descr, "0:%1d 1:%1d 2:%1d 3:%1d 4:%1d 5:%1d 6:%1d 7:%1d 8:%1d 9:%1d 10:%1d 11:%1d 12:%1d 13:%1d 14:%1d 15:%1d 16:%1d 17:%1d 18:%1d 19:%1d 20:%1d 21:%1d 22:%1d 23:%1d 24:%1d 25:%1d 26:%1d 27:%1d 28:%1d 29:%1d 30:%1d 31:%1d",
                     out_fifo_status.FIFO_RAM[0],
                     out_fifo_status.FIFO_RAM[1],
                     out_fifo_status.FIFO_RAM[2],
-                    out_fifo_status.FIFO_RAM[3]);
+                    out_fifo_status.FIFO_RAM[3],
+                    out_fifo_status.FIFO_RAM[4],
+                    out_fifo_status.FIFO_RAM[5],
+                    out_fifo_status.FIFO_RAM[6],
+                    out_fifo_status.FIFO_RAM[7],
+                    out_fifo_status.FIFO_RAM[8],
+                    out_fifo_status.FIFO_RAM[9],
+                    out_fifo_status.FIFO_RAM[10],
+                    out_fifo_status.FIFO_RAM[11],
+                    out_fifo_status.FIFO_RAM[12],
+                    out_fifo_status.FIFO_RAM[13],
+                    out_fifo_status.FIFO_RAM[14],
+                    out_fifo_status.FIFO_RAM[15],
+                    out_fifo_status.FIFO_RAM[16],
+                    out_fifo_status.FIFO_RAM[17],
+                    out_fifo_status.FIFO_RAM[18],
+                    out_fifo_status.FIFO_RAM[19],
+                    out_fifo_status.FIFO_RAM[20],
+                    out_fifo_status.FIFO_RAM[21],
+                    out_fifo_status.FIFO_RAM[22],
+                    out_fifo_status.FIFO_RAM[23],
+                    out_fifo_status.FIFO_RAM[24],
+                    out_fifo_status.FIFO_RAM[25],
+                    out_fifo_status.FIFO_RAM[26],
+                    out_fifo_status.FIFO_RAM[27],
+                    out_fifo_status.FIFO_RAM[28],
+                    out_fifo_status.FIFO_RAM[29],
+                    out_fifo_status.FIFO_RAM[30],
+                    out_fifo_status.FIFO_RAM[31]);
+              
     end
 
     function integer log2;
