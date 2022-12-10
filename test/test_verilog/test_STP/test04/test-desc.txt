@@ -1,1 +1,0 @@
-This test one STP command being passed in to the PEA. Testing invoke,enable,fsm2, mem_control, single_port_rm, get_command, and stp functionality.

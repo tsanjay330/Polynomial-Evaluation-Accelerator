@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 module tb_PEA();
 	
-    parameter d_size = 6; // This is related to the loop needs to be specified for EACH command you are going to call.
+    parameter d_size = 5; // This is related to the loop needs to be specified for EACH command you are going to call.
 	parameter c_size = 2; //Number of commands to pass in
 
 	parameter SETUP_INSTR = 2'b00, INSTR = 2'b01, OUTPUT = 2'b10;
@@ -38,9 +38,12 @@ module tb_PEA();
 	wire [7:0] instr;
 	wire start_in;
     integer i, j, k;
-
-	wire [1:0] state_GC;
-	wire [15:0] ram_out_c; 
+	
+	wire enable;
+    wire [log2(buffer_size) - 1 : 0] wr_addr_command;
+    wire [log2(buffer_size) - 1 : 0] rd_addr_command;
+    wire [log2(buffer_size) - 1 : 0] wr_addr_data;
+    wire [log2(buffer_size) - 1 : 0] rd_addr_data;
     /***************************************************************************
     Instantiate the input and output FIFOs for the actor under test.
     ***************************************************************************/
@@ -68,11 +71,15 @@ module tb_PEA();
     Instantiate the enable and invoke modules for the actor under test.
     ***************************************************************************/
 
-	PEA_top_module_1 invoke_module(clk,rst,data_in_fifo_command, 
-			data_in_fifo_data, invoke,next_instr, data_pop, command_pop, rd_in_command, rd_in_data, FC, wr_out, data_out_result, data_out_status, instr, arg2);
-		
-	PEA_enable enable_module(command_pop, data_pop, free_space_out_result,
-			free_space_out_status, next_instr, instr, arg2, enable);
+	PEA_top_module_1 invoke_module(clk,rst,data_in_fifo_command,
+        data_in_fifo_data, invoke,next_instr, data_pop, command_pop,
+        rd_in_command, rd_in_data, FC, wr_out, data_out_result,
+        data_out_status, instr, arg2,
+        wr_addr_command, rd_addr_command, wr_addr_data, rd_addr_data);
+
+    PEA_enable enable_module(free_space_out_result, free_space_out_status,
+    next_instr, instr, arg2, wr_addr_command,
+    rd_addr_command, wr_addr_data, rd_addr_data, enable);
 
     integer descr;
 
@@ -156,7 +163,7 @@ module tb_PEA();
 			wr_en_command <= 0;
 		end
 		#12
-        if (1)//WILL BE ENABLE AFTER EDIT
+        if (enable)
         begin
             $fdisplay(descr, "Enable Passed!");
             invoke <= 1;
@@ -192,7 +199,7 @@ module tb_PEA();
 		#12
 		next_instr = INSTR;
 		#2
-		if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
+		if (enable)
         begin
             $fdisplay(descr, "Enable Passed!");
             invoke <= 1;
@@ -214,7 +221,7 @@ module tb_PEA();
         #2
         next_instr = SETUP_INSTR;
         #2
-        if (1)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
+        if (enable)//ENABLE NEEDS TO BE EDITED BEFORE ADDED BACK IN IF STATEMENT
         begin
             $fdisplay(descr, "Enable Passed!");
             invoke <= 1;

@@ -1,9 +1,17 @@
-input[          0] = 0000001100000011
-input[          1] = 0000000100101001
-Enable Passed!
-Waiting for GC-1 to finish...
-GC-1 finished.
-instr:  3, arg2: 3
-Waiting for GC-2 to finish...
-GC-2 finished.
-instr:  1, arg2: 9
+input_c[          0] = 0000000000000011
+Enable Passed - SETUP_INSTR
+Waiting for GC to finish...
+GC finished.
+input_d[          0] = 0000000000000001
+input_d[          1] = 0000000000000010
+input_d[          2] = 0000000000000011
+input_d[          3] = 0000000000000100
+Enable Passed INSTR
+Waiting for STP to finish...
+STP finished.
+Dram[3]=    4
+Nram[0]= 3
+Sram[          0]=    1
+Sram[          1]=    2
+Sram[          2]=    3
+Sram[          3]=    4
