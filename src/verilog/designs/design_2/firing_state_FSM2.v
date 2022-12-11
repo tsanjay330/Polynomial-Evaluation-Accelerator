@@ -1,65 +1,21 @@
 /******************************************************************************
-Name: Firing State Module Level 2
-Description: firing state module FSM level 2
-Submodules: single_port_ram.v; N_ram.v; mem_controller.v;
-rd_addr_data_MUX.v; output_MUX.v; rd_addr_S_MUX.v;
-get_command_FSM3.v; STP_FSM3.v; EVP_FSM3.v; EVB_FSM3.v; RST_FSM3.v
-
 INPUT PORTS
 
 data_in - data from input fifo data
 command_in - data from input fifo command
 start_fsm2 - nested FSM start signal form parent FSM
-next_instr - mode to determine the next FSM state
-pop_in_fifo_data - input FIFO population data signal
-pop_in_fifo_command - input FIFO population command signal
+next_mode_in - mode to determine the next FSM state
 
 OUTPUT PORTS
 
-rst_instr - signal that checks for reset instruction functionality
 instr - The instruction reg within every FSM state
-en_rd_fifo_data - read enable signal for input fifo data
-en_rd_fifo_command - read enable signal for input fifo command
+rd_in_data - read enable signal for input fifo data
+rd_in_command - read enable signal for input fifo command
 done_fsm2 - nested FSM end signal to aprent FSM
-en_wr_output_fifo - output result fifo write enable signal
-result - output data for writing into output result fifo
-status - output data for writing into output status fifo
-arg2 - value of b to check for EVB functionality
-wr_addr_command - write address signal for input command fifo
-rd_addr_command - read address signal for input command fifo
-wr_addr_data - write address signal for input data fifo
-rd_addr_data - read address signal for input data fifo
-
-STATES
-
-SETUP_INSTR - mode that checks for get command instruction
-INSTR - mode which activates when the independent instructions are about to get fired
-
-STP - State to store the polynomial
-EVP - State to compute a monomial
-EVB - State to compute the polynomial
-RST - State to enable the reset function
-
-STATE_GET_COMMAND_START - mode that activates the start of the get command mode
-STATE_GET_COMMAND_WAIT - mode that activates the wait for get command mode
-STATE_GET_COMMAND_FINISH - mode that activates the finish of get command mode
-
-STATE_STP_START - mode that activates the start of the STP instruction
-STATE_STP_WAIT - mode that activates the wait of the STP instruction
-
-STATE_EVP_START - mode that activates the start of the EVP instruction
-STATE_EVP_WAIT - mode that activates the wait of the EVP instruction
-
-
-STATE_EVB_START - mode that activates the start of the EVB instruction
-STATE_EVB_WAIT - mode that activates the wait of the EVB instruction
-STATE_EVB_OUTPUT - mode that activates the output of EVB instruction
-
-STATE_RST - mode that activates the RST instruction
-STATE_OUTPUT - mode that activates the OUTPUT instruction
-STATE_EVB_END - mode that activates the end of EVB instruction
-
-Parameters - word_size; buffer_size; n_size; s_size
+wr_out_result - output result fifo write enable signal
+wr_out_status - output status fifo write enable signal
+data_out_result - output data for writing into output result fifo
+data_out_status - output data for writing into output status fifo
 *******************************************************************************/
 `timescale 1ns/1ps
 module firing_state_FSM2
@@ -114,9 +70,12 @@ module firing_state_FSM2
    wire done_out_rst;
    wire [2:0] arg1;
    wire [log2(buffer_size) - 1 : 0] rd_addr_data_STP, rd_addr_data_EVP, rd_addr_data_EVB;
-   wire [6:0] 			    rd_addr_S, rd_addr_S_EVP, rd_addr_S_EVB;
+   wire [log2(10) : 0] 			    rd_addr_S_coef, rd_addr_S_EVP_coef, rd_addr_S_EVB_coef;
+   wire [2:0]                       rd_addr_S_vec, rd_addr_S_EVP_vec, rd_addr_S_EVB_vec;
    wire [2:0] rd_addr_N, rd_addr_N_EVP, rd_addr_N_EVB;
-   wire [log2(s_size) - 1 : 0] wr_addr_S;
+   //wire [log2(s_size) - 1 : 0] wr_addr_S;
+   wire [log2(n_size) - 1 : 0] wr_addr_S_vec;
+   wire [log2(11) - 1 : 0]     wr_addr_S_coef;
    wire [log2(n_size) - 1 : 0] wr_addr_N;
    wire [2*word_size - 1 : 0]  result_STP, result_EVP, result_EVB, status_STP, status_EVP, status_EVB;
    
@@ -155,10 +114,13 @@ single_port_ram #(.word_size(word_size), .buffer_size(buffer_size))
 			.wr_en(wr_en_ram_data), .rd_en(rd_en_ram_data), .clk(clk), 
 			.q(ram_out_data));
 
-single_port_ram #(.word_size(word_size), .buffer_size(s_size))
-	RAM_S(.data(ram_in_S), .addr(wr_addr_S), .rd_addr(rd_addr_S), 
-			.wr_en(wr_en_ram_S), .rd_en(rd_en_ram_S), .clk(clk), .q(ram_out_S));
+//single_port_ram #(.word_size(word_size), .buffer_size(s_size))
+//	RAM_S(.data(ram_in_S), .addr(wr_addr_S), .rd_addr(rd_addr_S), 
+//			.wr_en(wr_en_ram_S), .rd_en(rd_en_ram_S), .clk(clk), .q(ram_out_S));
 
+   // New/different instantiation of S ram
+   S_ram RAM_S(.data(ram_in_S), .wr_vector_addr(wr_addr_S_vec), .wr_coef_addr(wr_addr_S_coef), .rd_vector_addr(rd_addr_S_vec), .rd_coef_addr(rd_addr_S_coef), .wr_en(wr_en_ram_S), .rd_en(rd_en_ram_S), .clk(clk), .q(ram_out_S));
+   
 N_ram RAM_N(.data(ram_in_N), .rst_instr(rst_instr), .wr_addr(wr_addr_N), 
 			.rd_addr(rd_addr_N), .wr_en(wr_en_ram_N), 
 			.rd_en(rd_en_ram_N), .clk(clk), .rst(rst), .q(ram_out_N));
@@ -196,9 +158,12 @@ output_MUX
 					.output_EVB(status_EVB), .instr(instr), 
 					.output_token(status));
 
-rd_addr_S_MUX #(s_size) 
-	MUX_rd_addr_S (.rd_addr_S_EVP(rd_addr_S_EVP), .rd_addr_S_EVB(rd_addr_S_EVB),
-					.instr(instr), .rd_addr_S(rd_addr_S));
+rd_addr_S_MUX #(10+1) // 10+1 -> for the 10 degrees, + 1 for degree 0 
+	MUX_rd_addr_S_vec (.rd_addr_S_EVP(rd_addr_S_EVP_vec), .rd_addr_S_EVB(rd_addr_S_EVB_vec),
+					.instr(instr), .rd_addr_S(rd_addr_S_vec));
+   rd_addr_S_MUX #(8)
+        MUX_rd_addr_S_coef (.rd_addr_S_EVP(rd_addr_S_EVP_coef), .rd_addr_S_EVB(rd_addr_S_EVB_coef),
+                                        .instr(instr), .rd_addr_S(rd_addr_S_coef));
    rd_addr_N_MUX MUX_rd_addr_N(.rd_addr_N_EVP(rd_addr_N_EVP), .rd_addr_N_EVB(rd_addr_N_EVB), .instr(instr), .rd_addr_N(rd_addr_N));
    
 /***********************************************************************
@@ -219,7 +184,7 @@ STP_FSM_3 #(.word_size(word_size), .buffer_size(buffer_size), .n_size(n_size),
 					.next_c(ram_out_data), .done_stp(done_out_stp), 
 					.en_rd_data(rd_en_STP), .en_wr_S(wr_en_ram_S), 
 					.en_wr_N(wr_en_ram_N), .rd_addr_data_updated(rd_addr_data_STP),					
-					.wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(ram_in_S),
+					.wr_addr_S_vec(wr_addr_S_vec), .wr_addr_S_coef(wr_addr_S_coef), .wr_addr_N(wr_addr_N), .c(ram_in_S),
 					.N_out(ram_in_N), .result(result_STP), .status(status_STP));
 
 EVP_FSM_3 #(.buffer_size(buffer_size))
@@ -227,7 +192,7 @@ EVP_FSM_3 #(.buffer_size(buffer_size))
 					.ram_out_data(ram_out_data), .ram_out_S(ram_out_S),.N(ram_out_N),
 					.rd_addr_data(rd_addr_data), .en_rd_data(rd_en_EVP),
 					.en_rd_S(rd_en_S_EVP), .en_rd_N(rd_en_N_EVP),
-					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S(rd_addr_S_EVP),
+					.rd_addr_data_updated(rd_addr_data_EVP), .rd_addr_S_vec(rd_addr_S_EVP_vec), .rd_addr_S_coef(rd_addr_S_EVP_coef),
 					.rd_addr_N(rd_addr_N_EVP), .done_evp(done_out_evp), 
 					.result(result_EVP), .status(status_EVP));
  
@@ -238,7 +203,7 @@ EVB_FSM_3 #(.buffer_size(buffer_size))
 					.done_evp(done_out_evp_evb), .done_evb(done_out_evb), 
 					.en_rd_data(rd_en_EVB), .en_rd_S(rd_en_S_EVB), 
 					.en_rd_N(rd_en_N_EVB), .rd_addr_data_updated(rd_addr_data_EVB),
-					.rd_addr_S(rd_addr_S_EVB), .rd_addr_N(rd_addr_N_EVB), 
+					.rd_addr_S_vec(rd_addr_S_EVB_vec), .rd_addr_S_coef(rd_addr_S_EVB_coef), .rd_addr_N(rd_addr_N_EVB), 
 					.result(result_EVB), .status(status_EVB));
  
 RST_FSM_3
@@ -444,11 +409,6 @@ begin
         en_rst <= 0;
         done_fsm2 <= 0;
     end
-/*********************************************************
-CFDF firing mode: "get command mode"
---Consumption rate is size of each input FIFO
---Production rate is 0 for each output FIFO
-*********************************************************/
 
     STATE_GET_COMMAND_START:
     begin
@@ -481,11 +441,6 @@ CFDF firing mode: "get command mode"
         en_rst <= 0;
         done_fsm2 <= 1;
     end
-/*********************************************************
-CFDF firing mode: "STP mode"
---Consumption rate is 0 for each input FIFO
---Production rate is 0 for each output FIFO
-*********************************************************/
     STATE_STP_START:
     begin
         en_wr_output_fifo <= 0;
@@ -506,11 +461,6 @@ CFDF firing mode: "STP mode"
         en_rst <= 0;
         done_fsm2 <= 0;
     end
-/*********************************************************
-CFDF firing mode: "EVP mode"
---Consumption rate is 0 for each input FIFO
---Production rate is 0 for each output FIFO
-*********************************************************/
     STATE_EVP_START:
     begin
         en_wr_output_fifo <= 0;
@@ -531,11 +481,6 @@ CFDF firing mode: "EVP mode"
         en_rst <= 0;
         done_fsm2 <= 0;
     end
-/*********************************************************
-CFDF firing mode: "EVB mode"
---Consumption rate is 0 for each input FIFO
---Production rate is 0 for each output FIFO
-*********************************************************/
     STATE_EVB_START:
     begin
         en_wr_output_fifo <= 0;
@@ -568,11 +513,6 @@ CFDF firing mode: "EVB mode"
 		en_rst <= 0;
 		done_fsm2 <= 0;
 	end
-/*********************************************************
-CFDF firing mode: "RST mode"
---Consumption rate is 0 for each input FIFO
---Production rate is 0 for each output FIFO
-*********************************************************/
 
     STATE_RST:
     begin
@@ -584,11 +524,6 @@ CFDF firing mode: "RST mode"
         en_rst <= 1;
         done_fsm2 <= 1;
     end
-/*********************************************************
-CFDF firing mode: "OUTPUT mode"
---Consumption rate is 0 for each input FIFO
---Production rate is 1 for each output FIFO
-*********************************************************/
 
     STATE_OUTPUT:
     begin

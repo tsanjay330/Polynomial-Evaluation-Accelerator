@@ -1,0 +1,142 @@
+input_c[          0] = 0000000000000001
+input_c[          1] = 0000000100000000
+input_c[          2] = 0000001000011111
+input_c[          3] = 0000001100000000
+input_c[          4] = 0000000000000010
+input_c[          5] = 0000000100000000
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+input_d[          0] = 0000000000001010
+input_d[          1] = 0000000000000101
+input_d[          2] = 0000000000000010
+input_d[          3] = 0000000000000000
+input_d[          4] = 0000000000000001
+input_d[          5] = 0000000000000010
+input_d[          6] = 0000000000000011
+input_d[          7] = 0000000000000100
+input_d[          8] = 0000000000000101
+input_d[          9] = 0000000000000110
+input_d[         10] = 0000000000000111
+input_d[         11] = 0000000000001000
+input_d[         12] = 0000000000001001
+input_d[         13] = 0000000000000000
+input_d[         14] = 0000000000000001
+input_d[         15] = 0000000000000010
+input_d[         16] = 0000000000000011
+input_d[         17] = 0000000000000100
+input_d[         18] = 0000000000000101
+input_d[         19] = 0000000000000110
+input_d[         20] = 0000000000000111
+input_d[         21] = 0000000000001000
+input_d[         22] = 0000000000001001
+input_d[         23] = 0000000000000000
+input_d[         24] = 0000000000000001
+input_d[         25] = 0000000000000010
+input_d[         26] = 0000000000000011
+input_d[         27] = 0000000000000100
+input_d[         28] = 0000000000000101
+input_d[         29] = 0000000000000110
+input_d[         30] = 0000000000000111
+input_d[         31] = 0000000000001000
+input_d[         32] = 0000000000001001
+input_d[         33] = 0000000000001010
+input_d[         34] = 0000000000000011
+input_d[         35] = 0000000000000010
+input_d[         36] = 0000000000000001
+input_d[         37] = 0000000000001010
+Enable Passed!
+Waiting for STP to finish...
+STP result: 1 and status: 0
+STP finished.
+After STP, S is...
+S[0]: 10 5 x x x x x x x x x
+S[1]: x x x x x x x x x x x
+S[2]: x x x x x x x x x x x
+S[3]: x x x x x x x x x x x
+S[4]: x x x x x x x x x x x
+S[5]: x x x x x x x x x x x
+S[6]: x x x x x x x x x x x
+S[7]: x x x x x x x x x x x
+...and N is...
+N: 1 31 31 31 31 31 31 31
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+Enable Passed!
+Waiting for EVP to finish...
+EVP result: 20 and status: 0
+EVP finished.
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+Enable Passed!
+Waiting for EVB to finish...
+EVB result: 10 and status: 0
+EVB result: 15 and status: 0
+EVB result: 20 and status: 0
+EVB result: 25 and status: 0
+EVB result: 30 and status: 0
+EVB result: 35 and status: 0
+EVB result: 40 and status: 0
+EVB result: 45 and status: 0
+EVB result: 50 and status: 0
+EVB result: 55 and status: 0
+EVB result: 10 and status: 0
+EVB result: 15 and status: 0
+EVB result: 20 and status: 0
+EVB result: 25 and status: 0
+EVB result: 30 and status: 0
+EVB result: 35 and status: 0
+EVB result: 40 and status: 0
+EVB result: 45 and status: 0
+EVB result: 50 and status: 0
+EVB result: 55 and status: 0
+EVB result: 10 and status: 0
+EVB result: 15 and status: 0
+EVB result: 20 and status: 0
+EVB result: 25 and status: 0
+EVB result: 30 and status: 0
+EVB result: 35 and status: 0
+EVB result: 40 and status: 0
+EVB result: 45 and status: 0
+EVB result: 50 and status: 0
+EVB result: 55 and status: 0
+EVB result: 60 and status: 0
+EVB finished.
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+Enable Passed!
+Waiting for RST to finish...
+RST finished.
+Enable Passed!
+RST: rst_instr has been set. Resetting...
+Waiting for GC to finish...
+GC finished.
+Enable Passed!
+Waiting for STP to finish...
+STP result: 1 and status: 0
+STP finished.
+After STP, S is...
+S[0]: 3 2 1 x x x x x x x x
+S[1]: x x x x x x x x x x x
+S[2]: x x x x x x x x x x x
+S[3]: x x x x x x x x x x x
+S[4]: x x x x x x x x x x x
+S[5]: x x x x x x x x x x x
+S[6]: x x x x x x x x x x x
+S[7]: x x x x x x x x x x x
+...and N is...
+N: 2 31 31 31 31 31 31 31
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+Enable Passed!
+Waiting for EVP to finish...
+EVP result: 123 and status: 0
+EVP finished.
+Output FIFO contents:
+0:60 1:1 2:10 3:15 4:20 5:25 6:30 7:35 8:40 9:45 10:50 11:55 12:10 13:15 14:20 15:25 16:30 17:35 18:40 19:45 20:50 21:55 22:10 23:15 24:20 25:25 26:30 27:35 28:40 29:45 30:50 31:55
+Status FIFO contents:
+0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0 10:0 11:0 12:0 13:0 14:0 15:0 16:0 17:0 18:0 19:0 20:0 21:0 22:0 23:0 24:0 25:0 26:0 27:0 28:0 29:0 30:0 31:0

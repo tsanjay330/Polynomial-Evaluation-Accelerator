@@ -1,14 +1,14 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
-------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2022.1 (lin64) Build 3526262 Mon Apr 18 15:47:01 MDT 2022
-| Date         : Sat Dec 10 20:49:40 2022
+| Date         : Sat Dec 10 20:22:48 2022
 | Host         : ucompute1.physics.umd.edu running 64-bit Ubuntu 20.04.5 LTS
-| Command      : report_drc -name drc_1 -file /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/lib/DRC_drc_1.txt -ruledecks default
+| Command      : report_drc -name drc_1 -file /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/lib/design_2/DRC_drc_1.txt -ruledecks default
 | Design       : PEA_top_module_1
 | Device       : xc7a35ticpg236-1L
 | Speed File   : -1L
 | Design State : Synthesized
-------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Report DRC
 
