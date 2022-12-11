@@ -1,21 +1,65 @@
 /******************************************************************************
+Name: Firing State Module Level 2
+Description: firing state module FSM level 2
+Submodules: single_port_ram.v; N_ram.v; mem_controller.v;
+rd_addr_data_MUX.v; output_MUX.v; rd_addr_S_MUX.v;
+get_command_FSM3.v; STP_FSM3.v; EVP_FSM3.v; EVB_FSM3.v; RST_FSM3.v
+
 INPUT PORTS
 
 data_in - data from input fifo data
 command_in - data from input fifo command
 start_fsm2 - nested FSM start signal form parent FSM
-next_mode_in - mode to determine the next FSM state
+next_instr - mode to determine the next FSM state
+pop_in_fifo_data - input FIFO population data signal
+pop_in_fifo_command - input FIFO population command signal
 
 OUTPUT PORTS
 
+rst_instr - signal that checks for reset instruction functionality
 instr - The instruction reg within every FSM state
-rd_in_data - read enable signal for input fifo data
-rd_in_command - read enable signal for input fifo command
+en_rd_fifo_data - read enable signal for input fifo data
+en_rd_fifo_command - read enable signal for input fifo command
 done_fsm2 - nested FSM end signal to aprent FSM
-wr_out_result - output result fifo write enable signal
-wr_out_status - output status fifo write enable signal
-data_out_result - output data for writing into output result fifo
-data_out_status - output data for writing into output status fifo
+en_wr_output_fifo - output result fifo write enable signal
+result - output data for writing into output result fifo
+status - output data for writing into output status fifo
+arg2 - value of b to check for EVB functionality
+wr_addr_command - write address signal for input command fifo
+rd_addr_command - read address signal for input command fifo
+wr_addr_data - write address signal for input data fifo
+rd_addr_data - read address signal for input data fifo
+
+STATES
+
+SETUP_INSTR - mode that checks for get command instruction
+INSTR - mode which activates when the independent instructions are about to get fired
+
+STP - State to store the polynomial
+EVP - State to compute a monomial
+EVB - State to compute the polynomial
+RST - State to enable the reset function
+
+STATE_GET_COMMAND_START - mode that activates the start of the get command mode
+STATE_GET_COMMAND_WAIT - mode that activates the wait for get command mode
+STATE_GET_COMMAND_FINISH - mode that activates the finish of get command mode
+
+STATE_STP_START - mode that activates the start of the STP instruction
+STATE_STP_WAIT - mode that activates the wait of the STP instruction
+
+STATE_EVP_START - mode that activates the start of the EVP instruction
+STATE_EVP_WAIT - mode that activates the wait of the EVP instruction
+
+
+STATE_EVB_START - mode that activates the start of the EVB instruction
+STATE_EVB_WAIT - mode that activates the wait of the EVB instruction
+STATE_EVB_OUTPUT - mode that activates the output of EVB instruction
+
+STATE_RST - mode that activates the RST instruction
+STATE_OUTPUT - mode that activates the OUTPUT instruction
+STATE_EVB_END - mode that activates the end of EVB instruction
+
+Parameters - word_size; buffer_size; n_size; s_size
 *******************************************************************************/
 `timescale 1ns/1ps
 module firing_state_FSM2
@@ -400,6 +444,11 @@ begin
         en_rst <= 0;
         done_fsm2 <= 0;
     end
+/*********************************************************
+CFDF firing mode: "get command mode"
+--Consumption rate is size of each input FIFO
+--Production rate is 0 for each output FIFO
+*********************************************************/
 
     STATE_GET_COMMAND_START:
     begin
@@ -432,6 +481,11 @@ begin
         en_rst <= 0;
         done_fsm2 <= 1;
     end
+/*********************************************************
+CFDF firing mode: "STP mode"
+--Consumption rate is 0 for each input FIFO
+--Production rate is 0 for each output FIFO
+*********************************************************/
     STATE_STP_START:
     begin
         en_wr_output_fifo <= 0;
@@ -452,6 +506,11 @@ begin
         en_rst <= 0;
         done_fsm2 <= 0;
     end
+/*********************************************************
+CFDF firing mode: "EVP mode"
+--Consumption rate is 0 for each input FIFO
+--Production rate is 0 for each output FIFO
+*********************************************************/
     STATE_EVP_START:
     begin
         en_wr_output_fifo <= 0;
@@ -472,6 +531,11 @@ begin
         en_rst <= 0;
         done_fsm2 <= 0;
     end
+/*********************************************************
+CFDF firing mode: "EVB mode"
+--Consumption rate is 0 for each input FIFO
+--Production rate is 0 for each output FIFO
+*********************************************************/
     STATE_EVB_START:
     begin
         en_wr_output_fifo <= 0;
@@ -504,6 +568,11 @@ begin
 		en_rst <= 0;
 		done_fsm2 <= 0;
 	end
+/*********************************************************
+CFDF firing mode: "RST mode"
+--Consumption rate is 0 for each input FIFO
+--Production rate is 0 for each output FIFO
+*********************************************************/
 
     STATE_RST:
     begin
@@ -515,6 +584,11 @@ begin
         en_rst <= 1;
         done_fsm2 <= 1;
     end
+/*********************************************************
+CFDF firing mode: "OUTPUT mode"
+--Consumption rate is 0 for each input FIFO
+--Production rate is 1 for each output FIFO
+*********************************************************/
 
     STATE_OUTPUT:
     begin
