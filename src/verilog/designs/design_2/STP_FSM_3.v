@@ -26,7 +26,9 @@ en_wr_S: enable signal that triggers RAM to write a value to S RAM
 
 rd_addr_data_updated: updated address (index) of data RAM
 
-wr_addr_S: address (index) of S RAM we wish to write to
+wr_addr_S_vec: address of the CV in S RAM to be written to
+
+wr_addr_S_coef: address of the coefficient/monomial degree in S RAM to be written to
  
 wr_addr_N: address (index) of N RAM we wish to write to
 
@@ -46,8 +48,6 @@ fifo_wr_en_s: Write enable signal to the status output FIFO
 
 `timescale 1ns/1ps
 
-//TODO: could change initial values of result and status
-// testing testing 123
 module STP_FSM_3 
 		#(parameter word_size = 16, buffer_size = 1024, n_size = 8, s_size = 88)(
 		input 				     clk, rst,
@@ -61,7 +61,8 @@ module STP_FSM_3
 		output reg 			     en_wr_S,
 		output reg 			     en_wr_N,
 		output reg [log2(buffer_size)-1 : 0] rd_addr_data_updated,
-		output reg [log2(s_size)-1 : 0]      wr_addr_S,
+		output reg [log2(n_size)-1 : 0]      wr_addr_S_vec,
+		output reg [log2(11) - 1 : 0] 	     wr_addr_S_coef,
 		output reg [log2(n_size) - 1 : 0]    wr_addr_N,
 		output reg [15 : 0] 		     c,
 		output reg [4 : 0] 		     N_out,
@@ -73,9 +74,11 @@ module STP_FSM_3
 		reg [31 : 0] next_result;
 		reg [31 : 0] next_status;
 		reg [log2(buffer_size) - 1 : 0] next_rd_addr_data;
-		reg [log2(s_size) - 1 : 0] next_wr_addr_S;
-		//reg [log2(n_size) - 1 : 0] next_wr_addr_N;
-   		//reg [log2(n_size) - 1] 		      next_wr_addr_N;
+		//reg [log2(s_size) - 1 : 0] next_wr_addr_S;
+   		reg [log2(n_size) - 1 : 0] 		next_wr_addr_S_vec;
+   		reg [log2(11) - 1 : 0] 			next_wr_addr_S_coef;
+   
+   
 
 	localparam STATE_IDLE = 3'b000, STATE_START = 3'b001, 
 				STATE_RD_FIRST_DATA = 3'b010, STATE_WR_COEFF0 = 3'b011, 
@@ -87,7 +90,8 @@ module STP_FSM_3
 		if (! rst) begin
 			state <= STATE_IDLE;
 		   	rd_addr_data_updated <= 0;
-			wr_addr_S <= 0;
+			wr_addr_S_vec <= 0;
+		   	wr_addr_S_coef <= 0;
 			wr_addr_N <= 0;
 			c <= 0;
 			N_out <= 5'b1111; // is this necessary?
@@ -97,7 +101,8 @@ module STP_FSM_3
 		else begin
 			state <= next_state;
 			rd_addr_data_updated <= next_rd_addr_data;
-			wr_addr_S <= next_wr_addr_S;
+			wr_addr_S_vec <= next_wr_addr_S_vec;
+		   	wr_addr_S_coef <= next_wr_addr_S_coef;
 			wr_addr_N <= A; // Is this correct?
 			c <= next_c;
 			N_out <= N;
@@ -105,7 +110,7 @@ module STP_FSM_3
 			status <= next_status;
 		end
 
-	always @(state, start_stp, N, wr_addr_S, A)
+	always @(state, start_stp, N, wr_addr_S_coef, A)
 		case (state)
 			STATE_IDLE:
 				if(start_stp)
@@ -127,13 +132,13 @@ module STP_FSM_3
 				next_state <= STATE_WR_COEFF0;
 			
 			STATE_WR_COEFF0:
-				if (wr_addr_S == A * 11 + (N))
+				if (wr_addr_S_coef == N)
 					next_state <= STATE_END;
 				else
 					next_state <= STATE_WR_COEFF1;
 
 			STATE_WR_COEFF1:
-				if (wr_addr_S == A * 11 + (N-1))//Minus two becasue one cycle is used to get a value in STATE_WR_COEFF0 and it should already be (N-1) for the if statement since wr_addr_S starts at 0.
+				if (wr_addr_S_coef == N-1)//Minus two becasue one cycle is used to get a value in STATE_WR_COEFF0 and it should already be (N-1) for the if statement since wr_addr_S starts at 0.
 					next_state <= STATE_END;
 				else
 					next_state <= STATE_WR_COEFF1;
@@ -146,7 +151,7 @@ module STP_FSM_3
 	
 		endcase
 
-	always @(state, wr_addr_S, wr_addr_N, A, N, c, result, status)
+	always @(state, wr_addr_S_coef, wr_addr_N, A, N, c, result, status)
 		case (state)
 			STATE_IDLE:
 			begin
@@ -155,7 +160,9 @@ module STP_FSM_3
                 en_wr_S <= 0;
                 en_wr_N <= 0;
                 next_rd_addr_data <= rd_addr_data_updated;
-                next_wr_addr_S <= wr_addr_S;
+                next_wr_addr_S_vec <= wr_addr_S_vec;
+		next_wr_addr_S_coef <= wr_addr_S_coef;
+			   
                 //wr_addr_N <= wr_addr_N;
                 //next_result <= 0;
                 //next_status <= 32'b11111111111111111111111111111111;
@@ -169,7 +176,8 @@ module STP_FSM_3
 				en_wr_S <= 0;
 				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data;
-				next_wr_addr_S <= wr_addr_S;
+			   	next_wr_addr_S_vec <= wr_addr_S_vec;
+                		next_wr_addr_S_coef <= wr_addr_S_coef;
 				//wr_addr_N <= wr_addr_N;
 				next_result <= 0;
 				next_status <= 32'b11111111111111111111111111111111;
@@ -182,7 +190,9 @@ module STP_FSM_3
 				en_wr_S <= 0;
 				en_wr_N <= 1;
 				next_rd_addr_data <= rd_addr_data_updated + 1;
-				next_wr_addr_S <= A * 11;
+			   	next_wr_addr_S_vec <= A;
+                		next_wr_addr_S_coef <= 0;
+				//next_wr_addr_S <= A * 11;
 				//wr_addr_N <= A;
 				next_result <= result;
 				next_status <= status;
@@ -195,7 +205,9 @@ module STP_FSM_3
 				en_wr_S <= 1;
 				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated + 1;
-				next_wr_addr_S <= wr_addr_S + 1;
+			   	next_wr_addr_S_vec <= wr_addr_S_vec;
+                		next_wr_addr_S_coef <= wr_addr_S_coef + 1;
+				//next_wr_addr_S <= wr_addr_S + 1;
 				//wr_addr_N <= wr_addr_N;
 				next_result <= 1;
 				next_status <= 0;
@@ -208,7 +220,9 @@ module STP_FSM_3
 				en_wr_S <= 0;
 				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated;
-				next_wr_addr_S <= wr_addr_S;
+			   	next_wr_addr_S_vec <= wr_addr_S_vec;
+                		next_wr_addr_S_coef <= wr_addr_S_coef;
+				//next_wr_addr_S <= wr_addr_S;
 				//wr_addr_N <= wr_addr_N;
 				next_result <= 0;
 				next_status <= 2'b01;
@@ -221,14 +235,16 @@ module STP_FSM_3
 				en_wr_S <= 1;
 				en_wr_N <= 0;
 				next_rd_addr_data <= rd_addr_data_updated;
-				next_wr_addr_S <= wr_addr_S;
+			   	next_wr_addr_S_vec <= wr_addr_S_vec;
+                		next_wr_addr_S_coef <= wr_addr_S_coef;
+				//next_wr_addr_S <= wr_addr_S;
 				next_result <= result;
 				next_status <= status;
 			end  
 		endcase
 
 	function integer log2;
-    input [31 : 0] value;
+    input [31 : 0] 				value;
      integer i;
     begin
           if(value==1)
