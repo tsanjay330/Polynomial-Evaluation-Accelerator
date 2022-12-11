@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2022.1 (lin64) Build 3526262 Mon Apr 18 15:47:01 MDT 2022
-| Date         : Fri Dec  9 20:17:29 2022
+| Date         : Sat Dec 10 20:49:40 2022
 | Host         : ucompute1.physics.umd.edu running 64-bit Ubuntu 20.04.5 LTS
 | Command      : report_drc -name drc_1 -file /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/lib/DRC_drc_1.txt -ruledecks default
 | Design       : PEA_top_module_1
@@ -24,11 +24,10 @@ Table of Contents
       Design limits: <entire design considered>
            Ruledeck: default
              Max violations: <unlimited>
-             Violations found: 39
+             Violations found: 36
 +----------+------------------+-----------------------------------------------------+------------+
 | Rule     | Severity         | Description                                         | Violations |
 +----------+------------------+-----------------------------------------------------+------------+
-| MDRV-1   | Error            | Multiple Driver Nets                                | 3          |
 | NSTD-1   | Critical Warning | Unspecified I/O Standard                            | 1          |
 | UCIO-1   | Critical Warning | Unconstrained Logical Port                          | 1          |
 | CFGBVS-1 | Warning          | Missing CFGBVS and CONFIG_VOLTAGE Design Properties | 1          |
@@ -40,27 +39,6 @@ Table of Contents
 
 2. REPORT DETAILS
 -----------------
-MDRV-1#1 Error
-Multiple Driver Nets  
-Net FSM2/evp_command/B2[0] has multiple drivers: FSM2/MUX_rd_addr_N/rd_addr_N_reg[0]/Q,
-FSM2/evb_command/evp/rd_addr_N_reg[0]/Q
-FSM2/evp_command/rd_addr_N_reg[0]/Q.
-Related violations: <none>
-
-MDRV-1#2 Error
-Multiple Driver Nets  
-Net FSM2/evp_command/B2[1] has multiple drivers: FSM2/MUX_rd_addr_N/rd_addr_N_reg[1]/Q,
-FSM2/evb_command/evp/rd_addr_N_reg[1]/Q
-FSM2/evp_command/rd_addr_N_reg[1]/Q.
-Related violations: <none>
-
-MDRV-1#3 Error
-Multiple Driver Nets  
-Net FSM2/evp_command/B2[2] has multiple drivers: FSM2/MUX_rd_addr_N/rd_addr_N_reg[2]/Q,
-FSM2/evb_command/evp/rd_addr_N_reg[2]/Q
-FSM2/evp_command/rd_addr_N_reg[2]/Q.
-Related violations: <none>
-
 NSTD-1#1 Critical Warning
 Unspecified I/O Standard  
 178 out of 178 logical ports use I/O standard (IOSTANDARD) value 'DEFAULT', instead of a user assigned specific value. This may cause I/O contention or incompatibility with the board power or connectivity affecting performance, signal integrity or in extreme cases cause damage to the device or the components to which it is connected. To correct this violation, specify all I/O standards. This design will fail to generate a bitstream unless all logical ports have a user specified I/O standard value defined. To allow bitstream creation with unspecified I/O standard values (not recommended), use this command: set_property SEVERITY {Warning} [get_drc_checks NSTD-1].  NOTE: When using the Vivado Runs infrastructure (e.g. launch_runs Tcl command), add this command to a .tcl file and add that file as a pre-hook for write_bitstream step for the implementation run. Problem ports: FC, arg2[4:0], clk, command_in[15:0], command_pop[9:0], data_in[15:0],

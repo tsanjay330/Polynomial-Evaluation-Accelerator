@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2022.1 (lin64) Build 3526262 Mon Apr 18 15:47:01 MDT 2022
-| Date         : Fri Dec  9 20:18:28 2022
+| Date         : Sat Dec 10 20:41:21 2022
 | Host         : ucompute1.physics.umd.edu running 64-bit Ubuntu 20.04.5 LTS
 | Command      : report_utilization -file /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/lib/utilization_report.txt -name utilization_1
 | Design       : PEA_top_module_1
@@ -31,14 +31,14 @@ Table of Contents
 +----------------------------+------+-------+------------+-----------+-------+
 |          Site Type         | Used | Fixed | Prohibited | Available | Util% |
 +----------------------------+------+-------+------------+-----------+-------+
-| Slice LUTs*                | 1677 |     0 |          0 |     20800 |  8.06 |
-|   LUT as Logic             |  929 |     0 |          0 |     20800 |  4.47 |
+| Slice LUTs*                | 1662 |     0 |          0 |     20800 |  7.99 |
+|   LUT as Logic             |  914 |     0 |          0 |     20800 |  4.39 |
 |   LUT as Memory            |  748 |     0 |          0 |      9600 |  7.79 |
 |     LUT as Distributed RAM |  748 |     0 |            |           |       |
 |     LUT as Shift Register  |    0 |     0 |            |           |       |
-| Slice Registers            | 1143 |     0 |          0 |     41600 |  2.75 |
+| Slice Registers            | 1141 |     0 |          0 |     41600 |  2.74 |
 |   Register as Flip Flop    |  562 |     0 |          0 |     41600 |  1.35 |
-|   Register as Latch        |  581 |     0 |          0 |     41600 |  1.40 |
+|   Register as Latch        |  579 |     0 |          0 |     41600 |  1.39 |
 | F7 Muxes                   |   69 |     0 |          0 |     16300 |  0.42 |
 | F8 Muxes                   |   16 |     0 |          0 |      8150 |  0.20 |
 +----------------------------+------+-------+------------+-----------+-------+
@@ -58,7 +58,7 @@ Table of Contents
 | 0     |            _ |       Reset |            - |
 | 0     |          Yes |           - |            - |
 | 143   |          Yes |           - |          Set |
-| 929   |          Yes |           - |        Reset |
+| 927   |          Yes |           - |        Reset |
 | 0     |          Yes |         Set |            - |
 | 71    |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
@@ -154,19 +154,19 @@ Table of Contents
 | Ref Name | Used | Functional Category |
 +----------+------+---------------------+
 | RAMD64E  |  748 |  Distributed Memory |
-| LDCE     |  581 |        Flop & Latch |
+| LDCE     |  579 |        Flop & Latch |
 | LUT6     |  514 |                 LUT |
 | FDCE     |  348 |        Flop & Latch |
-| LUT4     |  178 |                 LUT |
-| LUT5     |  169 |                 LUT |
+| LUT4     |  179 |                 LUT |
+| LUT5     |  157 |                 LUT |
 | FDPE     |  143 |        Flop & Latch |
 | OBUF     |  121 |                  IO |
 | LUT2     |   99 |                 LUT |
-| LUT3     |   87 |                 LUT |
+| LUT3     |   86 |                 LUT |
 | FDRE     |   71 |        Flop & Latch |
 | MUXF7    |   69 |               MuxFx |
 | IBUF     |   57 |                  IO |
-| CARRY4   |   27 |          CarryLogic |
+| CARRY4   |   24 |          CarryLogic |
 | MUXF8    |   16 |               MuxFx |
 | DSP48E1  |    8 |    Block Arithmetic |
 | BUFG     |    5 |               Clock |
