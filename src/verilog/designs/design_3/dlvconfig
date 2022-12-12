@@ -31,4 +31,4 @@
 dlvincludepath=./
 dlvverbose=""
 dlvext=.v
-dlvbindir=../../../../bin/verilog/design_1
+dlvbindir=../../../../bin/verilog/design_3
