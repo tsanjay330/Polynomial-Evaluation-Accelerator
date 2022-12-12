@@ -1,4 +1,6 @@
 /**************************************************
+Name: Enable module of the PEA design
+Description: the enable module for the PEA design in the verilog component
 Port List Description
 
 Input Ports
