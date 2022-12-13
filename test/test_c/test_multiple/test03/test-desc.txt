@@ -1,0 +1,12 @@
+Tests a sequence of instructions:
+
+STP 2 20
+EVP 2
+EVB 0 2
+
+There is no data required since each instruction results in an error.
+
+This test should result in 3 errors:
+1) Instruction #1, STP 2 20: N is too large
+2) Instruction #2, EVP 2: S_2 has not been set
+3) Instruction #3, EVB 0 2: S_0 has not been set

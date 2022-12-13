@@ -1,0 +1,2 @@
+This is the first test suite for the EVP instruction.
+Data values are 5 and command bit is 3.

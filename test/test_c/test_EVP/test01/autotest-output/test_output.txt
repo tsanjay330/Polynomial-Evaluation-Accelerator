@@ -1,0 +1,10 @@
+Tests started on:
+Tue 15 Nov 2022 01:53:18 AM EST
+-----------------------------------------------------
+Test result for:
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_EVP/test01
+-----------------------------------------------------
+Error comparison result for: 
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_EVP/test01
+Tests completed on:
+Tue 15 Nov 2022 01:53:20 AM EST

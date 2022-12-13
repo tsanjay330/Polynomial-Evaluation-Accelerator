@@ -1,0 +1,10 @@
+Tests started on:
+Thu 10 Nov 2022 02:19:14 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_c/test_STP/test02
+-----------------------------------------------------
+Error comparison result for: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_c/test_STP/test02
+Tests completed on:
+Thu 10 Nov 2022 02:19:16 PM EST

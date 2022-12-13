@@ -1,0 +1,10 @@
+Tests started on:
+Sun 13 Nov 2022 06:30:24 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_RST/test01
+-----------------------------------------------------
+Error comparison result for: 
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_RST/test01
+Tests completed on:
+Sun 13 Nov 2022 06:30:26 PM EST

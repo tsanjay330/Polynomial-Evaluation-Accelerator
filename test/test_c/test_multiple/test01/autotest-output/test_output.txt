@@ -1,0 +1,10 @@
+Tests started on:
+Thu 10 Nov 2022 04:35:05 AM EST
+-----------------------------------------------------
+Test result for:
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test01
+-----------------------------------------------------
+Error comparison result for: 
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test01
+Tests completed on:
+Thu 10 Nov 2022 04:35:07 AM EST

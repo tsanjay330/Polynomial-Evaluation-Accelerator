@@ -1,0 +1,34 @@
+Tests started on:
+Thu 10 Nov 2022 02:05:42 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test01
+-----------------------------------------------------
+Error comparison result for: 
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test01
+-----------------------------------------------------
+Test result for:
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test02
+-----------------------------------------------------
+Error comparison result for: 
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test02
+-----------------------------------------------------
+Test result for:
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test03
+-----------------------------------------------------
+Error comparison result for: 
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test03
+-----------------------------------------------------
+Test result for:
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test04
+-----------------------------------------------------
+Error comparison result for: 
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test04
+-----------------------------------------------------
+Test result for:
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test05
+-----------------------------------------------------
+Error comparison result for: 
+/homes/e/r/erinq20/home/enee408c/project/team1/test/test_c/test_multiple/test05
+Tests completed on:
+Thu 10 Nov 2022 02:05:54 PM EST

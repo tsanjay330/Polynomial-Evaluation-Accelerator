@@ -1,0 +1,1 @@
+This is a basic test to make sure that EVB functionality was implemented properly and that it works for a very simple case. b = 2

@@ -1,0 +1,22 @@
+Tests started on:
+Sun 13 Nov 2022 06:30:30 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_RST/test01
+-----------------------------------------------------
+Error comparison result for: 
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_RST/test01
+-----------------------------------------------------
+Test result for:
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_RST/test02
+-----------------------------------------------------
+Error comparison result for: 
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_RST/test02
+-----------------------------------------------------
+Test result for:
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_RST/test03
+-----------------------------------------------------
+Error comparison result for: 
+/homes/t/s/tsanjay/home/enee408c/team1/test/test_c/test_RST/test03
+Tests completed on:
+Sun 13 Nov 2022 06:30:37 PM EST
