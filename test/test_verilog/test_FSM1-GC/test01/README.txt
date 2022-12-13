@@ -22,7 +22,7 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+This test one command being passed in to the PEA. Testing invoke,enable,fsm2, mem_control, single_port_rm, and get_command functionality.
 
 @author Cole Schneider.
 

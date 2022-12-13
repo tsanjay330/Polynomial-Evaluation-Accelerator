@@ -1,0 +1,44 @@
+Vivado Simulator v2022.1
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb_PEA -debug typical -s top 
+Multi-threading is on. Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'result_free_space' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_multi_instr/test03/tb_PEA.v:83]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.fifo(buffer_size=1024,width=16)
+Compiling module work.fifo(buffer_size=32,width=32)
+Compiling module work.single_port_ram
+Compiling module work.single_port_ram(buffer_size=88)
+Compiling module work.N_ram
+Compiling module work.mem_controller
+Compiling module work.rd_addr_data_MUX
+Compiling module work.output_MUX
+Compiling module work.rd_addr_S_MUX
+Compiling module work.rd_addr_N_MUX
+Compiling module work.get_command_FSM_3
+Compiling module work.STP_FSM_3
+Compiling module work.EVP_FSM_3
+Compiling module work.EVB_FSM_3
+Compiling module work.RST_FSM_3
+Compiling module work.firing_state_FSM2
+Compiling module work.PEA_top_module_1
+Compiling module work.PEA_enable
+Compiling module work.tb_PEA
+Built simulation snapshot top
+
+****** xsim v2022.1 (64-bit)
+  **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+  **** IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+## quit
+INFO: [Common 17-206] Exiting xsim at Mon Dec 12 23:24:01 2022...

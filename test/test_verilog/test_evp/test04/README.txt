@@ -22,7 +22,8 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+This tests one EVP command being passed in to the PEA.
+Testing invoke,enable,fsm2, mem_control, single_port_rm, get_command, stp, and evp functionality.
 
 @author Cole Schneider.
 

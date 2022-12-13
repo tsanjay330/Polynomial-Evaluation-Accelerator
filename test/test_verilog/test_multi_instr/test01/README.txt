@@ -22,7 +22,11 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+Tests the following instructions:
+STP 2 6
+EVP 2
+STP 7 2
+EVB 7 3
 
 @author Erin Quartararo.
 

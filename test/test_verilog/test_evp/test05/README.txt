@@ -22,7 +22,7 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+This tests the error handling ability of EVP.
 
 @author Noah-Olson.
 

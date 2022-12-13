@@ -1,5 +1,5 @@
 Tests started on:
-Wed 30 Nov 2022 05:09:22 PM EST
+Mon 12 Dec 2022 10:22:07 PM EST
 -----------------------------------------------------
 Test result for:
 /homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test01
@@ -7,4 +7,4 @@ Test result for:
 Error comparison result for: 
 /homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test01
 Tests completed on:
-Wed 30 Nov 2022 05:09:32 PM EST
+Mon 12 Dec 2022 10:22:17 PM EST

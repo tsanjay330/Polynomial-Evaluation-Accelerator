@@ -1,0 +1,30 @@
+Vivado Simulator v2022.1
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab testbench -debug typical -s top 
+Multi-threading is on. Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3645] port 'rst_instr' remains unconnected for this instance [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test02/testbench.v:52]
+WARNING: [VRFC 10-3645] port 'rst_instr' remains unconnected for this instance [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test02/testbench.v:53]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.fifo(buffer_size=1024,width=16)
+Compiling module work.single_port_ram
+Compiling module work.mem_controller
+Compiling module work.testbench
+Built simulation snapshot top
+
+****** xsim v2022.1 (64-bit)
+  **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+  **** IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+## quit
+INFO: [Common 17-206] Exiting xsim at Mon Dec 12 23:23:26 2022...

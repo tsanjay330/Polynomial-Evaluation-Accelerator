@@ -1,0 +1,1 @@
+This test runs STP on index A = 4 with degree n = 7, then performs a reset instruction. The expected output is for N[4] = 7 at first, then reset to N[4] = 31, the error/uninitialized value.

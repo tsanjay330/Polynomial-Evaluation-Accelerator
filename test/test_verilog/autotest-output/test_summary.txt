@@ -1,0 +1,8 @@
+Test count: 29; test failures: 6; error output mismatches: 0
+Test failures: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_multi_instr/test02
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_multi_instr/test03
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test02
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_STP/test01
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_STP/test03
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_STP/test05

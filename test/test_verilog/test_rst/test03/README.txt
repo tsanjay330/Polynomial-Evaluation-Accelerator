@@ -22,7 +22,8 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+This test verifies that when either rst or rst_instr goes low,
+the contents of N ram are changed to the error value of 5'b11111 = 32.
 
 @author Erin Quartararo.
 

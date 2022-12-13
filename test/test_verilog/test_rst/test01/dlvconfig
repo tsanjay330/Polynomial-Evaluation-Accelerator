@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+dlvincludepath="./"
+dlvverbose=""
+dlvext=".v"
+dlvbindir="../../../../bin/verilog/design_1"
+dlvdest="./xsim.dir/work"
+
+# The right hand side of the following assignment statement needs to
+# be filled in with the testbench file name without the filename extension. 
+dlvtestbench="tb_rst"

@@ -22,7 +22,7 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+This unit test runs STP and then calls EVB to ensure it calculates/evaluates properly
 
 @author Erin Quartararo.
 

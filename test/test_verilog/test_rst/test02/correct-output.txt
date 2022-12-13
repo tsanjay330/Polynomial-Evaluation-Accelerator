@@ -1,2 +1,19 @@
-[FIXME: insert correct output here,
-this is just a placeholder]
+input_c[          0] = 0000001100000000
+input_c[          1] = xxxxxxxxxxxxxxxx
+input_c[          2] = xxxxxxxxxxxxxxxx
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+input_d[          0] = 0000000000000001
+input_d[          1] = xxxxxxxxxxxxxxxx
+input_d[          2] = xxxxxxxxxxxxxxxx
+input_d[          3] = xxxxxxxxxxxxxxxx
+input_d[          4] = xxxxxxxxxxxxxxxx
+Enable Passed!
+Waiting for STP1 to finish...
+STP1 finished.
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+Enable Passed!
+Waiting for STP2 to finish...

@@ -4,13 +4,9 @@ Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb
 Multi-threading is on. Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-Completed static elaboration
-Starting simulation data flow analysis
-Completed simulation data flow analysis
-Time Resolution for simulation is 1ps
-Compiling module work.EVP_FSM_3
-Compiling module work.tb_evp
-Built simulation snapshot top
+ERROR: [VRFC 10-3180] cannot find port 'c_i' on this module [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test02/tb_evp.v:35]
+ERROR: [VRFC 10-3180] cannot find port 'rst_instr' on this module [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test02/tb_evp.v:34]
+ERROR: [XSIM 43-3322] Static elaboration of top level Verilog design unit(s) in library work failed.
 
 ****** xsim v2022.1 (64-bit)
   **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
@@ -30,4 +26,4 @@ result =       3600
 status =          0
 $finish called at time : 46 ns : File "/afs/glue.umd.edu/home/glue/e/r/erinq20/home/enee408c/project/team1/test/test_verilog/test_evp/test02/tb_evp.v" Line 245
 ## quit
-INFO: [Common 17-206] Exiting xsim at Sat Dec  3 23:31:48 2022...
+INFO: [Common 17-206] Exiting xsim at Mon Dec 12 23:21:57 2022...

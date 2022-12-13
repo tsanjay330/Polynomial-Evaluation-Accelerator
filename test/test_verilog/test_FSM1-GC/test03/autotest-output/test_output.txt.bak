@@ -1,11 +1,10 @@
 Tests started on:
-Mon 05 Dec 2022 05:44:27 PM EST
+Mon 05 Dec 2022 05:48:52 PM EST
 -----------------------------------------------------
 Test result for:
 /homes/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test03
-Files ../correct-output.txt and output.txt differ
 -----------------------------------------------------
 Error comparison result for: 
 /homes/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test03
 Tests completed on:
-Mon 05 Dec 2022 05:44:57 PM EST
+Mon 05 Dec 2022 05:49:02 PM EST

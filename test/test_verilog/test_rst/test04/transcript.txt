@@ -4,10 +4,10 @@ Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb
 Multi-threading is on. Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'result_free_space' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v:74]
-WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'status_free_space' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v:75]
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 2 for port 'next_mode_in' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v:74]
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 8 for port 'mode' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v:75]
 WARNING: [VRFC 10-3645] port 'wr_addr_command' remains unconnected for this instance [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v:71]
-WARNING: [VRFC 10-3645] port 'rd_addr_command' remains unconnected for this instance [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v:74]
+WARNING: [VRFC 10-3645] port 'rd_addr_data' remains unconnected for this instance [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v:74]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis
@@ -21,6 +21,7 @@ Compiling module work.mem_controller
 Compiling module work.rd_addr_data_MUX
 Compiling module work.output_MUX
 Compiling module work.rd_addr_S_MUX
+Compiling module work.rd_addr_N_MUX
 Compiling module work.get_command_FSM_3
 Compiling module work.STP_FSM_3
 Compiling module work.EVP_FSM_3
@@ -68,4 +69,4 @@ N[          4] = 31
 STATE:0, rst:1, start_rst:0, rst_instr:1
 $finish called at time : 183 ns : File "/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test04/tb_PEA.v" Line 269
 ## quit
-INFO: [Common 17-206] Exiting xsim at Fri Dec  9 16:44:42 2022...
+INFO: [Common 17-206] Exiting xsim at Mon Dec 12 23:24:37 2022...

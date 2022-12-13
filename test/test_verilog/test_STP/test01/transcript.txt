@@ -1,22 +1,8 @@
 Vivado Simulator v2022.1
 Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
-Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab testbench -debug typical -s top 
+Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb_stp -debug typical -s top 
 Multi-threading is on. Using 2 slave threads.
-Starting static elaboration
-Pass Through NonSizing Optimizer
-Completed static elaboration
-Starting simulation data flow analysis
-Completed simulation data flow analysis
-Time Resolution for simulation is 1ps
-Compiling module work.fifo(buffer_size=1024,width=16)
-Compiling module work.fifo(buffer_size=1024,width=32)
-Compiling module work.single_port_ram
-Compiling module work.single_port_ram(buffer_size=88)
-Compiling module work.N_ram
-Compiling module work.mem_controller
-Compiling module work.STP_FSM_3
-Compiling module work.testbench
-Built simulation snapshot top
+ERROR: [XSIM 43-3225] Cannot find design unit work.tb_stp in library work located at xsim.dir/work.
 
 ****** xsim v2022.1 (64-bit)
   **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
@@ -95,4 +81,4 @@ wr_addr_N: 0, en_wr_N: 0, degree:  3
 fifo_wr_en_r: 0, result:          0
 fifo_wr_en_s: 0, status: 4294967295
 ## quit
-INFO: [Common 17-206] Exiting xsim at Sun Dec  4 00:54:04 2022...
+INFO: [Common 17-206] Exiting xsim at Mon Dec 12 23:24:49 2022...

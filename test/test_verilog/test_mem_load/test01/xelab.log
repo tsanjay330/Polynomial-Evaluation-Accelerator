@@ -4,12 +4,6 @@ Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab te
 Multi-threading is on. Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-Completed static elaboration
-Starting simulation data flow analysis
-Completed simulation data flow analysis
-Time Resolution for simulation is 1ps
-Compiling module work.fifo(buffer_size=1024,width=16)
-Compiling module work.single_port_ram
-Compiling module work.mem_controller
-Compiling module work.testbench
-Built simulation snapshot top
+ERROR: [VRFC 10-3180] cannot find port 're_en' on this module [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test01/testbench.v:46]
+ERROR: [VRFC 10-3180] cannot find port 're_en' on this module [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test01/testbench.v:47]
+ERROR: [XSIM 43-3322] Static elaboration of top level Verilog design unit(s) in library work failed.

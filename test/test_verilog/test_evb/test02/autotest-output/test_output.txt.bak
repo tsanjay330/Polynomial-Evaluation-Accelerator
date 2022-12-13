@@ -1,0 +1,12 @@
+Tests started on:
+Mon 12 Dec 2022 11:07:28 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evb/test02
+Files ../correct-output.txt and output.txt differ
+-----------------------------------------------------
+Error comparison result for: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evb/test02
+Files ../expected-errors.txt and error_output.txt differ
+Tests completed on:
+Mon 12 Dec 2022 11:07:39 PM EST

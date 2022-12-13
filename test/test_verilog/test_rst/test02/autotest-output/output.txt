@@ -1,0 +1,8 @@
+input_c[          0] = 0000001100000000
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+input_d[          0] = 0000000000000001
+Enable Passed!
+Waiting for RST to finish...
+RST finished.

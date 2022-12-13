@@ -1,0 +1,11 @@
+Tests started on:
+Sat 10 Dec 2022 07:57:34 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_enable/test01
+Files ../correct-output.txt and output.txt differ
+-----------------------------------------------------
+Error comparison result for: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_enable/test01
+Tests completed on:
+Sat 10 Dec 2022 07:57:46 PM EST

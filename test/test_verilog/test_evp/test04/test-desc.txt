@@ -1,1 +1,2 @@
-This test one EVP command being passed in to the PEA. Testing invoke,enable,fsm2, mem_control, single_port_rm, get_command, stp, and evp functionality.
+This tests one EVP command being passed in to the PEA.
+Testing invoke,enable,fsm2, mem_control, single_port_rm, get_command, stp, and evp functionality.

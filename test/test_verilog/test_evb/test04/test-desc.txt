@@ -1,0 +1,1 @@
+This unit test runs STP and then calls EVB to ensure it calculates/evaluates properly.

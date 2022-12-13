@@ -1,0 +1,61 @@
+#-----------------------------------------------------------
+# xsim v2022.1 (64-bit)
+# SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+# IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+# Start of session at: Mon Dec 12 22:46:56 2022
+# Process ID: 1856290
+# Current directory: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04
+# Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
+# Log file: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04/xsim.log
+# Journal file: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evp/test04/xsim.jou
+# Running On: ucompute2.physics.umd.edu, OS: Linux, CPU Frequency: 2294.609 MHz, CPU Physical cores: 4, Host memory: 25221 MB
+#-----------------------------------------------------------
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+STATE:x, N:x, X:x, C_i:x, sum:x, xpow:          0
+STATE:0, N:x, X:x, C_i:x, sum:0, xpow:          0
+STATE:1, N:x, X:x, C_i:x, sum:0, xpow:          0
+STATE:2, N:x, X:x, C_i:x, sum:0, xpow:          0
+STATE:3, N:x, X:x, C_i:x, sum:0, xpow:          0
+STATE:4, N:x, X:3, C_i:1, sum:0, xpow:          0
+STATE:5, N:x, X:3, C_i:1, sum:0, xpow:          0
+STATE:6, N:x, X:3, C_i:1, sum:1, xpow:          0
+STATE:7, N:x, X:3, C_i:1, sum:1, xpow:          0
+STATE:5, N:x, X:3, C_i:1, sum:1, xpow:          0
+STATE:6, N:x, X:3, C_i:1, sum:4, xpow:          0
+STATE:7, N:x, X:3, C_i:1, sum:4, xpow:          0
+STATE:5, N:x, X:3, C_i:1, sum:4, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:13, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:13, xpow:          0
+STATE:5, N:x, X:3, C_i:x, sum:13, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:5, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:5, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:5, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:5, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:5, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:5, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:5, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:5, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:6, N:x, X:3, C_i:x, sum:x, xpow:          0
+STATE:7, N:x, X:3, C_i:x, sum:x, xpow:          0
+## quit
+INFO: [Common 17-206] Exiting xsim at Mon Dec 12 22:47:00 2022...

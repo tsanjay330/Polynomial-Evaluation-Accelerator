@@ -1,0 +1,28 @@
+#-----------------------------------------------------------
+# xsim v2022.1 (64-bit)
+# SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+# IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+# Start of session at: Mon Dec 12 23:00:57 2022
+# Process ID: 1863210
+# Current directory: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test03
+# Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
+# Log file: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test03/xsim.log
+# Journal file: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test03/xsim.jou
+# Running On: ucompute2.physics.umd.edu, OS: Linux, CPU Frequency: 2294.609 MHz, CPU Physical cores: 4, Host memory: 25221 MB
+#-----------------------------------------------------------
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -autoloadwcfg -tclbatch {run.tcl}
+Time resolution is 1 ps
+source run.tcl
+## run all
+STATE:x, rst:x, N[0]:x, N[5]:x, N[2]:x, S[0]:x, S[5]:x, S[2]x
+STATE:0, rst:0, N[0]:31, N[5]:31, N[2]:31, S[0]:x, S[5]:x, S[2]x
+STATE:0, rst:1, N[0]:31, N[5]:31, N[2]:31, S[0]:x, S[5]:x, S[2]x
+STATE:0, rst:1, N[0]:2, N[5]:31, N[2]:31, S[0]:x, S[5]:x, S[2]x
+STATE:0, rst:1, N[0]:2, N[5]:31, N[2]:31, S[0]:1, S[5]:x, S[2]x
+STATE:0, rst:1, N[0]:2, N[5]:31, N[2]:31, S[0]:1, S[5]:x, S[2]1
+STATE:0, rst:1, N[0]:2, N[5]:1, N[2]:31, S[0]:1, S[5]:x, S[2]1
+STATE:1, rst:1, N[0]:2, N[5]:1, N[2]:31, S[0]:1, S[5]:x, S[2]1
+$finish called at time : 167 ns : File "/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test03/tb_PEA.v" Line 305
+## quit
+INFO: [Common 17-206] Exiting xsim at Mon Dec 12 23:01:02 2022...

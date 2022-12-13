@@ -1,0 +1,5 @@
+Test count: 1; test failures: 1; error output mismatches: 1
+Test failures: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test02
+Error comparison failures: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test02

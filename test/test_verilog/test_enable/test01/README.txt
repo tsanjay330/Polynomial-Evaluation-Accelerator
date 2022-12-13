@@ -22,7 +22,10 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+The purpose of this first test is to set up the input and output FIFOs and ensure that data can be successfully read from the input FIFOs and written to the output FIFOs.
+Additionally, see if this FIFO data can be used to validate the enable module.
 
-@author Cole Schneider.
+This tests the enable on just the command population( So first level of SETUP_INSTR)
+
+@author Noah Olson.
 

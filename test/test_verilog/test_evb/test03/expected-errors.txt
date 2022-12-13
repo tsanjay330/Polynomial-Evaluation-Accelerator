@@ -1,2 +1,0 @@
-[FIXME: insert expected error output here,
-this is just a placeholder]

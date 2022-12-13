@@ -1,0 +1,16 @@
+Tests started on:
+Mon 12 Dec 2022 10:27:40 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test01
+-----------------------------------------------------
+Error comparison result for: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test01
+-----------------------------------------------------
+Test result for:
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test02
+-----------------------------------------------------
+Error comparison result for: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_mem_load/test02
+Tests completed on:
+Mon 12 Dec 2022 10:28:01 PM EST

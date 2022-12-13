@@ -1,1 +1,6 @@
 The purpose of this first test is to set up the input and output FIFOs and ensure that data can be successfully read from the input FIFOs to RAM modules via the memory controller/loader.
+
+This unit test is outdated, and helped to succesfully verify the memory controller's functionality in an old design.
+
+The test is no longer required as its updated version performs successfully in all system level tests and unit tests for the other modules,
+but remains in this directory for reference.

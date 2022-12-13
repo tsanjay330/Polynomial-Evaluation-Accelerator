@@ -4,11 +4,5 @@ Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb
 Multi-threading is on. Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-Completed static elaboration
-Starting simulation data flow analysis
-Completed simulation data flow analysis
-Time Resolution for simulation is 1ps
-Compiling module work.EVP_FSM_3
-Compiling module work.EVB_FSM_3
-Compiling module work.tb_evb
-Built simulation snapshot top
+ERROR: [VRFC 10-3180] cannot find port 'rst_instr' on this module [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_evb/test01/tb_evb.v:36]
+ERROR: [XSIM 43-3322] Static elaboration of top level Verilog design unit(s) in library work failed.

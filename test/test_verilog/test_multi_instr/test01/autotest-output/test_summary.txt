@@ -1,0 +1,3 @@
+Test count: 1; test failures: 1; error output mismatches: 0
+Test failures: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_multi_instr/test01

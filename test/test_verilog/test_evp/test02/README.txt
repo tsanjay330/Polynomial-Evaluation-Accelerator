@@ -22,7 +22,12 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+This is an outdated version of a unit test for the EVP module.
+
+While it not longer verifies the new design, it is useful as a reference.
+
+This unit test calculates EVP calls when values for coefficients and x are manually placed in registers.
+
 
 @author Erin Quartararo.
 

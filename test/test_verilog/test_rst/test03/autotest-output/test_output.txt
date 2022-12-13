@@ -1,0 +1,10 @@
+Tests started on:
+Mon 12 Dec 2022 11:03:05 PM EST
+-----------------------------------------------------
+Test result for:
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test03
+-----------------------------------------------------
+Error comparison result for: 
+/homes/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_rst/test03
+Tests completed on:
+Mon 12 Dec 2022 11:03:16 PM EST

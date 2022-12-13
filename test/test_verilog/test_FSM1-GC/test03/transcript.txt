@@ -4,23 +4,37 @@ Running: /dept/enee/software/xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab tb
 Multi-threading is on. Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:58]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:59]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:62]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:63]
-WARNING: [VRFC 10-3091] actual bit length 10 differs from formal bit length 16 for port 'data_pop' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:71]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 16 for port 'result' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/invoke_PEA.v:62]
-WARNING: [VRFC 10-3091] actual bit length 7 differs from formal bit length 10 for port 'addr' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:85]
-WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 10 for port 'wr_addr' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:89]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:94]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 10 for port 'FIFO_population' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:98]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 5 for port 'N_out' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:113]
-WARNING: [VRFC 10-3091] actual bit length 8 differs from formal bit length 7 for port 'rd_addr_S' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:115]
-WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 5 for port 'N' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:118]
-WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'result_free_space' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:73]
-WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'status_free_space' [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:74]
-ERROR: [VRFC 10-3236] concurrent assignment to a non-net 'en_wr_output_fifo' is not permitted [/afs/glue.umd.edu/home/glue/n/o/nolson12/home/enee408c/labs/FINAL/team1/src/verilog/designs/design_1/firing_state_FSM2.v:113]
-ERROR: [XSIM 43-3322] Static elaboration of top level Verilog design unit(s) in library work failed.
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:61]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:62]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_in' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:65]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:66]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out_result' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:74]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 32 for port 'data_out_status' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:75]
+WARNING: [VRFC 10-3091] actual bit length 5 differs from formal bit length 10 for port 'result_free_space' [/afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/test/test_verilog/test_FSM1-GC/test03/tb_PEA.v:78]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.fifo(buffer_size=1024,width=16)
+Compiling module work.fifo(buffer_size=32,width=32)
+Compiling module work.single_port_ram
+Compiling module work.single_port_ram(buffer_size=88)
+Compiling module work.N_ram
+Compiling module work.mem_controller
+Compiling module work.rd_addr_data_MUX
+Compiling module work.output_MUX
+Compiling module work.rd_addr_S_MUX
+Compiling module work.rd_addr_N_MUX
+Compiling module work.get_command_FSM_3
+Compiling module work.STP_FSM_3
+Compiling module work.EVP_FSM_3
+Compiling module work.EVB_FSM_3
+Compiling module work.RST_FSM_3
+Compiling module work.firing_state_FSM2
+Compiling module work.PEA_top_module_1
+Compiling module work.PEA_enable
+Compiling module work.tb_PEA
+Built simulation snapshot top
 
 ****** xsim v2022.1 (64-bit)
   **** SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
@@ -89,4 +103,4 @@ FSM1:2,FSM2: 2, FSM3_MEM:0, FSM3_GC:2, ramo:    0, instr:  0
 FSM1:2,FSM2: 3, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  0
 FSM1:0,FSM2: 0, FSM3_MEM:0, FSM3_GC:0, ramo:    0, instr:  0
 ## quit
-INFO: [Common 17-206] Exiting xsim at Mon Dec  5 17:51:15 2022...
+INFO: [Common 17-206] Exiting xsim at Mon Dec 12 23:23:04 2022...

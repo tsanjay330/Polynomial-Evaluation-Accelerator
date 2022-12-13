@@ -22,7 +22,9 @@ MARYLAND HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
 ENHANCEMENTS, OR MODIFICATIONS.
 ----------------------------------------------------------------------------
 
-FIXME: Enter a brief description of the test here
+This is an old version of the unit reset testbench.
+
+It no longer works, but serves as a useful reference.
 
 @author Taruni Sanjay.
 

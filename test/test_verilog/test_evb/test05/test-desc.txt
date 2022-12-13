@@ -1,0 +1,2 @@
+This unit test runs STP and then calls EVB on a different CV
+to ensure it handles errors properly.
