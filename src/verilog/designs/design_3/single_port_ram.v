@@ -27,13 +27,13 @@ ENHANCEMENTS, OR MODIFICATIONS.
 *******************************************************************************/
 
 /*******************************************************************************
-This is an edited version of the single port RAM (random access memory) module.
+This is a single port RAM (random access memory) module.
 
 --- INPUTS: ---
 
 data:  data to be written into the RAM
 
-wr_addr:  RAM address for writing data
+addr:  RAM address for writing data
 
 rd_addr: RAM address for reading data
 
@@ -47,10 +47,6 @@ clk: clock
 
 q: data that is read out of the RAM
 
-q_en: binary signal that goes high for a single clock cycle when data is successfully read from RAM
-
-wr_suc: binary signal that goes high for a single clock cycle when data is successfully written to RAM
-
 --- PARAMETERS: ---    
 
 buffer_size: the number of tokens (integers) in each input vector. So, if size =
@@ -60,16 +56,14 @@ word_size: the bit width for each of the input data  used in computation of the 
 *******************************************************************************/
 
 `timescale 1ns/1ps
-module single_port_ram_edited
+module single_port_ram
 /*Here word_size and buffer_size is treated as width and size parameters from lab 07 respectively*/
         #(parameter word_size = 16, buffer_size = 1024)(  
-        input [word_size - 1 : 0] 	  data,
-        input [log2(buffer_size) - 1 : 0] wr_addr,
+        input [word_size - 1 : 0] data,
+        input [log2(buffer_size) - 1 : 0] addr,
         input [log2(buffer_size) - 1 : 0] rd_addr,
-        input 				  wr_en, re_en, clk,
-        output reg [word_size - 1 : 0] 	  q,
-	output reg			  wr_suc,
-	output reg			  q_en); // This signal goes high when data is successfully read out - it is the responsibility of the module that drives the read_enable signal to make sure that re_en only stays high for a single clock cycle.
+        input wr_en, rd_en, clk,
+        output [word_size - 1 : 0] q);
 
     /* Declare the RAM variable */
     reg [word_size - 1 : 0] ram[buffer_size - 1 : 0];
@@ -80,24 +74,12 @@ module single_port_ram_edited
     always @ (posedge clk)
     begin
         /* Write */
-        if (wr_en) begin
-           ram[wr_addr] <= data;
-	   wr_suc <= 1'b1;
-	end
-        else
-	  wr_suc <= 1'b0;
-
-        /* Read */
-        if (re_en) begin
-	   q <= ram[rd_addr];
-	   q_en <= 1'b1;
-	end
-        else
-	   q_en <= 1'b0;	  
+        if (wr_en)
+            ram[addr] <= data;
     end
 		
-		/* Read - how it worked for the old RAM module */
-    // assign q = (re_en) ? ram[rd_addr] : 0;
+		/* Read */
+    assign q = (rd_en) ? ram[rd_addr] : 0;
  
     function integer log2;
     input [31 : 0] value;

@@ -42,6 +42,8 @@ wr_en: enable signal for activating write operation (active high)
 rd_en: enable signal for activating reading operation (active high)
 
 clk: clock
+ 
+rst_instr: the reset instruction signal (active low)
 
 --- OUTPUT: ---
 
@@ -61,16 +63,14 @@ word_size: the bit width for each of the input data  used in computation of the 
 
 `timescale 1ns/1ps
 module N_ram
-/*	Since this module is only for N - the word size is 4 bits and there are 8 coefficient vectors*/
-        #(parameter word_size = 4, buffer_size = 8)(  
+/*	Since this module is only for N - the word size is 5 bits and there are 8 coefficient vectors*/
+        #(parameter word_size = 5, buffer_size = 8)(  
         input [word_size - 1 : 0] 	  data,
-	input 				  rst,
+	input 				  rst_instr, // This rst is from the INSTRUCTION not the general rst signal
         input [log2(buffer_size) - 1 : 0] wr_addr,
         input [log2(buffer_size) - 1 : 0] rd_addr,
-        input 				  wr_en, re_en, clk,
-        output reg [word_size - 1 : 0] 	  q,
-	output reg 			  wr_suc,
-	output reg 			  q_en); // This signal goes high when data is successfully read out - it is the responsibility of the module that drives the read_enable signal to make sure that re_en only stays high for a single clock cycle.
+        input wr_en, rd_en, clk, rst,
+        output reg [word_size - 1 : 0] 	  q);
 
     /* Declare the RAM variable */
     reg [word_size - 1 : 0] ram[buffer_size - 1 : 0];
@@ -83,29 +83,26 @@ module N_ram
     always @ (posedge clk)
       begin
 	/* Reset functionality */
-        if (rst) begin
+        if (!rst || !rst_instr) begin // The reset instruction is ACTIVE LOW
 	   for(i = 0; i < buffer_size; i = i+1) begin
-	      ram[i] <= 4'b1111; // The "reset"/"error" degree value
+	      ram[i] <= 5'b11111; // The "reset"/"error" degree value
 	   end
 	end
+	
 	/* Write */
         if (wr_en) begin
            ram[wr_addr] <= data;
-	   wr_suc <= 1'b1;
 	end
-        else
-	  wr_suc <= 1'b0;
-
+	
         /* Read */
-        if (re_en) begin
+        if (rd_en) begin
 	   q <= ram[rd_addr];
-	   q_en <= 1'b1;
 	end
-        else
-	   q_en <= 1'b0;	  
+        /*else
+	   q <= 0;*/
     end
 		
-		/* Read - how it worked for the old RAM module */
+		/* Read - how it is implemented in old RAM module */
     // assign q = (re_en) ? ram[rd_addr] : 0;
  
     function integer log2;

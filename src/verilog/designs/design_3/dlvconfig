@@ -31,4 +31,4 @@
 dlvincludepath=./
 dlvverbose=""
 dlvext=.v
-dlvbindir=../bin/window-computation
+dlvbindir=../../../../bin/verilog/design_3
