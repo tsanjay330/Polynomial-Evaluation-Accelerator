@@ -39,3 +39,36 @@ Waiting for GC to finish...
 GC finished.
 Enable Passed!
 Waiting for EVP to finish...
+EVP result: 247 and status: 0
+EVP finished.
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+Enable Passed!
+Waiting for STP to finish...
+STP result: 1 and status: 0
+STP finished.
+After STP, S is...
+S[0]: x x x x x x x x x x x
+S[1]: x x x x x x x x x x x
+S[2]: 7 6 5 4 3 2 1 x x x x
+S[3]: x x x x x x x x x x x
+S[4]: x x x x x x x x x x x
+S[5]: x x x x x x x x x x x
+S[6]: x x x x x x x x x x x
+S[7]: 2 3 4 x x x x x x x x
+...and N is...
+N: 31 31 6 31 31 31 31 2
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+Enable Passed!
+Waiting for EVB to finish...
+EVB result: 2 and status: 0
+EVB result: 9 and status: 0
+EVB result: 24 and status: 0
+EVB finished.
+Output FIFO contents:
+0:1 1:247 2:1 3:2 4:9 5:24
+Status FIFO contents:
+0:0 1:0 2:0 3:0 4:0 5:0
