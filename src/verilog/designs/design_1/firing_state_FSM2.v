@@ -182,7 +182,6 @@ rd_addr_data_MUX
 	MUX_rd_addr_data(.rd_addr_data_STP(rd_addr_data_STP), 
 					.rd_addr_data_EVP(rd_addr_data_EVP), 
 					.rd_addr_data_EVB(rd_addr_data_EVB), 
-					/*.rd_addr_data_cur(16'h0000),*/ 
 					.instr(instr), .rst(rst), 
 					.rd_addr_data_updated(rd_addr_data));
 

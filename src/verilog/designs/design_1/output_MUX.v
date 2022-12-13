@@ -15,7 +15,6 @@ module output_MUX #(parameter word_size = 16)(
 	  STP: output_token <= output_STP;
 	  EVP: output_token <= output_EVP;
 	  EVB: output_token <= output_EVB;
-	  // Consider adding a default case/rst case for proper comb. logic
 	endcase // case (instr)
      end
 endmodule // output_MUX

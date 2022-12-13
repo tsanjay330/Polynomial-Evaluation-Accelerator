@@ -4,8 +4,6 @@ Description: the enable module for the PEA design in the verilog component
 Port List Description
 
 Input Ports
-result_free_space - free space output FIFO(result)
-status_free_space - free space output FIFO(status)
 next_mode_in - next state mode for instruction
 mode - next state mode for all instructions
 arg2 - value of b
@@ -63,23 +61,21 @@ module PEA_enable #(parameter word_size = 16,  buffer_size = 1024,
         INSTR: begin
             case(mode)
                 STP: begin
-                    if((wr_addr_data - rd_addr_data) >= arg2)  //&& result_free_space >= 1
+                    if((wr_addr_data - rd_addr_data) >= arg2)
                         enable <= 1;
                     else
                         enable <= 0;
                 end
 
                 EVP: begin
-                    if((wr_addr_data - rd_addr_data) >= 1) //&& result_free_space >= 1
-                        //&& status_free_space >= 1)
+                    if((wr_addr_data - rd_addr_data) >= 1)
                         enable <= 1;
                     else
                         enable <= 0;
                 end
 
                 EVB: begin
-                    if( (wr_addr_data - rd_addr_data) >= arg2) //&& result_free_space >= arg2
-                       //&& status_free_space >= arg2)
+                    if( (wr_addr_data - rd_addr_data) >= arg2)
                         enable <= 1;
                     else
                         enable <= 0;

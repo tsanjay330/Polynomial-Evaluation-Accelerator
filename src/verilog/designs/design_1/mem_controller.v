@@ -6,7 +6,8 @@
  	There will be TWO instantiated controllers - one for each FIFO/RAM pair (One in charge of command tokens, the other in charge of data tokens)
  
  	It is also responsible for tracking the current index/write address of the Command and Data RAM (these values should go to 0 on RST instruction). 
- 
+
+	FIFO Population is passed into here instead of the enable so that way we can access data faster for future commands. 
 */
 `timescale 1ns/1ps
 

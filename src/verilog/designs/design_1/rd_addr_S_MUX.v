@@ -9,7 +9,6 @@ module rd_addr_S_MUX #(parameter s_size = 88)(
 						);
    localparam STP = 2'b00, EVP = 2'b01, EVB = 2'b10, RST = 2'b11;
 
-   //assign rd_addr_S = (instr - 1) ? rd_addr_S_EVP : rd_addr_S_EVB;
   
    always@(rd_addr_S_EVP, rd_addr_S_EVB)
      begin

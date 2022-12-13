@@ -66,7 +66,7 @@ module N_ram
 /*	Since this module is only for N - the word size is 5 bits and there are 8 coefficient vectors*/
         #(parameter word_size = 5, buffer_size = 8)(  
         input [word_size - 1 : 0] 	  data,
-	input 				  rst_instr, // This rst is from the INSTRUCTION not the general rst signal
+		input rst_instr, // This rst is from the INSTR not the tb rst signal
         input [log2(buffer_size) - 1 : 0] wr_addr,
         input [log2(buffer_size) - 1 : 0] rd_addr,
         input wr_en, rd_en, clk, rst,
@@ -102,8 +102,6 @@ module N_ram
 	   q <= 0;*/
     end
 		
-		/* Read - how it is implemented in old RAM module */
-    // assign q = (re_en) ? ram[rd_addr] : 0;
  
     function integer log2;
     input [31 : 0] value;
