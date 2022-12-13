@@ -1,33 +1,35 @@
 `timescale 1ns/1ps
 
-module tb_stp
-		#(parameter word_size = 16, buffer_size = 1024)();
-    A = 3'b010, N = 5'b01000;
+module tb_stp #(parameter word_size = 16, buffer_size = 1024)();
 	reg clk;
 	reg rst;
 	reg rst_instr;
-	reg start_stp;
     reg [log2(buffer_size - 1) : 0] rd_addr_data;
+	reg [log2(buffer_size - 1) : 0] rd_addr_N;
+	reg [log2(buffer_size - 1) : 0] rd_addr_S;
 	reg [2 : 0] A;
 	reg [4 : 0] N;
-    reg [15 : 0] next_c;
+    reg [15 : 0] c_i;
+	reg [2:0] data [15:0];
+	reg [7:0] S [15:0];
     wire done_stp;
 	wire en_rd_data;
 	wire en_rd_S;
 	wire en_rd_N;
+	reg  start_stp;
 	wire [log2(buffer_size) - 1 : 0] rd_addr_data_updated;
 	wire [log2(buffer_size) - 1 : 0] wr_addr_S;
 	wire [log2(buffer_size) - 1 : 0] wr_addr_N;
 	wire [15 : 0] c;
 	wire [31 : 0] result;
 	wire [31 : 0] status;
-
+	
 
 	integer i;
 	integer descr;
 
 	STP_FSM_3 #(.buffer_size(buffer_size))
-		stp(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_stp(start_stp), .rd_addr_data(rd_addr_data), .A(A), .N(N), .next_c(next_c), .done_stp(done_stp), .en_rd_data(en_rd_data), .en_rd_S(en_rd_S), .en_rd_N(en_rd_N), .rd_addr_data_updated(rd_addr_data_updated), .wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(c), .result(result), .status(status)); 
+		stp(.clk(clk), .rst(rst), .rst_instr(rst_instr), .start_stp(start_stp), .rd_addr_data(rd_addr_data), .A(A), .N(N), .next_c(c_i), .done_stp(done_stp), .en_rd_data(en_rd_data), .en_rd_S(en_rd_S), .en_rd_N(en_rd_N), .rd_addr_data_updated(rd_addr_data_updated), .wr_addr_S(wr_addr_S), .wr_addr_N(wr_addr_N), .c(c), .result(result), .status(status)); 
 
 initial begin
 	rst <= 0;
@@ -44,8 +46,8 @@ end
 
 initial begin
 	descr = $fopen("out.txt");
-
-
+	
+	
 	rst_instr = 1;
 
 	S[0] = 16'd3;
@@ -67,18 +69,11 @@ initial begin
 
 	A = 0;
 	rd_addr_data = 0;
-	start_evp = 1;
+	start_stp = 1;
 
 	#2;
 
 	/* STATE_COMPUTE0 */
-
-	if (en_rd_data)
-		x = data[rd_addr_data];
-	else begin
-		$display("1: en_rd_data is ", en_rd_data);
-		$finish;
-	end
 
 	rd_addr_data = rd_addr_data_updated;
 	
@@ -90,7 +85,7 @@ initial begin
 	end
 
 	if (en_rd_N)
-		N_i = N[rd_addr_N];
+		N = N[rd_addr_N];
 	else begin
 		$display("3: en_rd_N is low when it should be high");
 		$finish;
@@ -157,31 +152,31 @@ initial begin
 
 	/* STATE_COMPUTE1 */
 
-	$display("a: done_evp = ", done_evp);
+	$display("a: done_stp = ", done_stp);
 
 	#1;
 
-	$display("b: done_evp = ", done_evp);
+	$display("b: done_stp = ", done_stp);
 
 	#1;
 
-	$display("c: done_evp = ", done_evp);
+	$display("c: done_stp = ", done_stp);
 
 	#1;
 
-	$display("d: done_evp = ", done_evp);
+	$display("d: done_stp = ", done_stp);
 
 	#1;
 
-	$display("e: done_evp = ", done_evp);
+	$display("e: done_stp = ", done_stp);
 
 	#1;
 
-	$display("f: done_evp = ", done_evp);
+	$display("f: done_stp = ", done_stp);
 
 	#1;
 
-	$display("g: done_evp = ", done_evp);
+	$display("g: done_stp = ", done_stp);
 
 	$display("result = ", result);
 	$display("status = ", status);
