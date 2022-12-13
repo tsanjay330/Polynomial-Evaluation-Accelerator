@@ -492,6 +492,7 @@ module tb_PEA();
          $fdisplay(descr, "Waiting for EVP to finish...");
         wait(FC);
         $fdisplay(descr, "EVP finished.");
+		#2
 
 // PRINT CONTENTS OF OUTPUT FIFOS
         #2

@@ -1,3 +1,23 @@
+/*******************************************************************************This is the module that implements the STP instruction.
+
+--- Inputs ---
+
+clk: clock
+
+rst: reset
+
+--- Outputs ---
+
+rst_instr: signal that triggers a reset
+
+--- Local ---
+
+state: current state that the RST module is operating in
+
+next_state: the state that the RST module will operate in next
+
+*******************************************************************************/
+
 `timescale 1ns/1ps
 
 module RST_FSM_3
@@ -5,12 +25,12 @@ module RST_FSM_3
 		input clk, rst,
 		input start_rst,
 		output reg rst_instr);
-		//output reg done_rst);
 
 		reg [1 : 0] state, next_state;
 
-	localparam STATE_START = 2'b00, STATE_RESET = 2'b01; //, STATE_END = 2'b10;
+	localparam STATE_START = 2'b00, STATE_RESET = 2'b01;
 
+	/* Update state */
 	always @(posedge clk, negedge rst) begin
 		if (! rst)
 			state <= STATE_START;
@@ -18,43 +38,29 @@ module RST_FSM_3
 			state <= next_state;
 	end
 
+	/* Determine the next state of the module */
 	always @(state, start_rst)
 		case (state)
 			STATE_START:
-			begin
 				if (start_rst)
 					next_state <= STATE_RESET;
 				else
 					next_state <= STATE_START;
-			end
 
 			STATE_RESET:
 				next_state <= STATE_START;
 
-			/*STATE_END:
-				next_state <= STATE_START;*/
-	
 		endcase
 
+	/* Update the output according to the state */
 	always @(state)
 		case (state)
 			STATE_START:
-			begin
 				rst_instr <= 1;
-				//done_rst <= 0;
-			end
 
 			STATE_RESET:
-			begin
 				rst_instr <= 0;
-				//done_rst <= 0;
-			end
 
-			/*STATE_END:
-			begin
-				rst <= 1;
-				done_rst <= 1;
-			end*/
-		
 		endcase
+
 endmodule

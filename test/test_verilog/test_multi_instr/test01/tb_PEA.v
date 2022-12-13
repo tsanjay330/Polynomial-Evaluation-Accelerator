@@ -94,7 +94,7 @@ module tb_PEA();
     initial
     begin
         clk <= 0;
-        for(j = 0; j < 500; j = j + 1)
+        for(j = 0; j < 5000; j = j + 1)
         begin
             #1 clk <= 1;
             #1 clk <= 0;
@@ -112,6 +112,7 @@ module tb_PEA();
                         invoke_module.FSM2.result,
                         invoke_module.FSM2.status);
 
+			#1;
             $fdisplay(descr, "After STP, S is...");
             for (a = 0; a < 8; a = a + 1) begin
                 $fdisplay(descr,
@@ -162,7 +163,7 @@ module tb_PEA();
     ***************************************************************************/
     initial
     begin
-    /*$monitor("result:%1d, status:%1d, EVP state:%1d, en_evp:%1d, start_evp:%1d",
+    $monitor("result:%1d, status:%1d, EVP state:%1d, en_evp:%1d, start_evp:%1d",
 		invoke_module.FSM2.result,
 		invoke_module.FSM2.status,
 		invoke_module.FSM2.evp_command.state,
@@ -170,10 +171,10 @@ module tb_PEA();
 		invoke_module.FSM2.evp_command.start_evp
         // x_power is not a signal within the EVP module
 		 //invoke_module.FSM2.evp_command.x_power        
-		);*/    
+		);  
 
-/*
-	$monitor("FSM1:%1d,FSM2:%1d, FSM3_DMEM:%1d, FSM3_STP:%1d,FSM3_EVP:%1d, x:%1d, c:%1d",
+
+/*	$monitor("FSM1:%1d,FSM2:%1d, FSM3_DMEM:%1d, FSM3_STP:%1d,FSM3_EVP:%1d, x:%1d, c:%1d",
         invoke_module.state_module,
         invoke_module.FSM2.state_module,
         invoke_module.FSM2.DATA_MEM_CONTROLLER.state,

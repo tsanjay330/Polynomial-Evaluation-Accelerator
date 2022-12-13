@@ -2,6 +2,8 @@ input_c[          0] = 0000000001000110
 input_c[          1] = 0000000101000000
 input_c[          2] = 0000000011100010
 input_c[          3] = 0000001011100011
+input_c[          4] = xxxxxxxxxxxxxxxx
+input_c[          5] = xxxxxxxxxxxxxxxx
 Enable Passed!
 Waiting for GC to finish...
 GC finished.
@@ -19,13 +21,38 @@ input_d[         10] = 0000000000000100
 input_d[         11] = 0000000000000000
 input_d[         12] = 0000000000000001
 input_d[         13] = 0000000000000010
+input_d[         14] = xxxxxxxxxxxxxxxx
+input_d[         15] = xxxxxxxxxxxxxxxx
+input_d[         16] = xxxxxxxxxxxxxxxx
+input_d[         17] = xxxxxxxxxxxxxxxx
+input_d[         18] = xxxxxxxxxxxxxxxx
+input_d[         19] = xxxxxxxxxxxxxxxx
+input_d[         20] = xxxxxxxxxxxxxxxx
+input_d[         21] = xxxxxxxxxxxxxxxx
+input_d[         22] = xxxxxxxxxxxxxxxx
+input_d[         23] = xxxxxxxxxxxxxxxx
+input_d[         24] = xxxxxxxxxxxxxxxx
+input_d[         25] = xxxxxxxxxxxxxxxx
+input_d[         26] = xxxxxxxxxxxxxxxx
+input_d[         27] = xxxxxxxxxxxxxxxx
+input_d[         28] = xxxxxxxxxxxxxxxx
+input_d[         29] = xxxxxxxxxxxxxxxx
+input_d[         30] = xxxxxxxxxxxxxxxx
+input_d[         31] = xxxxxxxxxxxxxxxx
+input_d[         32] = xxxxxxxxxxxxxxxx
+input_d[         33] = xxxxxxxxxxxxxxxx
+input_d[         34] = xxxxxxxxxxxxxxxx
+input_d[         35] = xxxxxxxxxxxxxxxx
+input_d[         36] = xxxxxxxxxxxxxxxx
+input_d[         37] = xxxxxxxxxxxxxxxx
 Enable Passed!
 Waiting for STP to finish...
 STP result: 1 and status: 0
+STP finished.
 After STP, S is...
 S[0]: x x x x x x x x x x x
 S[1]: x x x x x x x x x x x
-S[2]: 7 6 5 4 3 2 x x x x x
+S[2]: 7 6 5 4 3 2 1 x x x x
 S[3]: x x x x x x x x x x x
 S[4]: x x x x x x x x x x x
 S[5]: x x x x x x x x x x x
@@ -33,7 +60,6 @@ S[6]: x x x x x x x x x x x
 S[7]: x x x x x x x x x x x
 ...and N is...
 N: 31 31 6 31 31 31 31 31
-STP finished.
 Enable Passed!
 Waiting for GC to finish...
 GC finished.
@@ -45,8 +71,9 @@ Enable Passed!
 Waiting for GC to finish...
 GC finished.
 Enable Passed!
-Waiting for STP to finish...
+Waiting for EVB to finish...
 STP result: 1 and status: 0
+EVB finished.
 After STP, S is...
 S[0]: x x x x x x x x x x x
 S[1]: x x x x x x x x x x x
@@ -55,20 +82,19 @@ S[3]: x x x x x x x x x x x
 S[4]: x x x x x x x x x x x
 S[5]: x x x x x x x x x x x
 S[6]: x x x x x x x x x x x
-S[7]: 2 3 x x x x x x x x x
+S[7]: 2 3 4 x x x x x x x x
 ...and N is...
 N: 31 31 6 31 31 31 31 2
-STP finished.
 Enable Passed!
 Waiting for GC to finish...
 GC finished.
 Enable Passed!
-Waiting for EVB to finish...
+Waiting for RST to finish...
 EVB result: 2 and status: 0
 EVB result: 9 and status: 0
 EVB result: 24 and status: 0
-EVB finished.
-Output FIFO contents:
-0:1 1:247 2:1 3:2 4:9 5:24
-Status FIFO contents:
-0:0 1:0 2:0 3:0 4:0 5:0
+RST finished.
+Enable Passed!
+Waiting for GC to finish...
+GC finished.
+Enable Failed.

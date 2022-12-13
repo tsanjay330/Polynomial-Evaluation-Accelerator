@@ -492,22 +492,25 @@ module tb_PEA();
          $fdisplay(descr, "Waiting for EVP to finish...");
         wait(FC);
         $fdisplay(descr, "EVP finished.");
+		#2
 
 // PRINT CONTENTS OF OUTPUT FIFOS
         #2
         $fdisplay(descr, "Output FIFO contents:");
-        $fdisplay(descr, "0:%1d 1:%1d 2:%1d 3:%1d",
+        $fdisplay(descr, "0:%1d 1:%1d 2:%1d 3:%1d 4: %1d",
                     out_fifo_result.FIFO_RAM[0],
                     out_fifo_result.FIFO_RAM[1],
                     out_fifo_result.FIFO_RAM[2],
-                    out_fifo_result.FIFO_RAM[3]);
+                    out_fifo_result.FIFO_RAM[3],
+					out_fifo_result.FIFO_RAM[4]);
 
         $fdisplay(descr, "Status FIFO contents:");
-        $fdisplay(descr, "0:%1d 1:%1d 2:%1d 3:%1d",
+        $fdisplay(descr, "0:%1d 1:%1d 2:%1d 3:%1d 4:%1d",
                     out_fifo_status.FIFO_RAM[0],
                     out_fifo_status.FIFO_RAM[1],
                     out_fifo_status.FIFO_RAM[2],
-                    out_fifo_status.FIFO_RAM[3]);
+                    out_fifo_status.FIFO_RAM[3],
+					out_fifo_status.FIFO_RAM[4]);
     end
 
     function integer log2;

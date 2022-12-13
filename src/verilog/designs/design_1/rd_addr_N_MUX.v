@@ -9,7 +9,7 @@ module rd_addr_N_MUX #(parameter n_size = 8)(
 					     );
    localparam STP = 2'b00, EVP = 2'b01, EVB = 2'b10, RST = 2'b11;
 
-   always@(rd_addr_N_EVP, rd_addr_N_EVB)
+   always@(*) //rd_addr_N_EVP, rd_addr_N_EVB)
      begin
 	case(instr)
 	  EVP: rd_addr_N <= rd_addr_N_EVP;
