@@ -1,9 +1,14 @@
-input[          0] = 0000001100000011
-input[          1] = 0000000100101001
+input_c[          0] = 0000000011100011
+input_c[          1] = 0000001011100011
 Enable Passed!
-Waiting for GC-1 to finish...
-GC-1 finished.
-instr:  3, arg2: 3
-Waiting for GC-2 to finish...
-GC-2 finished.
-instr:  1, arg2: 9
+Waiting for GC to finish...
+GC finished.
+input_d[          0] = 0000000000000011
+input_d[          1] = 0000000000000010
+input_d[          2] = 0000000000000001
+input_d[          3] = 0000000000000001
+input_d[          4] = 0000000000000010
+input_d[          5] = 0000000000000011
+Enable Passed!
+Waiting for STP to finish...
+STP finished.
