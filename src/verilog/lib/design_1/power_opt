@@ -1,0 +1,146 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version     : Vivado v.2022.1 (lin64) Build 3526262 Mon Apr 18 15:47:01 MDT 2022
+| Date             : Sat Dec 10 20:41:59 2022
+| Host             : ucompute1.physics.umd.edu running 64-bit Ubuntu 20.04.5 LTS
+| Command          : report_power_opt -file /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/src/verilog/lib/power_opt -format text -name power_opt_1
+| Design           : PEA_top_module_1
+| Device           : xc7a35ticpg236-1L
+| Design State     : Synthesized
+| Grade            : industrial
+| Process          : typical
+| Characterization : Production
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Power optimization report
+
+Table of Contents
+-----------------
+1. Summary
+2. Recommendations
+3. Hierarchical Information
+3.1 BRAMs
+3.2 SRLs
+3.3 Slice Registers
+3.3.1 User Gated Slice Registers
+3.3.2 Tool Gated Slice Registers
+3.4 XPM URAMs
+
+1. Summary
+----------
+
++---------------------------+-------+------------+------------+----------------+
+| Elements                  | TOTAL | USER GATED | TOOL GATED | % GATED(Total) |
++---------------------------+-------+------------+------------+----------------+
+| Number of BRAMs           | 0     | 0          | 0          | 0.000          |
+| Number of SRLs            | 0     | 0          | 0          | 0.000          |
+| Number of Slice Registers | 562   | 65         | 0          | 11.566         |
+| Number of XPM URAMs       | 0     | 0          | 0          | 0.000          |
++---------------------------+-------+------------+------------+----------------+
+
+
+2. Recommendations
+------------------
+
+No specific recommendations for this design.
+
+3. Hierarchical Information
+---------------------------
+
+3.1 BRAMs
+---------
+
+None
+
+3.2 SRLs
+--------
+
+None
+
+3.3 Slice Registers
+-------------------
+
+3.3.1 User Gated Slice Registers
+--------------------------------
+
++-----------------------------------------------------+---------+----------------------------------------------+
+| Cell Name                                           | CE Port | CE Net Name                                  |
++-----------------------------------------------------+---------+----------------------------------------------+
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[0] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[1] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[2] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[3] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[4] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[5] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[6] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[7] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[8] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[9] | CE      | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[0]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[1]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[2]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[3]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[4]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[5]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[6]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[7]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[8]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/DATA_MEM_CONTROLLER/temp_ram_wr_addr_reg[9]    | CE      | FSM2/DATA_MEM_CONTROLLER/next_ram_wr_addr    |
+| FSM2/RAM_N/q_reg[0]                                 | CE      | FSM2/RAM_N/q_reg[4]_0[0]                     |
+| FSM2/RAM_N/q_reg[1]                                 | CE      | FSM2/RAM_N/q_reg[4]_0[0]                     |
+| FSM2/RAM_N/q_reg[2]                                 | CE      | FSM2/RAM_N/q_reg[4]_0[0]                     |
+| FSM2/RAM_N/q_reg[3]                                 | CE      | FSM2/RAM_N/q_reg[4]_0[0]                     |
+| FSM2/RAM_N/q_reg[4]                                 | CE      | FSM2/RAM_N/q_reg[4]_0[0]                     |
+| FSM2/RAM_N/ram_reg[0][0]                            | CE      | FSM2/RAM_N/ram_reg[0][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[0][1]                            | CE      | FSM2/RAM_N/ram_reg[0][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[0][2]                            | CE      | FSM2/RAM_N/ram_reg[0][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[0][3]                            | CE      | FSM2/RAM_N/ram_reg[0][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[0][4]                            | CE      | FSM2/RAM_N/ram_reg[0][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[1][0]                            | CE      | FSM2/RAM_N/ram_reg[1][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[1][1]                            | CE      | FSM2/RAM_N/ram_reg[1][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[1][2]                            | CE      | FSM2/RAM_N/ram_reg[1][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[1][3]                            | CE      | FSM2/RAM_N/ram_reg[1][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[1][4]                            | CE      | FSM2/RAM_N/ram_reg[1][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[2][0]                            | CE      | FSM2/RAM_N/ram_reg[2][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[2][1]                            | CE      | FSM2/RAM_N/ram_reg[2][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[2][2]                            | CE      | FSM2/RAM_N/ram_reg[2][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[2][3]                            | CE      | FSM2/RAM_N/ram_reg[2][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[2][4]                            | CE      | FSM2/RAM_N/ram_reg[2][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[3][0]                            | CE      | FSM2/RAM_N/ram_reg[3][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[3][1]                            | CE      | FSM2/RAM_N/ram_reg[3][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[3][2]                            | CE      | FSM2/RAM_N/ram_reg[3][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[3][3]                            | CE      | FSM2/RAM_N/ram_reg[3][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[3][4]                            | CE      | FSM2/RAM_N/ram_reg[3][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[4][0]                            | CE      | FSM2/RAM_N/ram_reg[4][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[4][1]                            | CE      | FSM2/RAM_N/ram_reg[4][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[4][2]                            | CE      | FSM2/RAM_N/ram_reg[4][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[4][3]                            | CE      | FSM2/RAM_N/ram_reg[4][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[4][4]                            | CE      | FSM2/RAM_N/ram_reg[4][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[5][0]                            | CE      | FSM2/RAM_N/ram_reg[5][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[5][1]                            | CE      | FSM2/RAM_N/ram_reg[5][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[5][2]                            | CE      | FSM2/RAM_N/ram_reg[5][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[5][3]                            | CE      | FSM2/RAM_N/ram_reg[5][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[5][4]                            | CE      | FSM2/RAM_N/ram_reg[5][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[6][0]                            | CE      | FSM2/RAM_N/ram_reg[6][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[6][1]                            | CE      | FSM2/RAM_N/ram_reg[6][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[6][2]                            | CE      | FSM2/RAM_N/ram_reg[6][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[6][3]                            | CE      | FSM2/RAM_N/ram_reg[6][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[6][4]                            | CE      | FSM2/RAM_N/ram_reg[6][4]_0[0]                |
+| FSM2/RAM_N/ram_reg[7][0]                            | CE      | FSM2/RAM_N/E[0]                              |
+| FSM2/RAM_N/ram_reg[7][1]                            | CE      | FSM2/RAM_N/E[0]                              |
+| FSM2/RAM_N/ram_reg[7][2]                            | CE      | FSM2/RAM_N/E[0]                              |
+| FSM2/RAM_N/ram_reg[7][3]                            | CE      | FSM2/RAM_N/E[0]                              |
+| FSM2/RAM_N/ram_reg[7][4]                            | CE      | FSM2/RAM_N/E[0]                              |
++-----------------------------------------------------+---------+----------------------------------------------+
+
+
+3.3.2 Tool Gated Slice Registers
+--------------------------------
+
+None
+
+3.4 XPM URAMs
+-------------
+
+None
+

@@ -1,0 +1,28 @@
++===============================================+===============================================+=================================================+
+| Launch Setup Clock                            | Launch Hold Clock                             | Pin                                             |
++===============================================+===============================================+=================================================+
+| clk                                           | FSM2/get_command/state_reg[1]                 | FSM2/get_command/next_rd_addr_command_reg[7]/D  |
+| clk                                           | FSM2/get_command/state_reg[1]                 | FSM2/get_command/next_rd_addr_command_reg[5]/D  |
+| FSM2/get_command/state_reg[1]                 | FSM2/get_command/state_reg[1]                 | FSM2/get_command/FSM_onehot_next_state_reg[0]/D |
+| clk                                           | FSM2/get_command/instr_reg_n_0_[4]            | FSM2/get_command/next_instr_reg[4]/D            |
+| FSM2/get_command/FSM_onehot_state_reg_n_0_[0] | FSM2/get_command/state_reg[0]                 | FSM2/get_command/next_rd_addr_command_reg[0]/D  |
+| clk                                           | FSM2/get_command/instr_reg_n_0_[5]            | FSM2/get_command/next_instr_reg[5]/D            |
+| FSM2/get_command/state_reg[0]                 | FSM2/get_command/state_reg[0]                 | FSM2/get_command/en_rd_cmd_reg/D                |
+| clk                                           | FSM2/get_command/instr_reg_n_0_[0]            | FSM2/get_command/next_instr_reg[0]/D            |
+| clk                                           | FSM2/get_command/instr_reg_n_0_[2]            | FSM2/get_command/next_instr_reg[2]/D            |
+| clk                                           | FSM2/get_command/instr_reg_n_0_[6]            | FSM2/get_command/next_instr_reg[6]/D            |
+| clk                                           | FSM2/get_command/state_reg[1]                 | FSM2/get_command/next_rd_addr_command_reg[4]/D  |
+| FSM2/get_command/state_reg[1]                 | FSM2/get_command/state_reg[1]                 | FSM2/get_command/done_get_cmd_reg/D             |
+| FSM2/get_command/instr_reg_n_0_[0]            | FSM2/get_command/instr_reg_n_0_[1]            | FSM2/MUX_status/output_token_reg[31]/D          |
+| FSM2/get_command/FSM_onehot_state_reg_n_0_[0] | FSM2/get_command/state_reg[1]                 | FSM2/get_command/next_rd_addr_command_reg[3]/D  |
+| clk                                           | FSM2/get_command/instr_reg_n_0_[7]            | FSM2/get_command/next_instr_reg[7]/D            |
+| FSM2/get_command/state_reg[0]                 | FSM2/get_command/state_reg[0]                 | FSM2/get_command/FSM_onehot_next_state_reg[2]/D |
+| FSM2/get_command/FSM_onehot_state_reg_n_0_[0] | FSM2/get_command/state_reg[1]                 | FSM2/get_command/next_rd_addr_command_reg[2]/D  |
+| clk                                           | FSM2/get_command/state_reg[1]                 | FSM2/get_command/next_rd_addr_command_reg[9]/D  |
+| clk                                           | FSM2/get_command/state_reg[1]                 | FSM2/get_command/next_rd_addr_command_reg[6]/D  |
+| clk                                           | FSM2/get_command/instr_reg_n_0_[1]            | FSM2/get_command/next_instr_reg[1]/D            |
+| FSM2/get_command/FSM_onehot_state_reg_n_0_[0] | FSM2/get_command/state_reg[0]                 | FSM2/get_command/next_rd_addr_command_reg[1]/D  |
+| clk                                           | FSM2/get_command/instr_reg_n_0_[3]            | FSM2/get_command/next_instr_reg[3]/D            |
+| clk                                           | FSM2/get_command/FSM_onehot_state_reg_n_0_[0] | FSM2/get_command/FSM_onehot_next_state_reg[1]/D |
+| clk                                           | FSM2/get_command/FSM_onehot_state_reg_n_0_[0] | FSM2/get_command/next_rd_addr_command_reg[8]/D  |
++-----------------------------------------------+-----------------------------------------------+-------------------------------------------------+

@@ -1,0 +1,533 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.1 (lin64) Build 3526262 Mon Apr 18 15:47:01 MDT 2022
+| Date         : Mon Dec 12 14:37:55 2022
+| Host         : ucompute1.physics.umd.edu running 64-bit Ubuntu 20.04.5 LTS
+| Command      : report_methodology -file PEA_top_module_1_methodology_drc_routed.rpt -pb PEA_top_module_1_methodology_drc_routed.pb -rpx PEA_top_module_1_methodology_drc_routed.rpx
+| Design       : PEA_top_module_1
+| Device       : xc7a35ticpg236-1L
+| Speed File   : -1L
+| Design State : Fully Routed
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Methodology
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+             Max violations: <unlimited>
+             Violations found: 99
++-----------+------------------+---------------------------------------------------------+------------+
+| Rule      | Severity         | Description                                             | Violations |
++-----------+------------------+---------------------------------------------------------+------------+
+| TIMING-14 | Critical Warning | LUT on the clock tree                                   | 4          |
+| TIMING-18 | Warning          | Missing input or output delay                           | 86         |
+| TIMING-50 | Warning          | Unrealistic path requirement between same-level latches | 8          |
+| LATCH-1   | Advisory         | Existing latches in the design                          | 1          |
++-----------+------------------+---------------------------------------------------------+------------+
+
+2. REPORT DETAILS
+-----------------
+TIMING-14#1 Critical Warning
+LUT on the clock tree  
+The LUT FSM2/COMMAND_MEM_CONTROLLER/ram_wr_addr_reg[9]_i_1 has been found on the clock tree. Run opt_design to optimize the clock trees, then re-run report_methodology. If LUT(s) are still present in the clock trees, modify the RTL or the synthesis options accordingly to move the clock gating logic to dedicated clock enable resources. Keep in mind that post-opt_design database cannot be used for pin-planning tasks
+Related violations: <none>
+
+TIMING-14#2 Critical Warning
+LUT on the clock tree  
+The LUT FSM2/get_command/en_rd_cmd_reg_i_1 has been found on the clock tree. Run opt_design to optimize the clock trees, then re-run report_methodology. If LUT(s) are still present in the clock trees, modify the RTL or the synthesis options accordingly to move the clock gating logic to dedicated clock enable resources. Keep in mind that post-opt_design database cannot be used for pin-planning tasks
+Related violations: <none>
+
+TIMING-14#3 Critical Warning
+LUT on the clock tree  
+The LUT FSM2/get_command/output_token_reg[0]_i_2 has been found on the clock tree. Run opt_design to optimize the clock trees, then re-run report_methodology. If LUT(s) are still present in the clock trees, modify the RTL or the synthesis options accordingly to move the clock gating logic to dedicated clock enable resources. Keep in mind that post-opt_design database cannot be used for pin-planning tasks
+Related violations: <none>
+
+TIMING-14#4 Critical Warning
+LUT on the clock tree  
+The LUT FSM2/get_command/output_token_reg[0]_i_3 has been found on the clock tree. Run opt_design to optimize the clock trees, then re-run report_methodology. If LUT(s) are still present in the clock trees, modify the RTL or the synthesis options accordingly to move the clock gating logic to dedicated clock enable resources. Keep in mind that post-opt_design database cannot be used for pin-planning tasks
+Related violations: <none>
+
+TIMING-18#1 Warning
+Missing input or output delay  
+An input delay is missing on command_in[0] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#2 Warning
+Missing input or output delay  
+An input delay is missing on command_in[10] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#3 Warning
+Missing input or output delay  
+An input delay is missing on command_in[11] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#4 Warning
+Missing input or output delay  
+An input delay is missing on command_in[12] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#5 Warning
+Missing input or output delay  
+An input delay is missing on command_in[13] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#6 Warning
+Missing input or output delay  
+An input delay is missing on command_in[14] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#7 Warning
+Missing input or output delay  
+An input delay is missing on command_in[15] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#8 Warning
+Missing input or output delay  
+An input delay is missing on command_in[1] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#9 Warning
+Missing input or output delay  
+An input delay is missing on command_in[2] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#10 Warning
+Missing input or output delay  
+An input delay is missing on command_in[3] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#11 Warning
+Missing input or output delay  
+An input delay is missing on command_in[4] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#12 Warning
+Missing input or output delay  
+An input delay is missing on command_in[5] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#13 Warning
+Missing input or output delay  
+An input delay is missing on command_in[6] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#14 Warning
+Missing input or output delay  
+An input delay is missing on command_in[7] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#15 Warning
+Missing input or output delay  
+An input delay is missing on command_in[8] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#16 Warning
+Missing input or output delay  
+An input delay is missing on command_in[9] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#17 Warning
+Missing input or output delay  
+An input delay is missing on command_pop[0] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#18 Warning
+Missing input or output delay  
+An input delay is missing on data_pop[0] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#19 Warning
+Missing input or output delay  
+An input delay is missing on invoke relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#20 Warning
+Missing input or output delay  
+An input delay is missing on rst relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#21 Warning
+Missing input or output delay  
+An output delay is missing on FC relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#22 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[0] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#23 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[10] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#24 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[11] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#25 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[12] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#26 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[13] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#27 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[14] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#28 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[15] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#29 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[16] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#30 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[17] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#31 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[18] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#32 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[19] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#33 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[1] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#34 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[20] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#35 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[21] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#36 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[22] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#37 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[23] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#38 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[24] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#39 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[25] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#40 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[26] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#41 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[27] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#42 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[28] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#43 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[29] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#44 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[2] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#45 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[30] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#46 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[31] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#47 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[3] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#48 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[4] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#49 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[5] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#50 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[6] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#51 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[7] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#52 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[8] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#53 Warning
+Missing input or output delay  
+An output delay is missing on data_out_result[9] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#54 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[0] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#55 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[10] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#56 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[11] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#57 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[12] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#58 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[13] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#59 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[14] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#60 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[15] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#61 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[16] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#62 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[17] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#63 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[18] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#64 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[19] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#65 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[1] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#66 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[20] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#67 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[21] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#68 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[22] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#69 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[23] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#70 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[24] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#71 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[25] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#72 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[26] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#73 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[27] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#74 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[28] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#75 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[29] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#76 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[2] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#77 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[30] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#78 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[31] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#79 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[3] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#80 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[4] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#81 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[5] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#82 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[6] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#83 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[7] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#84 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[8] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#85 Warning
+Missing input or output delay  
+An output delay is missing on data_out_status[9] relative to clock(s) clk
+Related violations: <none>
+
+TIMING-18#86 Warning
+Missing input or output delay  
+An output delay is missing on rd_in_data relative to clock(s) clk
+Related violations: <none>
+
+TIMING-50#1 Warning
+Unrealistic path requirement between same-level latches  
+There is a timing paths between the source pin FSM2/get_command/en_rd_cmd_reg/G and the destination pin FSM2/get_command/next_instr_reg[0]/D. The two latches are positive level-sensitive with a 0ns path requirement. The 0ns path requirement is coming from the conservative latch analysis and could severely impact the runtime due to time borrowing calculation. It is not recommended to have such topology unless there is a multicycle path constraint to adjust the path requirement to a realistic value (at least half clock period).
+Related violations: <none>
+
+TIMING-50#2 Warning
+Unrealistic path requirement between same-level latches  
+There is a timing paths between the source pin FSM2/get_command/en_rd_cmd_reg/G and the destination pin FSM2/get_command/next_instr_reg[1]/D. The two latches are positive level-sensitive with a 0ns path requirement. The 0ns path requirement is coming from the conservative latch analysis and could severely impact the runtime due to time borrowing calculation. It is not recommended to have such topology unless there is a multicycle path constraint to adjust the path requirement to a realistic value (at least half clock period).
+Related violations: <none>
+
+TIMING-50#3 Warning
+Unrealistic path requirement between same-level latches  
+There is a timing paths between the source pin FSM2/get_command/en_rd_cmd_reg/G and the destination pin FSM2/get_command/next_instr_reg[2]/D. The two latches are positive level-sensitive with a 0ns path requirement. The 0ns path requirement is coming from the conservative latch analysis and could severely impact the runtime due to time borrowing calculation. It is not recommended to have such topology unless there is a multicycle path constraint to adjust the path requirement to a realistic value (at least half clock period).
+Related violations: <none>
+
+TIMING-50#4 Warning
+Unrealistic path requirement between same-level latches  
+There is a timing paths between the source pin FSM2/get_command/en_rd_cmd_reg/G and the destination pin FSM2/get_command/next_instr_reg[3]/D. The two latches are positive level-sensitive with a 0ns path requirement. The 0ns path requirement is coming from the conservative latch analysis and could severely impact the runtime due to time borrowing calculation. It is not recommended to have such topology unless there is a multicycle path constraint to adjust the path requirement to a realistic value (at least half clock period).
+Related violations: <none>
+
+TIMING-50#5 Warning
+Unrealistic path requirement between same-level latches  
+There is a timing paths between the source pin FSM2/get_command/en_rd_cmd_reg/G and the destination pin FSM2/get_command/next_instr_reg[4]/D. The two latches are positive level-sensitive with a 0ns path requirement. The 0ns path requirement is coming from the conservative latch analysis and could severely impact the runtime due to time borrowing calculation. It is not recommended to have such topology unless there is a multicycle path constraint to adjust the path requirement to a realistic value (at least half clock period).
+Related violations: <none>
+
+TIMING-50#6 Warning
+Unrealistic path requirement between same-level latches  
+There is a timing paths between the source pin FSM2/get_command/en_rd_cmd_reg/G and the destination pin FSM2/get_command/next_instr_reg[5]/D. The two latches are positive level-sensitive with a 0ns path requirement. The 0ns path requirement is coming from the conservative latch analysis and could severely impact the runtime due to time borrowing calculation. It is not recommended to have such topology unless there is a multicycle path constraint to adjust the path requirement to a realistic value (at least half clock period).
+Related violations: <none>
+
+TIMING-50#7 Warning
+Unrealistic path requirement between same-level latches  
+There is a timing paths between the source pin FSM2/get_command/en_rd_cmd_reg/G and the destination pin FSM2/get_command/next_instr_reg[6]/D. The two latches are positive level-sensitive with a 0ns path requirement. The 0ns path requirement is coming from the conservative latch analysis and could severely impact the runtime due to time borrowing calculation. It is not recommended to have such topology unless there is a multicycle path constraint to adjust the path requirement to a realistic value (at least half clock period).
+Related violations: <none>
+
+TIMING-50#8 Warning
+Unrealistic path requirement between same-level latches  
+There is a timing paths between the source pin FSM2/get_command/en_rd_cmd_reg/G and the destination pin FSM2/get_command/next_instr_reg[7]/D. The two latches are positive level-sensitive with a 0ns path requirement. The 0ns path requirement is coming from the conservative latch analysis and could severely impact the runtime due to time borrowing calculation. It is not recommended to have such topology unless there is a multicycle path constraint to adjust the path requirement to a realistic value (at least half clock period).
+Related violations: <none>
+
+LATCH-1#1 Advisory
+Existing latches in the design  
+There are 35 latches found in the design. Inferred latches are often the result of HDL coding mistakes, such as incomplete if or case statements.
+Related violations: <none>
+
+

@@ -1,0 +1,99 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.1 (lin64) Build 3526262 Mon Apr 18 15:47:01 MDT 2022
+| Date         : Mon Dec 12 14:33:42 2022
+| Host         : ucompute1.physics.umd.edu running 64-bit Ubuntu 20.04.5 LTS
+| Command      : report_control_sets -verbose -file PEA_top_module_1_control_sets_placed.rpt
+| Design       : PEA_top_module_1
+| Device       : xc7a35ti
+---------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |    21 |
+|    Minimum number of control sets                        |    21 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |    26 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |    21 |
+| >= 0 to < 4        |     1 |
+| >= 4 to < 6        |     0 |
+| >= 6 to < 8        |     0 |
+| >= 8 to < 10       |     0 |
+| >= 10 to < 12      |     2 |
+| >= 12 to < 14      |     0 |
+| >= 14 to < 16      |    16 |
+| >= 16              |     2 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              35 |           12 |
+| No           | No                    | Yes                    |              27 |           10 |
+| No           | Yes                   | No                     |               6 |            2 |
+| Yes          | No                    | No                     |               0 |            0 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |              10 |            3 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++---------------------------------------------------------+-----------------------------------------------------------+------------------------+------------------+----------------+--------------+
+|                       Clock Signal                      |                       Enable Signal                       |    Set/Reset Signal    | Slice Load Count | Bel Load Count | Bels / Slice |
++---------------------------------------------------------+-----------------------------------------------------------+------------------------+------------------+----------------+--------------+
+|  FSM2/get_command/instr_reg[1]_0                        |                                                           |                        |                1 |              2 |         2.00 |
+|  FSM2/COMMAND_MEM_CONTROLLER/ram_wr_addr_reg[9]_i_1_n_0 |                                                           |                        |                3 |             10 |         3.33 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/next_ram_wr_addr              | FSM2/get_command/AR[0] |                3 |             10 |         3.33 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[7]_0     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/FSM_sequential_state_reg[2]_3 |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/FSM_sequential_state_reg[2]_2 |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[9]_3     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[9]_0     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[8]_2     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[8]_1     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[8]_0     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[7]_1     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[9]_2     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[9]_1     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/temp_ram_wr_addr_reg[6]_0     |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/FSM_sequential_state_reg[2]_1 |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/FSM_sequential_state_reg[2]_5 |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/FSM_sequential_state_reg[2]_4 |                        |                4 |             14 |         3.50 |
+|  clk_IBUF_BUFG                                          | FSM2/COMMAND_MEM_CONTROLLER/FSM_sequential_state_reg[2]_0 |                        |                4 |             14 |         3.50 |
+|  FSM2/get_command/en_rd_cmd_reg_i_1_n_0                 |                                                           |                        |                8 |             23 |         2.88 |
+|  clk_IBUF_BUFG                                          |                                                           | FSM2/get_command/AR[0] |               12 |             33 |         2.75 |
++---------------------------------------------------------+-----------------------------------------------------------+------------------------+------------------+----------------+--------------+
+
+

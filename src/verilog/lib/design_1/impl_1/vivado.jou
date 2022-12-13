@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Vivado v2022.1 (64-bit)
+# SW Build 3526262 on Mon Apr 18 15:47:01 MDT 2022
+# IP Build 3524634 on Mon Apr 18 20:55:01 MDT 2022
+# Start of session at: Mon Dec 12 14:32:55 2022
+# Process ID: 663827
+# Current directory: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/vivado_project.runs/impl_1
+# Command line: vivado -log PEA_top_module_1.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source PEA_top_module_1.tcl -notrace
+# Log file: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/vivado_project.runs/impl_1/PEA_top_module_1.vdi
+# Journal file: /afs/glue.umd.edu/home/glue/c/s/cschnei1/home/enee408c/team1/vivado_project.runs/impl_1/vivado.jou
+# Running On: ucompute1.physics.umd.edu, OS: Linux, CPU Frequency: 2294.609 MHz, CPU Physical cores: 4, Host memory: 25221 MB
+#-----------------------------------------------------------
+source PEA_top_module_1.tcl -notrace
